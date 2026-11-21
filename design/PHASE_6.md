@@ -50,7 +50,7 @@ On Linux or macOS use `sh android/gradlew -p android` and `python3` in the corre
 
 The **Package and release Ocarina of Resonance** workflow can be run manually as a rehearsal. It builds and tests all three platforms, uploads the Windows and web packages and their checksums, and uploads the debug APK separately.
 
-For a public release, add these environment secrets in repository **Settings → Environments → release-signing**. The Base64 value represents the keystore file bytes and is as sensitive as the file.
+For a signed Android candidate or public release, add these environment secrets in repository **Settings → Environments → release-signing**. The Base64 value represents the keystore file bytes and is as sensitive as the file.
 
 | Secret | Value |
 | --- | --- |
@@ -59,7 +59,25 @@ For a public release, add these environment secrets in repository **Settings →
 | `ANDROID_KEY_ALIAS` | Release key alias |
 | `ANDROID_KEY_PASSWORD` | Release key password |
 
-Allow matching release tags in the `release-signing` and `github-pages` deployment environments. Keep the existing Pages development branch policy. Use the environment's reviewer controls when available. Build the signed candidate locally and exercise the APK and AAB on the device before pushing the version tag. Update the [public release notes](RELEASE_NOTES.md), run the rehearsal, then tag the verified commit. The tag workflow checks the version before building, signs the Android outputs with a temporary keystore on the runner, verifies the packages, and deploys Pages from the same tested web output. GitHub creates the public Release after these jobs succeed. [GitHub deployment environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/managing-environments-for-deployment) · [GitHub release publication](https://cli.github.com/manual/gh_release_create)
+### Signed Android candidate
+
+Use a candidate tag such as `v0.6.0-rc.1` on the commit to test. The version portion must match `VERSION`. For later candidates, increase the final number. Push the candidate tag and dispatch the workflow on that tag with the signing option enabled.
+
+```powershell
+git tag -a v0.6.0-rc.1 -m "Ocarina of Resonance Android signing candidate"
+git push origin refs/tags/v0.6.0-rc.1
+gh workflow run release.yml --ref v0.6.0-rc.1 -f sign_android_candidate=true
+```
+
+The job uses the existing `release-signing` environment and uploads the standalone APK, AAB, universal APK set, SHA-256 checksums, and signer fingerprint as the **android-candidate** Actions artifact. It leaves the GitHub Release and Pages deployment for the stable tag. Check the artifact's `SOURCE.txt` before testing. Open the standalone APK with Android's package installer. Then use the generated APK set to verify the bundle on the same device with the same signing certificate. [GitHub workflow dispatch](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch) · [Android bundletool](https://developer.android.com/tools/bundletool)
+
+```powershell
+java -jar build/tools/bundletool-all-1.18.3.jar install-apks --apks=Ocarina-of-Resonance-Android-v0.6.0.apks --device-id=<serial>
+```
+
+### Publish the stable release
+
+Allow matching release tags in the `release-signing` and `github-pages` deployment environments. Retain the Pages development branch policy. Exercise the signed candidate on the device, update the [public release notes](RELEASE_NOTES.md), run the rehearsal, and push the stable version tag on the verified source. The tag workflow checks the version before building, signs the Android outputs on the runner, verifies all packages, and deploys Pages from the tested web output. GitHub creates the public Release after these jobs succeed. [GitHub deployment environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/managing-environments-for-deployment) · [GitHub release publication](https://cli.github.com/manual/gh_release_create)
 
 ## Direct install and Google Play
 

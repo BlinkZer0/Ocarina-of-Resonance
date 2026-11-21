@@ -42,6 +42,6 @@ The current build passed three Windows tests and 10 browser tests. The public Pa
 
 ## Remaining release checks
 
-- Configure the owner's signing credentials in the protected GitHub environment. Build a production-signed candidate locally, exercise direct installation and the generated bundletool APK set on hardware, and verify offline playback before tagging the verified commit. [GitHub signing environment](https://github.com/BlinkZer0/Ocarina-of-Resonance/settings/environments) · [Signing and installation instructions](PHASE_6.md#github-release)
+- Configure the owner's signing credentials in the protected GitHub environment. Build a production-signed candidate from a candidate tag, exercise direct installation and the generated bundletool APK set on hardware, and verify offline playback before tagging the verified commit. [GitHub signing environment](https://github.com/BlinkZer0/Ocarina-of-Resonance/settings/environments) · [Signed Android candidate](PHASE_6.md#signed-android-candidate)
 - Exercise physical USB MIDI and Bluetooth LE MIDI with a compatible controller, including sustained notes, expressive controls, disconnect, and reconnect. Wired audio, the physical tablet, route switches, and note-to-sound latency still need hardware verification.
 - Confirm the applicable JUCE 8 distribution terms and complete listening sign-off. [JUCE licensing](https://juce.com/legal/juce-8-licence/)

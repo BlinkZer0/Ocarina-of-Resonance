@@ -4,7 +4,13 @@ on:
   push:
     tags:
       - 'v*'
+      - '!v*-rc.*'
   workflow_dispatch:
+    inputs:
+      sign_android_candidate:
+        description: Sign Android for hardware testing from a versioned candidate tag
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -18,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
+      mode: ${{ steps.version.outputs.mode }}
     steps:
       - uses: actions/checkout@v4
       - name: Verify the common version
@@ -25,20 +32,33 @@ jobs:
         env:
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
+          SIGN_CANDIDATE: ${{ inputs.sign_android_candidate }}
         run: |
           args=()
-          if [[ "$REF_TYPE" == tag ]]; then args+=(--tag "$REF_NAME"); fi
+          mode=rehearsal
+          if [[ "$SIGN_CANDIDATE" == true ]]; then
+            if [[ "$REF_TYPE" != tag ]]; then
+              echo "::error::Select a candidate tag such as v0.6.0-rc.1 for Android signing."
+              exit 1
+            fi
+            mode=android-candidate
+            args+=(--candidate-tag "$REF_NAME")
+          elif [[ "$REF_TYPE" == tag ]]; then
+            args+=(--tag "$REF_NAME")
+            if [[ "$GITHUB_EVENT_NAME" == push ]]; then mode=release; fi
+          fi
           version=$(python scripts/package-release.py version "${args[@]}")
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          printf 'version=%s\nmode=%s\n' "$version" "$mode" >> "$GITHUB_OUTPUT"
 
   build:
+    if: needs.version.outputs.mode != 'android-candidate'
     needs: version
     uses: ./.github/workflows/ci.yml
     with:
       package_release: true
 
   sign-android:
-    if: github.event_name == 'push' && github.ref_type == 'tag'
+    if: needs.version.outputs.mode == 'release' || needs.version.outputs.mode == 'android-candidate'
     needs: version
     runs-on: ubuntu-latest
     environment: release-signing
@@ -53,7 +73,7 @@ jobs:
         run: |
           for secret in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
             if [[ -z "${!secret}" ]]; then
-              echo "::error::Set $secret in the release-signing environment before publishing."
+              echo "::error::Set $secret in the release-signing environment before signing Android."
               exit 1
             fi
           done
@@ -68,6 +88,8 @@ jobs:
         run: python scripts/package-release.py bundletool "$RUNNER_TEMP/bundletool"
       - name: Build and verify signed APK and AAB
         env:
+          RELEASE_MODE: ${{ needs.version.outputs.mode }}
+          VERSION: ${{ needs.version.outputs.version }}
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -89,14 +111,34 @@ jobs:
             --aab android/app/build/outputs/bundle/release/app-release.aab \
             --bundletool "$RUNNER_TEMP/bundletool/bundletool-all-1.18.3.jar" \
             --certificate-sha256 "$signer" --output dist
+          if [[ "$RELEASE_MODE" == android-candidate ]]; then
+            printf '%s\n' "$ANDROID_KEYSTORE_PASSWORD" > "$signing_dir/store-pass"
+            printf '%s\n' "$ANDROID_KEY_PASSWORD" > "$signing_dir/key-pass"
+            bundletool="$RUNNER_TEMP/bundletool/bundletool-all-1.18.3.jar"
+            aab="dist/Ocarina-of-Resonance-Android-v$VERSION.aab"
+            java -jar "$bundletool" build-apks --bundle="$aab" \
+              --output="$signing_dir/candidate.apks" --mode=universal \
+              --ks="$ANDROID_RELEASE_KEYSTORE" --ks-key-alias="$ANDROID_KEY_ALIAS" \
+              --ks-pass="file:$signing_dir/store-pass" --key-pass="file:$signing_dir/key-pass"
+            unzip -p "$signing_dir/candidate.apks" universal.apk > "$signing_dir/universal.apk"
+            python scripts/package-release.py android release --apk "$signing_dir/universal.apk" \
+              --aab "$aab" --bundletool "$bundletool" --certificate-sha256 "$signer"
+            mv "$signing_dir/candidate.apks" "dist/Ocarina-of-Resonance-Android-v$VERSION.apks"
+            printf 'Tag: %s\nCommit: %s\nSigner SHA-256: %s\n' "$GITHUB_REF_NAME" "$(git rev-parse HEAD)" "$signer" > dist/SOURCE.txt
+          fi
+      - name: Write candidate checksums
+        if: needs.version.outputs.mode == 'android-candidate'
+        working-directory: dist
+        run: |
+          sha256sum ./*.apk ./*.aab ./*.apks > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: release-android
+          name: ${{ needs.version.outputs.mode == 'android-candidate' && 'android-candidate' || 'release-android' }}
           path: dist/*
           if-no-files-found: error
 
   collect:
-    if: ${{ !cancelled() && needs.version.result == 'success' && needs.build.result == 'success' && (needs.sign-android.result == 'success' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ !cancelled() && needs.version.result == 'success' && needs.build.result == 'success' && (needs.sign-android.result == 'success' || needs.version.outputs.mode == 'rehearsal') }}
     needs: [version, build, sign-android]
     runs-on: ubuntu-latest
     steps:
@@ -108,10 +150,10 @@ jobs:
           path: dist
       - name: Verify archives and write checksums
         env:
-          RELEASE_EVENT: ${{ github.event_name }}
+          RELEASE_MODE: ${{ needs.version.outputs.mode }}
         run: |
           args=()
-          if [[ "$RELEASE_EVENT" == workflow_dispatch ]]; then args+=(--rehearsal); fi
+          if [[ "$RELEASE_MODE" == rehearsal ]]; then args+=(--rehearsal); fi
           python scripts/package-release.py checksums dist "${args[@]}"
       - uses: actions/upload-artifact@v4
         with:

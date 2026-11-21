@@ -32,11 +32,14 @@ def require(condition, explanation):
         raise ValueError(explanation)
 
 
-def version(tag=None):
+def version(tag=None, candidate_tag=None):
     value = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
     require(re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", value),
             "VERSION needs a major.minor.patch version.")
     require(tag is None or tag == f"v{value}", f"Expected tag v{value}, received {tag}.")
+    if candidate_tag is not None:
+        require(re.fullmatch(rf"v{re.escape(value)}-rc\.[1-9][0-9]*", candidate_tag),
+                f"Expected a candidate tag like v{value}-rc.1, received {candidate_tag}.")
     return value
 
 
@@ -254,7 +257,9 @@ def checksums(directory, rehearsal):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("version").add_argument("--tag")
+    version_tags = commands.add_parser("version").add_mutually_exclusive_group()
+    version_tags.add_argument("--tag")
+    version_tags.add_argument("--candidate-tag")
     for platform in ("windows", "web"):
         command = commands.add_parser(platform)
         command.add_argument("source", type=Path)
@@ -273,7 +278,7 @@ def main():
     args = parser.parse_args()
     try:
         if args.command == "version":
-            print(version(args.tag))
+            print(version(args.tag, args.candidate_tag))
         elif args.command in ("windows", "web"):
             archive(args.command, args.source, args.output)
         elif args.command == "android":
