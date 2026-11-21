@@ -1,4 +1,5 @@
 #include "dsp/VoiceManager.h"
+#include "PluginEditor.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
@@ -25,6 +26,9 @@ public:
     void processBlock(juce::AudioBuffer<float>& audio, juce::MidiBuffer& midi) override {
         juce::ScopedNoDenormals guard;
         readParameters();
+        keyboard.drain([&](auto event) { engine.apply(event); }, [&] {
+            engine.apply({ocarina::EventType::releaseSource, InstrumentEditor::keyboardSource, 0, 0, 0.0f});
+        });
         auto cursor = 0;
         for (const auto metadata : midi) {
             // Channel voice MIDI messages fit in three bytes. Skip SysEx and system data.
@@ -39,12 +43,18 @@ public:
         }
         render(audio, cursor, audio.getNumSamples());
         midi.clear();
+        meter.peak.store(audio.getMagnitude(0, audio.getNumSamples()), std::memory_order_relaxed);
+        meter.voices.store(engine.soundingVoices(), std::memory_order_relaxed);
+        meter.note.store(engine.latestNote(), std::memory_order_relaxed);
     }
 
     void processBlockBypassed(juce::AudioBuffer<float>& audio, juce::MidiBuffer& midi) override {
         engine.reset();
         audio.clear();
         midi.clear();
+        meter.peak.store(0, std::memory_order_relaxed);
+        meter.voices.store(0, std::memory_order_relaxed);
+        meter.note.store(-1, std::memory_order_relaxed);
     }
 
     const juce::String getName() const override { return JucePlugin_Name; }
@@ -52,7 +62,11 @@ public:
     bool producesMidi() const override { return false; }
     double getTailLengthSeconds() const override { return 0.3; }
     bool hasEditor() const override { return true; }
-    juce::AudioProcessorEditor* createEditor() override { return new juce::GenericAudioProcessorEditor(*this); }
+    juce::AudioProcessorEditor* createEditor() override {
+        if (InstrumentEditor::available())
+            return new InstrumentEditor(*this, parameters, keyboard, meter);
+        return new juce::GenericAudioProcessorEditor(*this);
+    }
     int getNumPrograms() override { return 1; }
     int getCurrentProgram() override { return 0; }
     void setCurrentProgram(int) override {}
@@ -139,6 +153,8 @@ private:
     ocarina::VoiceManager engine;
     juce::AudioProcessorValueTreeState parameters;
     std::array<std::atomic<float>*, ocarina::parameterCount> controls {};
+    ocarina::EventQueue keyboard;
+    InstrumentMeter meter;
 };
 
 } // namespace

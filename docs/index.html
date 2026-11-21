@@ -3,41 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a101b">
+  <meta name="application-version" content="0.3.0">
   <title>Ocarina of Resonance</title>
-  <meta name="description" content="Play a physically modeled vessel flute in your browser.">
-  <link rel="stylesheet" href="./assets/style.css?v=0.2.0">
-  <script type="module" src="./assets/main.js?v=0.2.0"></script>
+  <meta name="description" content="Play a physically modeled vessel flute.">
+  <link rel="stylesheet" href="./assets/style.css?v=0.3.0">
+  <script type="module" src="./assets/main.js?v=0.3.0"></script>
 </head>
 <body>
-  <main>
-    <h1>Ocarina of Resonance</h1>
-    <p class="version">Physical-model prototype · v0.2.0</p>
-    <button id="start" type="button">Start audio</button>
-    <p id="status" role="status">Start audio, then hold a note to play.</p>
-    <div class="settings">
-      <label>Sound model
-        <select id="model">
-          <option value="0">Ceramic Authentic</option>
-          <option value="1">Retro Fantasy</option>
-          <option value="2">Crystal Resonator</option>
-          <option value="3">Electronic Hybrid</option>
-        </select>
-      </label>
-      <label>Polyphony
-        <select id="polyphony"><option value="0">Mono legato</option></select>
-      </label>
+  <main class="instrument" aria-label="Ocarina of Resonance">
+    <header class="header">
+      <div class="brand"><h1>Ocarina <span>of Resonance</span></h1><p>Physical modeling synthesizer</p></div>
+      <div class="audio-status"><button id="start" type="button" disabled>Start audio</button><span id="status" role="status">Loading instrument</span></div>
+    </header>
+
+    <section class="transport" aria-label="Instrument settings">
+      <label class="setting">Sound model<select id="model"></select></label>
+      <label class="setting">Polyphony<select id="polyphony"></select></label>
+      <div id="master"></div>
+      <div class="output"><label for="meter">Output <output id="level">−∞ dB</output></label><meter id="meter" min="0" max="1" value="0"></meter></div>
+      <div class="activity"><span>MIDI <output id="note">—</output></span><span>Voices <output id="voices">0</output></span></div>
+    </section>
+
+    <div class="workspace">
+      <details class="rail breath" open><summary>Breath &amp; tone</summary><div id="breath" class="rail-controls"></div></details>
+      <section class="vessel" aria-label="Ocarina finger holes">
+        <div class="stage-shell">
+          <div class="stage" id="stage">
+            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.3.0" alt="Royal-blue ceramic ocarina with twelve drilled finger holes and gold Celtic inlay" draggable="false">
+            <div class="holes" id="holes"></div>
+          </div>
+        </div>
+        <div class="inspector">
+          <label for="hole-value"><span id="hole-name">Breath Pressure</span><span id="hole-unit"></span></label>
+          <input id="hole-value" type="number" inputmode="decimal" step="any" aria-label="Selected parameter value">
+          <button id="reset" type="button">Reset</button>
+          <label class="fine"><input id="fine" type="checkbox"> Fine</label>
+        </div>
+      </section>
+      <details class="rail articulation" open><summary>Articulation</summary><div id="articulation" class="rail-controls"></div></details>
     </div>
-    <fieldset id="keys" disabled>
-      <legend>Play a note</legend>
-      <div class="keys">
-        <button data-note="60" type="button">C4</button>
-        <button data-note="64" type="button">E4</button>
-        <button data-note="67" type="button">G4</button>
-        <button data-note="69" type="button">A4</button>
-      </div>
-    </fieldset>
-    <label for="meter">Output</label>
-    <meter id="meter" min="0" max="1" value="0"></meter>
+
+    <section class="keyboard" aria-label="Playable piano">
+      <div class="keyboard-top"><span id="range">C3–B6</span><div><button id="lower" type="button" aria-label="Octave down">−</button><button id="higher" type="button" aria-label="Octave up">+</button></div></div>
+      <div class="key-scroll"><fieldset id="keys" disabled aria-label="Piano keys"></fieldset></div>
+      <input id="keyboard-scroll" type="range" min="0" max="1000" value="0" aria-label="Scroll keyboard" hidden>
+    </section>
+    <details class="diagnostics" id="diagnostics" hidden><summary>Audio diagnostics</summary><button id="test-tone" type="button">Play A4 test tone</button><button id="profile" type="button">Profile 16 voices</button><output id="diagnostic-result"></output></details>
   </main>
 </body>
 </html>

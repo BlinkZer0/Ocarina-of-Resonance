@@ -16,6 +16,7 @@ public:
     void setParameter(size_t index, float value) noexcept;
     float nextSample() noexcept;
     int soundingVoices() const noexcept;
+    int latestNote() const noexcept { return keyCount > 0 ? keys[keyCount - 1].id.note : -1; }
 
 private:
     struct KeyId {

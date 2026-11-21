@@ -12,7 +12,7 @@ android {
         applicationId = "com.blinkzer0.ocarina"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
+        versionCode = 3
         versionName = rootProject.file("../VERSION").readText().trim()
         ndk { abiFilters += "arm64-v8a" }
         externalNativeBuild { cmake { arguments += "-DANDROID_STL=c++_shared" } }
@@ -42,3 +42,13 @@ kotlin {
 dependencies {
     implementation("com.google.oboe:oboe:1.11.0")
 }
+
+val panelDirectory = layout.buildDirectory.dir("generated/ocarinaPanel")
+val syncPanel = tasks.register<Sync>("syncInstrumentPanel") {
+    from(rootProject.file("../docs")) {
+        include("index.html", "assets/main.js", "assets/style.css", "assets/parameters.json", "assets/ocarina.webp")
+    }
+    into(panelDirectory)
+}
+android.sourceSets.named("main") { assets.srcDir(panelDirectory) }
+tasks.named("preBuild") { dependsOn(syncPanel) }

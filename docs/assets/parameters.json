@@ -1,0 +1,280 @@
+{
+  "controls": [
+    {
+      "index": 0,
+      "id": "masterGain",
+      "name": "Master Volume",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 70
+    },
+    {
+      "index": 1,
+      "id": "breathPressure",
+      "name": "Breath Pressure",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 55
+    },
+    {
+      "index": 2,
+      "id": "jetVelocity",
+      "name": "Jet Velocity",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 50
+    },
+    {
+      "index": 3,
+      "id": "edgeInteraction",
+      "name": "Edge Interaction",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 50
+    },
+    {
+      "index": 4,
+      "id": "turbulence",
+      "name": "Turbulence",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 20
+    },
+    {
+      "index": 5,
+      "id": "cavityVolume",
+      "name": "Cavity Volume",
+      "unit": "cm³",
+      "min": 10,
+      "max": 500,
+      "initial": 110
+    },
+    {
+      "index": 6,
+      "id": "openHoleArea",
+      "name": "Open-Hole Area",
+      "unit": "mm²",
+      "min": 5,
+      "max": 300,
+      "initial": 45
+    },
+    {
+      "index": 7,
+      "id": "apertureNeckLength",
+      "name": "Aperture Neck Length",
+      "unit": "mm",
+      "min": 1,
+      "max": 35,
+      "initial": 7
+    },
+    {
+      "index": 8,
+      "id": "resonatorDamping",
+      "name": "Resonator Damping",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 35
+    },
+    {
+      "index": 9,
+      "id": "resonatorDetuning",
+      "name": "Resonator Detuning",
+      "unit": "cents",
+      "min": -50,
+      "max": 50,
+      "initial": 0
+    },
+    {
+      "index": 10,
+      "id": "vibratoDepth",
+      "name": "Vibrato Depth",
+      "unit": "cents",
+      "min": 0,
+      "max": 60,
+      "initial": 8
+    },
+    {
+      "index": 11,
+      "id": "attackArticulation",
+      "name": "Attack Articulation",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 45
+    },
+    {
+      "index": 12,
+      "id": "formantColor",
+      "name": "Formant Color",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 50
+    },
+    {
+      "index": 13,
+      "id": "model",
+      "name": "Sound Model",
+      "unit": "",
+      "min": 0,
+      "max": 3,
+      "initial": 0
+    },
+    {
+      "index": 14,
+      "id": "voiceMode",
+      "name": "Voice Mode",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 1
+    },
+    {
+      "index": 15,
+      "id": "voiceLimit",
+      "name": "Voice Limit",
+      "unit": "voices",
+      "min": 1,
+      "max": 16,
+      "initial": 16
+    },
+    {
+      "index": 16,
+      "id": "portamento",
+      "name": "Legato Glide",
+      "unit": "ms",
+      "min": 0,
+      "max": 250,
+      "initial": 32
+    },
+    {
+      "index": 17,
+      "id": "bendRange",
+      "name": "Pitch Bend Range",
+      "unit": "semitones",
+      "min": 0,
+      "max": 24,
+      "initial": 2
+    },
+    {
+      "index": 18,
+      "id": "velocityResponse",
+      "name": "Velocity Response",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 72
+    },
+    {
+      "index": 19,
+      "id": "aftertouchResponse",
+      "name": "Aftertouch Response",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 40
+    },
+    {
+      "index": 20,
+      "id": "breathCurve",
+      "name": "Breath Response Curve",
+      "unit": "",
+      "min": 0.5,
+      "max": 2,
+      "initial": 1
+    },
+    {
+      "index": 21,
+      "id": "turbulenceColor",
+      "name": "Turbulence Color",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 45
+    },
+    {
+      "index": 22,
+      "id": "excitationShape",
+      "name": "Excitation Nonlinearity",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 45
+    },
+    {
+      "index": 23,
+      "id": "harmonicEnhancement",
+      "name": "Harmonic Enhancement",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 20
+    }
+  ],
+  "models": [
+    "Ceramic Authentic",
+    "Retro Fantasy",
+    "Crystal Resonator",
+    "Electronic Hybrid"
+  ],
+  "face": {
+    "width": 1774,
+    "height": 887,
+    "centers": [
+      [
+        18.269,
+        51.641
+      ],
+      [
+        30.957,
+        51.676
+      ],
+      [
+        43.527,
+        51.562
+      ],
+      [
+        56.006,
+        51.471
+      ],
+      [
+        68.236,
+        51.404
+      ],
+      [
+        80.797,
+        51.363
+      ],
+      [
+        18.59,
+        70.967
+      ],
+      [
+        31,
+        71.176
+      ],
+      [
+        43.467,
+        71.191
+      ],
+      [
+        55.867,
+        71.136
+      ],
+      [
+        68.29,
+        71.083
+      ],
+      [
+        80.788,
+        70.915
+      ]
+    ]
+  }
+}

@@ -20,6 +20,10 @@ EMSCRIPTEN_KEEPALIVE void note(int on, int key, int source) {
 
 EMSCRIPTEN_KEEPALIVE void release() { voice.releaseAll(); }
 
+EMSCRIPTEN_KEEPALIVE void parameter(int index, float value) { voice.setParameter(static_cast<size_t>(index), value); }
+EMSCRIPTEN_KEEPALIVE int activeVoices() { return voice.soundingVoices(); }
+EMSCRIPTEN_KEEPALIVE int latestNote() { return voice.latestNote(); }
+
 EMSCRIPTEN_KEEPALIVE void performance(int model, int voices) {
     voice.setParameter(ocarina::model, static_cast<float>(model));
     voice.setParameter(ocarina::voiceLimit, static_cast<float>(voices));

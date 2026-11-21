@@ -4,11 +4,13 @@ type AudioExports = {
   prepare(rate: number): void;
   note(on: number, key: number, source: number): void;
   release(): void;
-  performance(model: number, voices: number): void;
+  parameter(index: number, value: number): void;
+  activeVoices(): number;
+  latestNote(): number;
   render(frames: number): number;
 };
 
-export type VoiceMessage = { key: number; source: number; on: boolean } | { release: true } | { model: number; voices: number };
+export type VoiceMessage = { key: number; source: number; on: boolean } | { release: true } | { index: number; value: number };
 
 declare const sampleRate: number;
 declare class AudioWorkletProcessor {
@@ -31,7 +33,7 @@ class OcarinaVoice extends AudioWorkletProcessor {
     this.memory = new Float32Array(this.engine.memory.buffer);
     this.port.onmessage = ({ data }: MessageEvent<VoiceMessage>) => {
       if ('release' in data) this.engine.release();
-      else if ('model' in data) this.engine.performance(data.model, data.voices);
+      else if ('index' in data) this.engine.parameter(data.index, data.value);
       else this.engine.note(Number(data.on), data.key, data.source);
     };
   }
@@ -50,7 +52,7 @@ class OcarinaVoice extends AudioWorkletProcessor {
     }
     this.meterFrames += frames;
     if (this.meterFrames >= sampleRate / 15) {
-      this.port.postMessage(this.peak);
+      this.port.postMessage({ peak: this.peak, voices: this.engine.activeVoices(), note: this.engine.latestNote() });
       this.peak = 0;
       this.meterFrames = 0;
     }

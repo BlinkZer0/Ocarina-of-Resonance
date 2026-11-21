@@ -30,6 +30,15 @@ public:
         queue.push({EventType::parameter, 0, 0, voiceMode, voices == 0 ? 0.0f : 1.0f});
     }
 
+    void parameter(int index, float value) noexcept {
+        if (index >= 0 && static_cast<size_t>(index) < ocarina::parameterCount && std::isfinite(value))
+            queue.push({ocarina::EventType::parameter, 0, 0, static_cast<uint8_t>(index), value});
+    }
+
+    void release(uint16_t source) noexcept {
+        queue.push({ocarina::EventType::releaseSource, source, 0, 0, 0.0f});
+    }
+
     void beginProfile() noexcept {
         for (auto& bucket : histogram)
             bucket.store(0, std::memory_order_relaxed);
@@ -65,15 +74,21 @@ public:
         auto* output = static_cast<float*>(buffer);
         const int channels = device->getChannelCount();
         int32_t sounding = 0;
+        float outputPeak = 0;
         for (int32_t frame = 0; frame < frames; ++frame) {
             const float sample = voice.nextSample();
+            outputPeak = std::max(outputPeak, std::abs(sample));
             if (std::abs(sample) > 0.0001f)
                 ++sounding;
             for (int channel = 0; channel < channels; ++channel)
                 *output++ = sample;
         }
         audibleFrames.fetch_add(sounding, std::memory_order_relaxed);
-        if (measure && frames > 0 && voice.soundingVoices() == ocarina::VoiceManager::maxVoices) {
+        const int activeVoices = voice.soundingVoices();
+        latestPeak.store(outputPeak, std::memory_order_relaxed);
+        latestVoices.store(activeVoices, std::memory_order_relaxed);
+        latestNote.store(voice.latestNote(), std::memory_order_relaxed);
+        if (measure && frames > 0 && activeVoices == ocarina::VoiceManager::maxVoices) {
             const double elapsed = std::chrono::duration<double>(Clock::now() - start).count();
             const int percent = static_cast<int>(std::ceil(elapsed * device->getSampleRate() * 100.0 / frames));
             histogram[std::min(percent, 100)].fetch_add(1, std::memory_order_relaxed);
@@ -83,6 +98,8 @@ public:
     }
 
     std::atomic<int64_t> audibleFrames {0};
+    std::atomic<float> latestPeak {0};
+    std::atomic<int> latestVoices {0}, latestNote {-1};
     std::atomic<oboe::Result> error {oboe::Result::OK};
 
 private:
@@ -160,6 +177,28 @@ Java_com_blinkzer0_ocarina_MainActivity_sendNote(JNIEnv*, jobject, jlong handle,
 extern "C" JNIEXPORT void JNICALL
 Java_com_blinkzer0_ocarina_MainActivity_setPerformance(JNIEnv*, jobject, jlong handle, jint model, jint voices) {
     output(handle)->renderer->performance(model, voices);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_blinkzer0_ocarina_MainActivity_setParameter(JNIEnv*, jobject, jlong handle, jint index, jfloat value) {
+    output(handle)->renderer->parameter(index, value);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_blinkzer0_ocarina_MainActivity_releaseKeyboard(JNIEnv*, jobject, jlong handle, jint source) {
+    output(handle)->renderer->release(static_cast<uint16_t>(source));
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_blinkzer0_ocarina_MainActivity_telemetry(JNIEnv* env, jobject, jlong handle) {
+    const auto& renderer = *output(handle)->renderer;
+    const jfloat state[] { renderer.latestPeak.load(std::memory_order_relaxed),
+        static_cast<jfloat>(renderer.latestVoices.load(std::memory_order_relaxed)),
+        static_cast<jfloat>(renderer.latestNote.load(std::memory_order_relaxed)) };
+    auto array = env->NewFloatArray(3);
+    if (array)
+        env->SetFloatArrayRegion(array, 0, 3, state);
+    return array;
 }
 
 extern "C" JNIEXPORT jint JNICALL

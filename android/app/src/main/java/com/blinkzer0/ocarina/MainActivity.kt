@@ -1,153 +1,119 @@
 package com.blinkzer0.ocarina
 
 import android.app.Activity
+import android.content.pm.ApplicationInfo
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.TextView
+import android.view.WindowInsets
+import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.FrameLayout
+import org.json.JSONArray
+import org.json.JSONObject
 
 class MainActivity : Activity() {
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var web: WebView
     private var audio = 0L
-    private lateinit var status: TextView
-    private lateinit var models: Spinner
-    private lateinit var voices: Spinner
+    private var ready = false
+    private var audioStatus = "Opening audio"
+    private var diagnostic = ""
+    private val values = mutableMapOf<Int, Float>()
     private var benchmarking = false
     private var benchmarkXruns = 0
-    private val benchmarkNotes = (48..63)
-    private val finishBenchmark = Runnable {
-        if (audio != 0L) {
-            val report = endProfile(audio, benchmarkXruns)
-            for (note in benchmarkNotes) sendNote(audio, false, note, 200)
-            benchmarking = false
-            applyPerformance()
-            status.text = "${audioDescription(audio)}\n$report"
-            Log.i("OcarinaAudio", "${audioDescription(audio)} | $report")
+    private var testStartFrames = 0L
+    private val benchmarkNotes = 48..63
+    private val debug get() = applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+
+    private val meterPoll = object : Runnable {
+        override fun run() {
+            publish()
+            if (audio != 0L) handler.postDelayed(this, 50)
         }
     }
     private val finishTest = Runnable {
         if (audio != 0L) {
-            sendNote(audio, false, 69, 100)
+            sendNote(audio, false, 69, TEST_SOURCE)
             val frames = audibleFrames(audio) - testStartFrames
-            status.text = "${audioDescription(audio)}\nTest tone rendered $frames frames"
-            Log.i("OcarinaAudio", "${audioDescription(audio)} | A4 test rendered $frames non-silent frames")
+            diagnostic = "A4 test rendered $frames non-silent frames"
+            Log.i("OcarinaAudio", "$audioStatus | $diagnostic")
+            publish()
         }
     }
-    private var testStartFrames = 0L
+    private val finishBenchmark = Runnable {
+        if (audio != 0L) {
+            diagnostic = endProfile(audio, benchmarkXruns)
+            for (note in benchmarkNotes) sendNote(audio, false, note, BENCHMARK_SOURCE)
+            benchmarking = false
+            val savedVoices = if (values[VOICE_MODE] == 0f) 0 else (values[VOICE_LIMIT] ?: 16f).toInt()
+            setPerformance(audio, (values[MODEL] ?: 0f).toInt(), savedVoices)
+            Log.i("OcarinaAudio", "$audioStatus | $diagnostic")
+            publish()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val padding = (24 * resources.displayMetrics.density).toInt()
-        val column = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER
-            setPadding(padding, padding, padding, padding)
-            setBackgroundColor(Color.rgb(12, 22, 41))
+        savedInstanceState?.getFloatArray("instrument")?.forEachIndexed { index, value ->
+            if (value.isFinite()) values[index] = value
         }
-        column.addView(TextView(this).apply {
-            text = "Ocarina of Resonance"
-            textSize = 27f
-            gravity = Gravity.CENTER
-            setTextColor(Color.rgb(245, 207, 134))
-        })
-        status = TextView(this).apply {
-            textSize = 16f
-            gravity = Gravity.CENTER
-            setPadding(0, padding / 2, 0, padding / 2)
-        }
-        column.addView(status)
-        val controls = LinearLayout(this).apply { gravity = Gravity.CENTER }
-        models = addSelector(controls, "Sound model", listOf("Ceramic Authentic", "Retro Fantasy", "Crystal Resonator", "Electronic Hybrid"), 0)
-        voices = addSelector(controls, "Polyphony", listOf("Mono legato") + (1..16).map { "$it voices" }, 16)
-        column.addView(controls, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-        val keys = LinearLayout(this).apply { gravity = Gravity.CENTER }
-        for ((name, note) in listOf("C4" to 60, "E4" to 64, "G4" to 67, "A4" to 69)) {
-            keys.addView(Button(this).apply {
-                text = name
-                minWidth = 0
-                setOnTouchListener { view, event ->
-                    when (event.actionMasked) {
-                        MotionEvent.ACTION_DOWN -> if (audio != 0L) sendNote(audio, true, note, note)
-                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                            if (audio != 0L) sendNote(audio, false, note, note)
-                            if (event.actionMasked == MotionEvent.ACTION_UP) view.performClick()
-                        }
-                    }
-                    true
-                }
-            }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
-        }
-        column.addView(keys, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
-        column.addView(Button(this).apply {
-            text = "Play A4 test tone"
-            setOnClickListener {
-                if (audio != 0L && !benchmarking) {
-                    handler.removeCallbacks(finishTest)
-                    testStartFrames = audibleFrames(audio)
-                    sendNote(audio, true, 69, 100)
-                    handler.postDelayed(finishTest, 500)
+        WebView.setWebContentsDebuggingEnabled(debug)
+        web = WebView(this).apply {
+            setBackgroundColor(Color.rgb(10, 16, 27))
+            settings.javaScriptEnabled = true
+            settings.allowFileAccess = false
+            settings.allowContentAccess = false
+            addJavascriptInterface(InstrumentBridge(), "AndroidNative")
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = true
+
+                override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse {
+                    val url = request.url
+                    val path = url.path
+                    val mime = assetsByPath[path]
+                    if (url.scheme != "https" || url.host != ASSET_HOST || path == null || mime == null)
+                        return WebResourceResponse("text/plain", "UTF-8", null)
+                    return WebResourceResponse(mime, if (mime == "image/webp") null else "UTF-8", assets.open(path.removePrefix("/")))
                 }
             }
-        })
-        if ((applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
-            column.addView(Button(this).apply {
-                text = "Profile 16 voices"
-                setOnClickListener {
-                    if (audio != 0L && !benchmarking) {
-                        benchmarking = true
-                        setPerformance(audio, models.selectedItemPosition, 16)
-                        benchmarkXruns = beginProfile(audio)
-                        for (note in benchmarkNotes) sendNote(audio, true, note, 200)
-                        status.text = "Profiling 16 voices…"
-                        handler.postDelayed(finishBenchmark, 4000)
-                    }
+        }
+        setContentView(FrameLayout(this).apply {
+            setBackgroundColor(Color.rgb(10, 16, 27))
+            addView(web)
+            setOnApplyWindowInsetsListener { view, insets ->
+                if (Build.VERSION.SDK_INT >= 30) {
+                    val safe = insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
+                    view.setPadding(safe.left, safe.top, safe.right, safe.bottom)
                 }
-            })
-        }
-        setContentView(column)
-    }
-
-    private fun addSelector(parent: LinearLayout, label: String, choices: List<String>, initial: Int): Spinner {
-        return Spinner(this).apply {
-            contentDescription = label
-            adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_dropdown_item, choices)
-            setSelection(initial)
-            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) = applyPerformance()
-                override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+                insets
             }
-            parent.addView(this, LinearLayout.LayoutParams(0, (48 * resources.displayMetrics.density).toInt(), 1f))
-        }
-    }
-
-    private fun applyPerformance() {
-        if (audio != 0L && !benchmarking)
-            setPerformance(audio, models.selectedItemPosition, voices.selectedItemPosition)
+        })
+        web.loadUrl("https://$ASSET_HOST/index.html")
     }
 
     override fun onStart() {
         super.onStart()
         try {
             audio = openAudio()
-            applyPerformance()
-            status.text = audioDescription(audio)
+            for ((index, value) in values) setParameter(audio, index, value)
+            audioStatus = "Audio ready · " + audioDescription(audio)
+            handler.post(meterPoll)
         } catch (error: IllegalStateException) {
-            status.text = "Audio unavailable (${error.message})"
-            Log.e("OcarinaAudio", "Cannot open output", error)
+            audioStatus = "Audio unavailable (" + error.message + ")"
+            Log.e("OcarinaAudio", audioStatus, error)
+            publish()
         }
     }
 
     override fun onStop() {
+        handler.removeCallbacks(meterPoll)
         handler.removeCallbacks(finishTest)
         handler.removeCallbacks(finishBenchmark)
         benchmarking = false
@@ -158,9 +124,86 @@ class MainActivity : Activity() {
         super.onStop()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putFloatArray("instrument", FloatArray(PARAMETER_COUNT) { values[it] ?: Float.NaN })
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroy() {
+        ready = false
+        handler.removeCallbacksAndMessages(null)
+        web.removeJavascriptInterface("AndroidNative")
+        web.destroy()
+        super.onDestroy()
+    }
+
+    private inner class InstrumentBridge {
+        @JavascriptInterface
+        fun message(json: String) {
+            if (json.length > 512) return
+            val event = runCatching { JSONObject(json) }.getOrNull() ?: return
+            handler.post { if (!isDestroyed) receive(event) }
+        }
+    }
+
+    private fun receive(event: JSONObject) {
+        when (event.optString("type")) {
+            "ready" -> {
+                ready = true
+                publish(includeControls = true)
+            }
+            "parameter" -> {
+                val index = event.optInt("index", -1)
+                val value = event.optDouble("value", Double.NaN).toFloat()
+                if (index !in 0 until PARAMETER_COUNT || !value.isFinite()) return
+                values[index] = value
+                if (audio != 0L && (!benchmarking || index !in MODEL..VOICE_LIMIT))
+                    setParameter(audio, index, value)
+            }
+            "note" -> if (audio != 0L && !benchmarking) {
+                sendNote(audio, event.optBoolean("on"), event.optInt("key", -1), KEYBOARD_SOURCE)
+            }
+            "release" -> if (audio != 0L) releaseKeyboard(audio, KEYBOARD_SOURCE)
+            "test" -> if (debug && audio != 0L && !benchmarking) {
+                handler.removeCallbacks(finishTest)
+                testStartFrames = audibleFrames(audio)
+                sendNote(audio, true, 69, TEST_SOURCE)
+                handler.postDelayed(finishTest, 500)
+            }
+            "profile" -> if (debug && audio != 0L && !benchmarking) {
+                benchmarking = true
+                handler.removeCallbacks(finishTest)
+                releaseKeyboard(audio, KEYBOARD_SOURCE)
+                sendNote(audio, false, 69, TEST_SOURCE)
+                setPerformance(audio, (values[MODEL] ?: 0f).toInt(), 16)
+                benchmarkXruns = beginProfile(audio)
+                for (note in benchmarkNotes) sendNote(audio, true, note, BENCHMARK_SOURCE)
+                diagnostic = "Profiling 16 voices…"
+                handler.postDelayed(finishBenchmark, 4000)
+            }
+        }
+    }
+
+    private fun publish(includeControls: Boolean = false) {
+        if (!ready) return
+        val stats = if (audio != 0L) telemetry(audio) else floatArrayOf(0f, 0f, -1f)
+        val state = JSONObject()
+            .put("peak", stats[0].toDouble()).put("voices", stats[1].toInt()).put("note", stats[2].toInt())
+            .put("status", audioStatus).put("debug", debug).put("diagnostic", diagnostic)
+        if (includeControls && values.isNotEmpty()) {
+            val controls = JSONArray()
+            for ((index, value) in values) controls.put(index, value.toDouble())
+            state.put("params", controls)
+        }
+        web.evaluateJavascript("window.ocarinaReceive?.($state)", null)
+    }
+
     private external fun openAudio(): Long
     private external fun closeAudio(handle: Long)
     private external fun sendNote(handle: Long, on: Boolean, key: Int, source: Int)
+    private external fun releaseKeyboard(handle: Long, source: Int)
+    private external fun setParameter(handle: Long, index: Int, value: Float)
+    private external fun telemetry(handle: Long): FloatArray
     private external fun setPerformance(handle: Long, model: Int, voices: Int)
     private external fun beginProfile(handle: Long): Int
     private external fun endProfile(handle: Long, before: Int): String
@@ -168,6 +211,21 @@ class MainActivity : Activity() {
     private external fun audibleFrames(handle: Long): Long
 
     companion object {
+        private const val ASSET_HOST = "appassets.androidplatform.net"
+        private const val PARAMETER_COUNT = 24
+        private const val MODEL = 13
+        private const val VOICE_MODE = 14
+        private const val VOICE_LIMIT = 15
+        private const val KEYBOARD_SOURCE = 2
+        private const val TEST_SOURCE = 100
+        private const val BENCHMARK_SOURCE = 200
+        private val assetsByPath = mapOf(
+            "/index.html" to "text/html",
+            "/assets/main.js" to "text/javascript",
+            "/assets/style.css" to "text/css",
+            "/assets/parameters.json" to "application/json",
+            "/assets/ocarina.webp" to "image/webp",
+        )
         init { System.loadLibrary("ocarina_android") }
     }
 }

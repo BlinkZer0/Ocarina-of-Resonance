@@ -13,8 +13,8 @@ class OcarinaVoice extends AudioWorkletProcessor {
         this.port.onmessage = ({ data }) => {
             if ('release' in data)
                 this.engine.release();
-            else if ('model' in data)
-                this.engine.performance(data.model, data.voices);
+            else if ('index' in data)
+                this.engine.parameter(data.index, data.value);
             else
                 this.engine.note(Number(data.on), data.key, data.source);
         };
@@ -34,7 +34,7 @@ class OcarinaVoice extends AudioWorkletProcessor {
         }
         this.meterFrames += frames;
         if (this.meterFrames >= sampleRate / 15) {
-            this.port.postMessage(this.peak);
+            this.port.postMessage({ peak: this.peak, voices: this.engine.activeVoices(), note: this.engine.latestNote() });
             this.peak = 0;
             this.meterFrames = 0;
         }

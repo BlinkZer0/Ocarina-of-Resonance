@@ -32,5 +32,21 @@ const version = readFileSync(join(root, 'VERSION'), 'utf8').trim();
 const html = readFileSync(join(web, 'index.html'), 'utf8').replaceAll('%VERSION%', version);
 writeFileSync(join(publish, 'index.html'), html);
 copyFileSync(join(web, 'style.css'), join(assets, 'style.css'));
+copyFileSync(join(root, 'ui', 'ocarina.webp'), join(assets, 'ocarina.webp'));
+const registry = readFileSync(join(root, 'src', 'shared', 'Parameters.h'), 'utf8');
+const controls = Array.from(registry.matchAll(/\{"([\w]+)", "([^"]+)", "([^"]*)", (-?[\d.]+)f, (-?[\d.]+)f, (-?[\d.]+)f\}/g),
+  ([, id, name, unit, min, max, initial], index) => ({ index, id, name, unit, min: Number(min), max: Number(max), initial: Number(initial) }));
+const order = registry.match(/enum ParameterIndex : size_t \{([^}]+)\}/)?.[1].split(',').map(id => id.trim()).slice(0, -1);
+if (!order || controls.length !== order.length || controls.some(({ id }, index) => (index === 0 ? 'master' : id) !== order[index])) {
+  throw new Error('The UI parameter manifest does not match the C++ registry.');
+}
+const models = [...(registry.match(/modelNames \{([^}]+)\}/)?.[1] ?? '').matchAll(/"([^"]+)"/g)].map(([, model]) => model);
+if (models.length !== 4) throw new Error('Could not read the sound models from the C++ registry.');
+const face = JSON.parse(readFileSync(join(root, 'ui', 'holes.json'), 'utf8'));
+if (!(face.width > 0 && face.height > 0) || face.centers.length !== 12
+    || face.centers.some(point => point.length !== 2 || point.some(value => !(value > 0 && value < 100)))) {
+  throw new Error('The instrument artwork needs twelve valid finger-hole centers.');
+}
+writeFileSync(join(assets, 'parameters.json'), JSON.stringify({ controls, models, face }, null, 2) + '\n');
 writeFileSync(join(publish, '.nojekyll'), '');
 console.log(`Built docs/ for Ocarina of Resonance ${version}`);
