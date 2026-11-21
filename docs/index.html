@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a101b">
-  <meta name="application-version" content="0.4.0">
+  <meta name="application-version" content="0.4.1">
   <title>Ocarina of Resonance</title>
   <meta name="description" content="Play a physically modeled vessel flute.">
-  <link rel="stylesheet" href="./assets/style.css?v=0.4.0">
-  <script type="module" src="./assets/main.js?v=0.4.0"></script>
+  <link rel="stylesheet" href="./assets/style.css?v=0.4.1">
+  <script type="module" src="./assets/main.js?v=0.4.1"></script>
 </head>
 <body>
   <main class="instrument" aria-label="Ocarina of Resonance">
@@ -36,13 +36,14 @@
 
     <div class="workspace">
       <details class="rail breath" open><summary>Breath &amp; tone</summary><div id="breath" class="rail-controls"></div></details>
-      <section class="vessel" aria-label="Ocarina finger holes">
+      <section class="vessel" aria-label="Ocarina controls">
         <div class="stage-shell">
           <div class="stage" id="stage">
-            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.4.0" alt="Royal-blue ceramic ocarina with twelve drilled finger holes and gold Celtic inlay" draggable="false">
-            <div class="holes" id="holes"></div>
+            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.4.1" alt="Royal-blue transverse ceramic ocarina with gold Celtic inlay" draggable="false">
+            <div class="holes" id="holes" role="group" aria-label="Front finger holes"></div>
           </div>
         </div>
+        <div class="thumb-controls" id="thumb-controls" role="group" aria-label="Thumb controls"></div>
         <div class="inspector">
           <label for="hole-value"><span id="hole-name">Breath Pressure</span><span id="hole-unit"></span></label>
           <input id="hole-value" type="number" inputmode="decimal" step="any" aria-label="Selected parameter value">

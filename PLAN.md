@@ -50,7 +50,7 @@ Build the interface around a large glossy royal-blue ceramic ocarina with gold C
 
 ### Finger-hole controls
 
-Use the following proposed assignments. Confirm placement, ranges, and tuning interactions against the model before freezing the parameter IDs.
+Arrange eight main openings and two smaller subholes on the face of a transverse ocarina. Place the remaining two controls below it as a matching thumb pair, representing the two underside holes. Use the following parameter assignments.
 
 | Hole | Parameter | Hole | Parameter |
 | --- | --- | --- | --- |

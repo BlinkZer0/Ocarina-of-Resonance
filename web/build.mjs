@@ -43,9 +43,12 @@ if (!order || controls.length !== order.length || controls.some(({ id }, index) 
 const models = [...(registry.match(/modelNames \{([^}]+)\}/)?.[1] ?? '').matchAll(/"([^"]+)"/g)].map(([, model]) => model);
 if (models.length !== 4) throw new Error('Could not read the sound models from the C++ registry.');
 const face = JSON.parse(readFileSync(join(root, 'ui', 'holes.json'), 'utf8'));
-if (!(face.width > 0 && face.height > 0) || face.centers.length !== 12
-    || face.centers.some(point => point.length !== 2 || point.some(value => !(value > 0 && value < 100)))) {
-  throw new Error('The instrument artwork needs twelve valid finger-hole centers.');
+const front = Object.entries(face.front);
+const holeIds = new Set(controls.slice(1, 13).map(control => control.id));
+if (!(face.width > 0 && face.height > 0) || front.length !== 10
+    || front.filter(([, hole]) => hole.subhole === true).length !== 2
+    || front.some(([id, { x, y }]) => !holeIds.has(id) || !(x > 0 && x < 100 && y > 0 && y < 100))) {
+  throw new Error('The instrument artwork needs eight front holes and two subholes with valid coordinates and parameter IDs.');
 }
 const effects = JSON.parse(readFileSync(join(root, 'presets', 'effects.json'), 'utf8'));
 const { PresetFormat } = await import(new URL('../docs/assets/presets.js', import.meta.url));

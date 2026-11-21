@@ -146,17 +146,23 @@ function select(control) {
     numeric.max = String(control.max);
     numeric.value = compact(values[control.index]);
 }
-function makeHole(control, label, [x, y]) {
+function makeHole(control, label, position) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'hole';
+    button.className = position ? 'hole face-hole' : 'hole thumb-hole';
     button.dataset.parameter = control.id;
     button.setAttribute('role', 'slider');
     button.setAttribute('aria-label', control.name);
     button.setAttribute('aria-valuemin', String(control.min));
     button.setAttribute('aria-valuemax', String(control.max));
-    button.style.setProperty('--x', x + '%');
-    button.style.setProperty('--y', y + '%');
+    if (position) {
+        button.style.setProperty('--x', position.x + '%');
+        button.style.setProperty('--y', position.y + '%');
+        if (position.subhole)
+            button.classList.add('subhole');
+        if (position.labelAbove)
+            button.classList.add('label-above');
+    }
     const ring = document.createElement('span');
     ring.className = 'ring';
     const engraving = document.createElement('span');
@@ -164,7 +170,7 @@ function makeHole(control, label, [x, y]) {
     engraving.textContent = label;
     button.append(ring, engraving);
     holes.set(control.index, button);
-    get('holes').append(button);
+    get(position ? 'holes' : 'thumb-controls').append(button);
     bindings.set(control.index, (value) => {
         const valueText = (compact(value) + ' ' + control.unit).trim();
         button.setAttribute('aria-valuenow', compact(value));
@@ -611,12 +617,18 @@ async function initialise() {
     setupLibrary(catalogue);
     makeEffects(catalogue.effects);
     stage.style.setProperty('--aspect', String(catalogue.face.width / catalogue.face.height));
+    const engravings = ['Breath', 'Jet', 'Edge', 'Noise', 'Cavity', 'Aperture', 'Neck', 'Damp', 'Detune', 'Vibrato', 'Attack', 'Formant'];
+    controls.slice(1, 13).forEach((control, index) => makeHole(control, engravings[index], catalogue.face.front[control.id]));
     const faceWindow = stage.parentElement;
     new ResizeObserver(() => {
-        faceWindow.scrollLeft = Math.max(0, (faceWindow.scrollWidth - faceWindow.clientWidth) / 2);
+        if (faceWindow.scrollWidth <= faceWindow.clientWidth)
+            return;
+        const targets = Array.from(get('holes').children, button => button.getBoundingClientRect());
+        const left = Math.min(...targets.map(target => target.left));
+        const right = Math.max(...targets.map(target => target.right));
+        const bounds = faceWindow.getBoundingClientRect();
+        faceWindow.scrollLeft += (left + right - bounds.left - bounds.right) / 2;
     }).observe(faceWindow);
-    const engravings = ['Breath', 'Jet', 'Edge', 'Noise', 'Cavity', 'Aperture', 'Neck', 'Damp', 'Detune', 'Vibrato', 'Attack', 'Formant'];
-    controls.slice(1, 13).forEach((control, index) => makeHole(control, engravings[index], catalogue.face.centers[index]));
     select(controls[1]);
     makeRange(controls[0], get('master'));
     const byId = (id) => controls.find(control => control.id === id);

@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { chromium } from 'playwright-core';
 import { startServer } from '../server.mjs';
 
-test('finger holes send all twelve values and shape the sounding voice', async () => {
+const layout = JSON.parse(await readFile(new URL('../../ui/holes.json', import.meta.url), 'utf8'));
+
+test('the ocarina and thumb controls send all twelve values and shape the sounding voice', async () => {
   const { server, address } = await startServer(0);
   const browser = await chromium.launch({ executablePath: process.env.OCARINA_BROWSER || undefined });
   try {
@@ -22,7 +25,11 @@ test('finger holes send all twelve values and shape the sounding voice', async (
     await page.evaluate(() => { window.parameterEvents.length = 0; });
     const holes = page.locator('.hole');
     assert.equal(await holes.count(), 12);
-    const aligned = await page.evaluate(async () => {
+    assert.equal(await page.locator('#holes .face-hole').count(), 10);
+    assert.equal(await page.locator('#holes .subhole').count(), 2);
+    assert.deepEqual(await page.locator('#thumb-controls .thumb-hole').evaluateAll(
+      buttons => buttons.map(button => button.dataset.parameter)), ['attackArticulation', 'formantColor']);
+    const aligned = await page.evaluate(async front => {
       const art = document.querySelector('#art');
       await art.decode();
       const canvas = document.createElement('canvas');
@@ -31,15 +38,20 @@ test('finger holes send all twelve values and shape the sounding voice', async (
       const context = canvas.getContext('2d');
       context.drawImage(art, 0, 0);
       const bounds = art.getBoundingClientRect();
-      return [...document.querySelectorAll('.ring')].every(ring => {
-        const box = ring.getBoundingClientRect();
-        const x = (box.x + box.width / 2 - bounds.x) / bounds.width * canvas.width;
-        const y = (box.y + box.height / 2 - bounds.y) / bounds.height * canvas.height;
-        const [r, g, b, a] = context.getImageData(x, y, 1, 1).data;
-        return a > 245 && r < 15 && g < 20 && b < 42;
+      return [...document.querySelectorAll('.face-hole')].every(button => {
+        const box = button.querySelector('.ring').getBoundingClientRect();
+        const x = (box.x + box.width / 2 - bounds.x) / bounds.width;
+        const y = (box.y + box.height / 2 - bounds.y) / bounds.height;
+        const position = front[button.dataset.parameter];
+        const [r, g, b, a] = context.getImageData(x * canvas.width, y * canvas.height, 1, 1).data;
+        return Math.abs(x * 100 - position.x) < .1 && Math.abs(y * 100 - position.y) < .1
+          && a > 245 && b > Math.max(r, g) * 1.4;
       });
-    });
-    assert.ok(aligned, 'every knob is centered over a recessed opening in the artwork');
+    }, layout.front);
+    assert.ok(aligned, 'the ten front openings stay on the blue face at their mapped positions');
+    const stage = await page.locator('#stage').boundingBox();
+    const thumb = await page.locator('.thumb-hole').first().boundingBox();
+    assert.ok(thumb.y >= stage.y + stage.height, 'thumb controls are below the ocarina');
     for (const hole of await holes.all()) {
       const initial = await hole.getAttribute('aria-valuenow');
       await hole.press('ArrowUp');
@@ -103,6 +115,27 @@ test('phone layout supports independent touches and a separate keyboard scroll c
     const scroll = page.getByRole('slider', { name: 'Scroll keyboard' });
     await scroll.fill('1000');
     assert.ok(await page.locator('.key-scroll').evaluate(element => element.scrollLeft > 0));
+
+    for (const viewport of [{ width: 320, height: 680 }, { width: 393, height: 850 },
+      { width: 850, height: 393 }, { width: 820, height: 1080 }]) {
+      await page.setViewportSize(viewport);
+      const stage = await page.locator('.stage-shell').evaluate(element => new Promise(resolve => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve(element.getBoundingClientRect().toJSON())));
+      }));
+      const targets = await holes.evaluateAll(buttons => buttons.map(button => {
+        const bounds = button.getBoundingClientRect();
+        return { id: button.dataset.parameter, front: button.classList.contains('face-hole'),
+          x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height };
+      }));
+      for (const [index, a] of targets.entries()) {
+        assert.ok(a.width >= 44 && a.height >= 44, a.id);
+        if (a.front) assert.ok(a.x >= stage.left - 1 && a.x + a.width <= stage.right + 1,
+          `Full touch area visible for ${a.id} at ${viewport.width} × ${viewport.height}`);
+        assert.ok(targets.slice(index + 1).every(b =>
+          a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y),
+        `Distinct touch area for ${a.id} at ${viewport.width} × ${viewport.height}`);
+      }
+    }
   } finally {
     await browser.close();
     server.close();
