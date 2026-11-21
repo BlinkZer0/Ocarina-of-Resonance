@@ -2,7 +2,7 @@
 
 Ocarina of Resonance is a vessel-flute synthesizer in development for Windows VST3, web, and Android. The Phase 1 prototype plays a monophonic reference tone from the same C++ engine on all three platforms. The physical model begins in Phase 2.
 
-[Implementation and release plan](PLAN.md) · [Phase 1 architecture and verification](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
+[Play the web prototype](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Phase 1 architecture and verification](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
 
 ## Windows VST3
 
