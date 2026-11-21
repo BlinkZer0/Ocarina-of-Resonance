@@ -25,6 +25,6 @@ Oboe and Kotlin use Apache License 2.0. Emscripten uses MIT and University of Il
 | Target | Evidence |
 | --- | --- |
 | Shared C++ | CTest verified 440 Hz at 44.1, 48, 88.2, and 96 kHz, source-isolated release, bounded output, and queue overflow recovery. |
-| Windows VST3 | The x64 bundle passed 47 Steinberg validator tests. REAPER 7.86 loaded it as an instrument and rendered a MIDI A4 note at 48 kHz. The 24-bit stereo WAV measured 440 Hz at a peak of 0.165 FS. The FL Studio editor and host checks are pending. |
-| Web | Edge loaded the generated build at the local `/Ocarina-of-Resonance/` subpath and measured nonzero AudioWorklet output while a note was held and silence after release. GitHub Actions and live Pages verification require a GitHub repository destination. |
+| Windows VST3 | The x64 bundle passed 47 Steinberg validator tests and the CTest host integration check for MIDI offsets, note release, and state recall. REAPER 7.86 loaded it as an instrument and rendered a MIDI A4 note at 48 kHz. The 24-bit stereo WAV measured 440 Hz at a peak of 0.165 FS. The FL Studio editor and host checks are pending. |
+| Web | Edge and the GitHub Actions Chromium test loaded the generated build at the local `/Ocarina-of-Resonance/` subpath and measured nonzero AudioWorklet output while a note was held and silence after release. GitHub rejected live Pages for the source repository under its current private-repository plan. |
 | Android | The ARM64 APK passed APK signature and 16 KB ZIP-alignment checks. It installed and launched on Samsung SM-S948U1. Tapping **Play A4 test tone** on the phone logged 21,718 non-silent frames on an AAudio stream at 44.1 kHz. Tablet, OpenSL ES, and acoustic latency checks are pending. |
