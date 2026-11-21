@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstddef>
 #include <cstdint>
+#include <span>
 #include <utility>
 
 namespace ocarina {
@@ -25,6 +26,19 @@ struct Event {
 // at the start of the next drain so voice ownership cannot outlive the input.
 class EventQueue {
 public:
+    bool pushBatch(std::span<const Event> batch) noexcept {
+        if (overflow.load(std::memory_order_acquire)) return false;
+        auto index = write.load(std::memory_order_relaxed);
+        const auto consumed = read.load(std::memory_order_acquire);
+        if (batch.size() > (consumed + capacity - index - 1) % capacity) return false;
+        for (const auto& event : batch) {
+            events[index] = event;
+            index = (index + 1) % capacity;
+        }
+        write.store(index, std::memory_order_release);
+        return true;
+    }
+
     void push(Event event) noexcept {
         if (overflow.load(std::memory_order_acquire))
             return;

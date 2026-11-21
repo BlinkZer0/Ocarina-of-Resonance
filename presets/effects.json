@@ -1,0 +1,13 @@
+[
+  {"id":"filter","name":"Parametric EQ","controls":["filterHz","filterQ","filterDb"],"choices":{}},
+  {"id":"drive","name":"Saturation","controls":["driveMode","driveAmount","driveMix"],"choices":{"driveMode":["Tube","Retro digital","Soft clip"]}},
+  {"id":"fm","name":"FM Airglass","controls":["fmRatio","fmIndex","fmMix"],"choices":{}},
+  {"id":"grain","name":"Granular","controls":["grainSize","grainPitch","grainMix"],"choices":{}},
+  {"id":"tremolo","name":"Tremolo","controls":["tremoloRate","tremoloDepth"],"choices":{}},
+  {"id":"phaser","name":"Phaser","controls":["phaserRate","phaserDepth","phaserMix"],"choices":{}},
+  {"id":"chorus","name":"Chorus","controls":["chorusRate","chorusDepth","chorusWidth","chorusMix"],"choices":{}},
+  {"id":"crusher","name":"Bitcrusher","controls":["crusherBits","crusherMix"],"choices":{}},
+  {"id":"reducer","name":"Sample-rate reduction","controls":["reducerRate","reducerMix"],"choices":{}},
+  {"id":"delay","name":"Delay","controls":["delayMode","delaySync","delayDivision","delayTime","delayFeedback","delayCutoff","delayMix"],"choices":{"delayMode":["Stereo","Ping-pong"],"delaySync":["Milliseconds","Tempo"],"delayDivision":["Sixteenth","Eighth","Quarter","Dotted quarter","Half","Quarter triplet"]}},
+  {"id":"reverb","name":"Reverb","controls":["reverbMode","reverbDecay","reverbDamping","reverbMix"],"choices":{"reverbMode":["Room","Hall","Temple","Cavern","Shimmer"]}}
+]

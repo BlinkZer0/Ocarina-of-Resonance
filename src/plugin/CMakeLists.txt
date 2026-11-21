@@ -47,7 +47,7 @@ juce_add_plugin(OcarinaVST
 
 set(panel "${PROJECT_SOURCE_DIR}/docs")
 juce_add_binary_data(OcarinaPanel NAMESPACE OcarinaPanel HEADER_NAME OcarinaPanel.h SOURCES
-    "${panel}/index.html" "${panel}/assets/main.js" "${panel}/assets/style.css"
+    "${panel}/index.html" "${panel}/assets/main.js" "${panel}/assets/presets.js" "${panel}/assets/style.css"
     "${panel}/assets/parameters.json" "${panel}/assets/ocarina.webp")
 
 target_sources(OcarinaVST PRIVATE PluginProcessor.cpp PluginEditor.cpp)

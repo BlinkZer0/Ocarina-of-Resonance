@@ -1,5 +1,7 @@
 add_library(ocarina_core STATIC
     dsp/AirJetModel.cpp
+    dsp/EffectsEngine.cpp
+    dsp/InstrumentEngine.cpp
     dsp/OcarinaVoice.cpp
     dsp/VesselResonator.cpp
     dsp/VoiceManager.cpp)

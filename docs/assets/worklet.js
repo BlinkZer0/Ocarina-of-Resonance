@@ -13,6 +13,8 @@ class OcarinaVoice extends AudioWorkletProcessor {
         this.port.onmessage = ({ data }) => {
             if ('release' in data)
                 this.engine.release();
+            else if ('patch' in data)
+                data.patch.forEach((value, index) => this.engine.parameter(index, value));
             else if ('index' in data)
                 this.engine.parameter(data.index, data.value);
             else
@@ -26,10 +28,15 @@ class OcarinaVoice extends AudioWorkletProcessor {
             const count = Math.min(256, frames - start);
             const offset = this.engine.render(count) / Float32Array.BYTES_PER_ELEMENT;
             for (let frame = 0; frame < count; ++frame) {
-                const sample = this.memory[offset + frame];
-                this.peak = Math.max(this.peak, Math.abs(sample));
-                for (const channel of channels)
-                    channel[start + frame] = sample;
+                const left = this.memory[offset + frame];
+                const right = this.memory[offset + 256 + frame];
+                this.peak = Math.max(this.peak, Math.abs(left), Math.abs(right));
+                if (channels.length === 1)
+                    channels[0][start + frame] = (left + right) * .5;
+                else {
+                    channels[0][start + frame] = left;
+                    channels[1][start + frame] = right;
+                }
             }
         }
         this.meterFrames += frames;

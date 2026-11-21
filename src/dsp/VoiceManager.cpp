@@ -40,7 +40,7 @@ void VoiceManager::releaseAll() noexcept {
 }
 
 void VoiceManager::setParameter(size_t index, float value) noexcept {
-    if (index >= parameterCount || !std::isfinite(value))
+    if (index >= synthesisParameterCount || !std::isfinite(value))
         return;
     const auto& spec = parameters[index];
     value = std::clamp(value, spec.minimum, spec.maximum);
@@ -242,7 +242,7 @@ void VoiceManager::apply(Event event) noexcept {
 }
 
 void VoiceManager::refreshControls(int elapsed) noexcept {
-    for (size_t index = 1; index < parameterCount; ++index)
+    for (size_t index = 1; index < values.size(); ++index)
         values[index] += controlStep * (targets[index] - values[index]);
     for (size_t index = 0; index < modelBlend.size(); ++index)
         modelBlend[index] += controlStep * ((index == static_cast<size_t>(targets[model]) ? 1.0f : 0.0f) - modelBlend[index]);

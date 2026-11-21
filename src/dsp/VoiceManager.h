@@ -59,13 +59,13 @@ private:
     size_t keyCount = 0, channelCursor = 0;
     uint64_t generation = 0;
 
-    std::array<float, parameterCount> targets = [] {
-        std::array<float, parameterCount> result {};
-        for (size_t index = 0; index < parameterCount; ++index)
-            result[index] = parameters[index].initial;
+    std::array<float, synthesisParameterCount> targets = [] {
+        std::array<float, synthesisParameterCount> result {};
+        for (size_t index = 0; index < result.size(); ++index)
+            result[index] = parameterDefaults[index];
         return result;
     }();
-    std::array<float, parameterCount> values = targets;
+    std::array<float, synthesisParameterCount> values = targets;
     std::array<float, 4> modelBlend {1, 0, 0, 0};
     ModelControls controls {};
     float rate = 48000.0f, gain = 0.7f, gainStep = 0, controlStep = 0, referenceFrequency = 0;

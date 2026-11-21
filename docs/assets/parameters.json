@@ -215,6 +215,447 @@
       "min": 0,
       "max": 100,
       "initial": 20
+    },
+    {
+      "index": 24,
+      "id": "patchGain",
+      "name": "Preset gain",
+      "unit": "dB",
+      "min": -18,
+      "max": 6,
+      "initial": 0
+    },
+    {
+      "index": 25,
+      "id": "tempo",
+      "name": "Tempo",
+      "unit": "BPM",
+      "min": 40,
+      "max": 250,
+      "initial": 120
+    },
+    {
+      "index": 26,
+      "id": "filterEnabled",
+      "name": "Filter enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 27,
+      "id": "filterHz",
+      "name": "Frequency",
+      "unit": "Hz",
+      "min": 80,
+      "max": 10000,
+      "initial": 2100
+    },
+    {
+      "index": 28,
+      "id": "filterQ",
+      "name": "Resonance",
+      "unit": "",
+      "min": 0.35,
+      "max": 4,
+      "initial": 0.8
+    },
+    {
+      "index": 29,
+      "id": "filterDb",
+      "name": "Gain",
+      "unit": "dB",
+      "min": -18,
+      "max": 12,
+      "initial": 0
+    },
+    {
+      "index": 30,
+      "id": "driveEnabled",
+      "name": "Saturation enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 31,
+      "id": "driveMode",
+      "name": "Character",
+      "unit": "",
+      "min": 0,
+      "max": 2,
+      "initial": 0
+    },
+    {
+      "index": 32,
+      "id": "driveAmount",
+      "name": "Drive",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 28
+    },
+    {
+      "index": 33,
+      "id": "driveMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 25
+    },
+    {
+      "index": 34,
+      "id": "fmEnabled",
+      "name": "FM enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 35,
+      "id": "fmRatio",
+      "name": "Carrier ratio",
+      "unit": "",
+      "min": 0.5,
+      "max": 4,
+      "initial": 2
+    },
+    {
+      "index": 36,
+      "id": "fmIndex",
+      "name": "FM index",
+      "unit": "",
+      "min": 0,
+      "max": 5,
+      "initial": 1.1
+    },
+    {
+      "index": 37,
+      "id": "fmMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 22
+    },
+    {
+      "index": 38,
+      "id": "grainEnabled",
+      "name": "Granular enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 39,
+      "id": "grainSize",
+      "name": "Grain size",
+      "unit": "ms",
+      "min": 22,
+      "max": 180,
+      "initial": 75
+    },
+    {
+      "index": 40,
+      "id": "grainPitch",
+      "name": "Grain pitch",
+      "unit": "st",
+      "min": -12,
+      "max": 12,
+      "initial": 7
+    },
+    {
+      "index": 41,
+      "id": "grainMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 22
+    },
+    {
+      "index": 42,
+      "id": "tremoloEnabled",
+      "name": "Tremolo enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 43,
+      "id": "tremoloRate",
+      "name": "Rate",
+      "unit": "Hz",
+      "min": 0.15,
+      "max": 16,
+      "initial": 4.2
+    },
+    {
+      "index": 44,
+      "id": "tremoloDepth",
+      "name": "Depth",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 30
+    },
+    {
+      "index": 45,
+      "id": "phaserEnabled",
+      "name": "Phaser enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 46,
+      "id": "phaserRate",
+      "name": "Rate",
+      "unit": "Hz",
+      "min": 0.05,
+      "max": 8,
+      "initial": 0.65
+    },
+    {
+      "index": 47,
+      "id": "phaserDepth",
+      "name": "Sweep",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 64
+    },
+    {
+      "index": 48,
+      "id": "phaserMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 28
+    },
+    {
+      "index": 49,
+      "id": "chorusEnabled",
+      "name": "Chorus enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 50,
+      "id": "chorusRate",
+      "name": "Rate",
+      "unit": "Hz",
+      "min": 0.05,
+      "max": 8,
+      "initial": 0.73
+    },
+    {
+      "index": 51,
+      "id": "chorusDepth",
+      "name": "Depth",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 42
+    },
+    {
+      "index": 52,
+      "id": "chorusWidth",
+      "name": "Width",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 77
+    },
+    {
+      "index": 53,
+      "id": "chorusMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 28
+    },
+    {
+      "index": 54,
+      "id": "crusherEnabled",
+      "name": "Bitcrusher enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 55,
+      "id": "crusherBits",
+      "name": "Resolution",
+      "unit": "bits",
+      "min": 3,
+      "max": 16,
+      "initial": 10
+    },
+    {
+      "index": 56,
+      "id": "crusherMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 38
+    },
+    {
+      "index": 57,
+      "id": "reducerEnabled",
+      "name": "Rate reducer enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 58,
+      "id": "reducerRate",
+      "name": "Effective rate",
+      "unit": "Hz",
+      "min": 450,
+      "max": 24000,
+      "initial": 6500
+    },
+    {
+      "index": 59,
+      "id": "reducerMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 42
+    },
+    {
+      "index": 60,
+      "id": "delayEnabled",
+      "name": "Delay enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 61,
+      "id": "delayMode",
+      "name": "Routing",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 62,
+      "id": "delaySync",
+      "name": "Tempo sync",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 63,
+      "id": "delayDivision",
+      "name": "Note value",
+      "unit": "",
+      "min": 0,
+      "max": 5,
+      "initial": 2
+    },
+    {
+      "index": 64,
+      "id": "delayTime",
+      "name": "Time",
+      "unit": "ms",
+      "min": 30,
+      "max": 1500,
+      "initial": 300
+    },
+    {
+      "index": 65,
+      "id": "delayFeedback",
+      "name": "Feedback",
+      "unit": "%",
+      "min": 0,
+      "max": 87,
+      "initial": 32
+    },
+    {
+      "index": 66,
+      "id": "delayCutoff",
+      "name": "Feedback filter",
+      "unit": "Hz",
+      "min": 300,
+      "max": 15000,
+      "initial": 4400
+    },
+    {
+      "index": 67,
+      "id": "delayMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 23
+    },
+    {
+      "index": 68,
+      "id": "reverbEnabled",
+      "name": "Reverb enabled",
+      "unit": "",
+      "min": 0,
+      "max": 1,
+      "initial": 0
+    },
+    {
+      "index": 69,
+      "id": "reverbMode",
+      "name": "Space",
+      "unit": "",
+      "min": 0,
+      "max": 4,
+      "initial": 0
+    },
+    {
+      "index": 70,
+      "id": "reverbDecay",
+      "name": "Decay",
+      "unit": "s",
+      "min": 0.2,
+      "max": 13,
+      "initial": 2.2
+    },
+    {
+      "index": 71,
+      "id": "reverbDamping",
+      "name": "Damping",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 52
+    },
+    {
+      "index": 72,
+      "id": "reverbMix",
+      "name": "Mix",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "initial": 24
     }
   ],
   "models": [
@@ -276,5 +717,5793 @@
         70.915
       ]
     ]
-  }
+  },
+  "effects": [
+    {
+      "id": "filter",
+      "name": "Parametric EQ",
+      "controls": [
+        "filterHz",
+        "filterQ",
+        "filterDb"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "drive",
+      "name": "Saturation",
+      "controls": [
+        "driveMode",
+        "driveAmount",
+        "driveMix"
+      ],
+      "choices": {
+        "driveMode": [
+          "Tube",
+          "Retro digital",
+          "Soft clip"
+        ]
+      }
+    },
+    {
+      "id": "fm",
+      "name": "FM Airglass",
+      "controls": [
+        "fmRatio",
+        "fmIndex",
+        "fmMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "grain",
+      "name": "Granular",
+      "controls": [
+        "grainSize",
+        "grainPitch",
+        "grainMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "tremolo",
+      "name": "Tremolo",
+      "controls": [
+        "tremoloRate",
+        "tremoloDepth"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "phaser",
+      "name": "Phaser",
+      "controls": [
+        "phaserRate",
+        "phaserDepth",
+        "phaserMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "chorus",
+      "name": "Chorus",
+      "controls": [
+        "chorusRate",
+        "chorusDepth",
+        "chorusWidth",
+        "chorusMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "crusher",
+      "name": "Bitcrusher",
+      "controls": [
+        "crusherBits",
+        "crusherMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "reducer",
+      "name": "Sample-rate reduction",
+      "controls": [
+        "reducerRate",
+        "reducerMix"
+      ],
+      "choices": {}
+    },
+    {
+      "id": "delay",
+      "name": "Delay",
+      "controls": [
+        "delayMode",
+        "delaySync",
+        "delayDivision",
+        "delayTime",
+        "delayFeedback",
+        "delayCutoff",
+        "delayMix"
+      ],
+      "choices": {
+        "delayMode": [
+          "Stereo",
+          "Ping-pong"
+        ],
+        "delaySync": [
+          "Milliseconds",
+          "Tempo"
+        ],
+        "delayDivision": [
+          "Sixteenth",
+          "Eighth",
+          "Quarter",
+          "Dotted quarter",
+          "Half",
+          "Quarter triplet"
+        ]
+      }
+    },
+    {
+      "id": "reverb",
+      "name": "Reverb",
+      "controls": [
+        "reverbMode",
+        "reverbDecay",
+        "reverbDamping",
+        "reverbMix"
+      ],
+      "choices": {
+        "reverbMode": [
+          "Room",
+          "Hall",
+          "Temple",
+          "Cavern",
+          "Shimmer"
+        ]
+      }
+    }
+  ],
+  "factory": [
+    {
+      "schemaVersion": 1,
+      "id": "classic-blue-ceramic",
+      "name": "Classic Blue Ceramic",
+      "category": "Authentic",
+      "description": "Balanced glazed ceramic with a clear attack and a short wooden-room reflection.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 55,
+        "jetVelocity": 50,
+        "edgeInteraction": 48,
+        "turbulence": 17,
+        "cavityVolume": 112,
+        "openHoleArea": 45,
+        "apertureNeckLength": 7,
+        "resonatorDamping": 34,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 7,
+        "attackArticulation": 46,
+        "formantColor": 46,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.7,
+            "reverbDamping": 58,
+            "reverbMix": 10
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.67,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "alto-c-ocarina",
+      "name": "Alto C Ocarina",
+      "category": "Authentic",
+      "description": "A focused alto center with low breath noise and natural quarter-tone expression.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 57,
+        "jetVelocity": 52,
+        "edgeInteraction": 45,
+        "turbulence": 13,
+        "cavityVolume": 145,
+        "openHoleArea": 50,
+        "apertureNeckLength": 8.2,
+        "resonatorDamping": 35,
+        "resonatorDetuning": -1,
+        "vibratoDepth": 5,
+        "attackArticulation": 44,
+        "formantColor": 39,
+        "portamento": 17,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.9,
+            "reverbDamping": 52,
+            "reverbMix": 9
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.89,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "soprano-c-ocarina",
+      "name": "Soprano C Ocarina",
+      "category": "Authentic",
+      "description": "Small bright vessel, quick tongue, and a clean response for high melodies.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 61,
+        "jetVelocity": 63,
+        "edgeInteraction": 62,
+        "turbulence": 15,
+        "cavityVolume": 47,
+        "openHoleArea": 37,
+        "apertureNeckLength": 4.5,
+        "resonatorDamping": 42,
+        "resonatorDetuning": 2,
+        "vibratoDepth": 4,
+        "attackArticulation": 77,
+        "formantColor": 72,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": true,
+          "parameters": {
+            "filterHz": 2360,
+            "filterQ": 0.8,
+            "filterDb": 2.3
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.52,
+            "reverbDamping": 52,
+            "reverbMix": 8
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 6,
+        "gainCompensationDb": -1.58,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "bass-ocarina",
+      "name": "Bass Ocarina",
+      "category": "Authentic",
+      "description": "Large, dark chamber and wide breath for low-register playing.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 58,
+        "jetVelocity": 37,
+        "edgeInteraction": 40,
+        "turbulence": 20,
+        "cavityVolume": 375,
+        "openHoleArea": 43,
+        "apertureNeckLength": 15,
+        "resonatorDamping": 46,
+        "resonatorDetuning": -5,
+        "vibratoDepth": 4,
+        "attackArticulation": 27,
+        "formantColor": 21,
+        "portamento": 38,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": true,
+          "parameters": {
+            "filterHz": 720,
+            "filterQ": 0.8,
+            "filterDb": 2.4
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.76,
+            "reverbDamping": 52,
+            "reverbMix": 14
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.07,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "warm-clay-vessel",
+      "name": "Warm Clay Vessel",
+      "category": "Authentic",
+      "description": "Soft terracotta resonance with rounded transients and light tube warmth.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 55,
+        "jetVelocity": 40,
+        "edgeInteraction": 43,
+        "turbulence": 22,
+        "cavityVolume": 202,
+        "openHoleArea": 46,
+        "apertureNeckLength": 11.5,
+        "resonatorDamping": 41,
+        "resonatorDetuning": -3,
+        "vibratoDepth": 5,
+        "attackArticulation": 28,
+        "formantColor": 33,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 14,
+            "driveMix": 13
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.85,
+            "reverbDamping": 52,
+            "reverbMix": 12
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 7,
+        "gainCompensationDb": -0.08,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "concert-ceramic",
+      "name": "Concert Ceramic",
+      "category": "Authentic",
+      "description": "A clean projection patch with crisp articulation and a concert hall tail.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 62,
+        "jetVelocity": 61,
+        "edgeInteraction": 52,
+        "turbulence": 12,
+        "cavityVolume": 108,
+        "openHoleArea": 55,
+        "apertureNeckLength": 7.1,
+        "resonatorDamping": 34,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 10,
+        "attackArticulation": 62,
+        "formantColor": 51,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 2.4,
+            "reverbDamping": 40,
+            "reverbMix": 18
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": -1.11,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "wooden-vessel-flute",
+      "name": "Wooden Vessel Flute",
+      "category": "Authentic",
+      "description": "An airy edge with muted high overtones and a close room.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 53,
+        "jetVelocity": 44,
+        "edgeInteraction": 62,
+        "turbulence": 31,
+        "cavityVolume": 167,
+        "openHoleArea": 53,
+        "apertureNeckLength": 8.1,
+        "resonatorDamping": 46,
+        "resonatorDetuning": -2,
+        "vibratoDepth": 9,
+        "attackArticulation": 39,
+        "formantColor": 34,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": true,
+          "parameters": {
+            "filterHz": 4200,
+            "filterQ": 1,
+            "filterDb": -3.8
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.62,
+            "reverbDamping": 52,
+            "reverbMix": 14
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 6,
+        "gainCompensationDb": 0.37,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "breath-of-the-highlands",
+      "name": "Breath of the Highlands",
+      "category": "Authentic",
+      "description": "Wind-forward articulation with a singing swell over a distant hall.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 64,
+        "jetVelocity": 57,
+        "edgeInteraction": 59,
+        "turbulence": 35,
+        "cavityVolume": 149,
+        "openHoleArea": 51,
+        "apertureNeckLength": 9,
+        "resonatorDamping": 39,
+        "resonatorDetuning": 1,
+        "vibratoDepth": 14,
+        "attackArticulation": 42,
+        "formantColor": 48,
+        "portamento": 45,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 0.71,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 2.7,
+            "reverbDamping": 59,
+            "reverbMix": 25
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.41,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "ancient-folk-ocarina",
+      "name": "Ancient Folk Ocarina",
+      "category": "Authentic",
+      "description": "Drier handmade vessel with gentle pitch movement and a textured edge.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 57,
+        "jetVelocity": 45,
+        "edgeInteraction": 66,
+        "turbulence": 26,
+        "cavityVolume": 128,
+        "openHoleArea": 35,
+        "apertureNeckLength": 9.3,
+        "resonatorDamping": 46,
+        "resonatorDetuning": -7,
+        "vibratoDepth": 13,
+        "attackArticulation": 52,
+        "formantColor": 42,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 10,
+            "driveMix": 9
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.55,
+            "reverbDamping": 52,
+            "reverbMix": 8
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "poly",
+        "voiceLimit": 5,
+        "gainCompensationDb": -1.07,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "soloist-expressive",
+      "name": "Soloist Expressive",
+      "category": "Authentic",
+      "description": "Expressive monophonic lead with soft legato and strong pressure and velocity response.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 67,
+        "jetVelocity": 56,
+        "edgeInteraction": 55,
+        "turbulence": 19,
+        "cavityVolume": 116,
+        "openHoleArea": 48,
+        "apertureNeckLength": 7.8,
+        "resonatorDamping": 35,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 17,
+        "attackArticulation": 51,
+        "formantColor": 50,
+        "portamento": 55,
+        "bendRange": 2,
+        "velocityResponse": 87,
+        "aftertouchResponse": 82,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 1.7,
+            "reverbDamping": 52,
+            "reverbMix": 14
+          }
+        }
+      ],
+      "performance": {
+        "model": "ceramicAuthentic",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -1.66,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "heros-blue-ocarina",
+      "name": "Hero's Blue Ocarina",
+      "category": "Retro",
+      "description": "Rounded lead with a short temple reflection and a firm, clean attack.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 58,
+        "jetVelocity": 52,
+        "edgeInteraction": 49,
+        "turbulence": 9,
+        "cavityVolume": 101,
+        "openHoleArea": 49,
+        "apertureNeckLength": 7,
+        "resonatorDamping": 32,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 4,
+        "attackArticulation": 53,
+        "formantColor": 43,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 2,
+            "reverbDecay": 1.35,
+            "reverbDamping": 57,
+            "reverbMix": 15
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.71,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "time-traveler",
+      "name": "Time Traveler",
+      "category": "Retro",
+      "description": "Stable solo lead with dotted-note echoes paced for melodic phrases.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 56,
+        "jetVelocity": 47,
+        "edgeInteraction": 43,
+        "turbulence": 7,
+        "cavityVolume": 116,
+        "openHoleArea": 39,
+        "apertureNeckLength": 7.3,
+        "resonatorDamping": 38,
+        "resonatorDetuning": -2,
+        "vibratoDepth": 5,
+        "attackArticulation": 49,
+        "formantColor": 37,
+        "portamento": 43,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 1,
+            "delayDivision": 3,
+            "delayTime": 300,
+            "delayFeedback": 26,
+            "delayCutoff": 4400,
+            "delayMix": 21
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 11
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 1.82,
+        "tempoBpm": 108
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "forest-melody",
+      "name": "Forest Melody",
+      "category": "Retro",
+      "description": "Soft woody retro pipe with stereo chorus and a green, close room.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 55,
+        "jetVelocity": 43,
+        "edgeInteraction": 48,
+        "turbulence": 17,
+        "cavityVolume": 147,
+        "openHoleArea": 44,
+        "apertureNeckLength": 9,
+        "resonatorDamping": 39,
+        "resonatorDetuning": -3,
+        "vibratoDepth": 7,
+        "attackArticulation": 35,
+        "formantColor": 40,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.5,
+            "chorusDepth": 26,
+            "chorusWidth": 58,
+            "chorusMix": 19
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 1.2,
+            "reverbDamping": 52,
+            "reverbMix": 15
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": 1.69,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "sacred-temple",
+      "name": "Sacred Temple",
+      "category": "Retro",
+      "description": "Rounded vessel receding into stone temple reflections.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 59,
+        "jetVelocity": 53,
+        "edgeInteraction": 52,
+        "turbulence": 10,
+        "cavityVolume": 107,
+        "openHoleArea": 46,
+        "apertureNeckLength": 7.6,
+        "resonatorDamping": 34,
+        "resonatorDetuning": 1,
+        "vibratoDepth": 5,
+        "attackArticulation": 45,
+        "formantColor": 45,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 2,
+            "reverbDecay": 4.1,
+            "reverbDamping": 54,
+            "reverbMix": 36
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": 3.01,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "moonlit-serenade",
+      "name": "Moonlit Serenade",
+      "category": "Retro",
+      "description": "Soft solo voice with a slow pitch shimmer and quiet stereo delay.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 54,
+        "jetVelocity": 40,
+        "edgeInteraction": 42,
+        "turbulence": 8,
+        "cavityVolume": 151,
+        "openHoleArea": 45,
+        "apertureNeckLength": 9.5,
+        "resonatorDamping": 38,
+        "resonatorDetuning": -2,
+        "vibratoDepth": 12,
+        "attackArticulation": 28,
+        "formantColor": 32,
+        "portamento": 52,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 385,
+            "delayFeedback": 19,
+            "delayCutoff": 4400,
+            "delayMix": 17
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 2.7,
+            "reverbDamping": 52,
+            "reverbMix": 22
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 1.33,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "lost-woods",
+      "name": "Lost Woods",
+      "category": "Retro",
+      "description": "Quick plucked-air onset with compact filtered reflection.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 60,
+        "jetVelocity": 58,
+        "edgeInteraction": 58,
+        "turbulence": 12,
+        "cavityVolume": 86,
+        "openHoleArea": 49,
+        "apertureNeckLength": 5.9,
+        "resonatorDamping": 46,
+        "resonatorDetuning": 2,
+        "vibratoDepth": 3,
+        "attackArticulation": 76,
+        "formantColor": 53,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 122,
+            "delayFeedback": 17,
+            "delayCutoff": 2600,
+            "delayMix": 19
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.47,
+            "reverbDamping": 52,
+            "reverbMix": 8
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 9,
+        "gainCompensationDb": -0.22,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "ancient-kingdom",
+      "name": "Ancient Kingdom",
+      "category": "Retro",
+      "description": "Dark melody tone with wide low-passed echoes and resonant cavern depth.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 63,
+        "jetVelocity": 45,
+        "edgeInteraction": 43,
+        "turbulence": 16,
+        "cavityVolume": 191,
+        "openHoleArea": 46,
+        "apertureNeckLength": 11,
+        "resonatorDamping": 41,
+        "resonatorDetuning": -4,
+        "vibratoDepth": 6,
+        "attackArticulation": 33,
+        "formantColor": 33,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 1,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 2100,
+            "delayMix": 18
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 3,
+            "reverbDecay": 3.9,
+            "reverbDamping": 52,
+            "reverbMix": 25
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 7,
+        "gainCompensationDb": 2.19,
+        "tempoBpm": 92
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "fairy-fountain",
+      "name": "Fairy Fountain",
+      "category": "Retro",
+      "description": "Glassy high-register tone with a soft octave-up halo.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 62,
+        "jetVelocity": 60,
+        "edgeInteraction": 55,
+        "turbulence": 10,
+        "cavityVolume": 59,
+        "openHoleArea": 45,
+        "apertureNeckLength": 5.1,
+        "resonatorDamping": 36,
+        "resonatorDetuning": 1,
+        "vibratoDepth": 9,
+        "attackArticulation": 57,
+        "formantColor": 65,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.62,
+            "chorusDepth": 20,
+            "chorusWidth": 77,
+            "chorusMix": 16
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 4.6,
+            "reverbDamping": 42,
+            "reverbMix": 26
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": 1.86,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "twilight-echo",
+      "name": "Twilight Echo",
+      "category": "Retro",
+      "description": "A restrained, dusky solo lead with syncopated ping-pong echoes.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 56,
+        "jetVelocity": 46,
+        "edgeInteraction": 45,
+        "turbulence": 13,
+        "cavityVolume": 137,
+        "openHoleArea": 43,
+        "apertureNeckLength": 8.6,
+        "resonatorDamping": 42,
+        "resonatorDetuning": -4,
+        "vibratoDepth": 10,
+        "attackArticulation": 42,
+        "formantColor": 33,
+        "portamento": 54,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 1,
+            "delayDivision": 5,
+            "delayTime": 300,
+            "delayFeedback": 40,
+            "delayCutoff": 3200,
+            "delayMix": 29
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 2,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 13
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 3.75,
+        "tempoBpm": 97
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "eight-bit-dreamer",
+      "name": "Eight-Bit Dreamer",
+      "category": "Retro",
+      "description": "Bright chip-like tones with stepped quantization and rate reduction.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 64,
+        "jetVelocity": 61,
+        "edgeInteraction": 57,
+        "turbulence": 6,
+        "cavityVolume": 72,
+        "openHoleArea": 49,
+        "apertureNeckLength": 6.3,
+        "resonatorDamping": 37,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 2,
+        "attackArticulation": 72,
+        "formantColor": 54,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 1,
+            "driveAmount": 40,
+            "driveMix": 17
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": true,
+          "parameters": {
+            "crusherBits": 6,
+            "crusherMix": 45
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": true,
+          "parameters": {
+            "reducerRate": 11400,
+            "reducerMix": 34
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 165,
+            "delayFeedback": 18,
+            "delayCutoff": 4400,
+            "delayMix": 12
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": false,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 24
+          }
+        }
+      ],
+      "performance": {
+        "model": "retroFantasy",
+        "voiceMode": "poly",
+        "voiceLimit": 12,
+        "gainCompensationDb": -3.46,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "syntharina",
+      "name": "Syntharina",
+      "category": "Electronic",
+      "description": "Glossy lead with tight stereo chorus and a light soft-clip edge.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 65,
+        "jetVelocity": 65,
+        "edgeInteraction": 63,
+        "turbulence": 18,
+        "cavityVolume": 84,
+        "openHoleArea": 62,
+        "apertureNeckLength": 6.4,
+        "resonatorDamping": 34,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 7,
+        "attackArticulation": 60,
+        "formantColor": 71,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 2,
+            "driveAmount": 31,
+            "driveMix": 21
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.84,
+            "chorusDepth": 31,
+            "chorusWidth": 77,
+            "chorusMix": 24
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": false,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 24
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": -2.28,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "cyber-flute",
+      "name": "Cyber Flute",
+      "category": "Electronic",
+      "description": "Focused cyber-wind with a fast stereo phaser and filtered ping-pong delay.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 65,
+        "jetVelocity": 67,
+        "edgeInteraction": 72,
+        "turbulence": 21,
+        "cavityVolume": 72,
+        "openHoleArea": 66,
+        "apertureNeckLength": 6,
+        "resonatorDamping": 39,
+        "resonatorDetuning": -1,
+        "vibratoDepth": 5,
+        "attackArticulation": 63,
+        "formantColor": 69,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": true,
+          "parameters": {
+            "phaserRate": 1.48,
+            "phaserDepth": 63,
+            "phaserMix": 44
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 1,
+            "delayDivision": 1,
+            "delayTime": 300,
+            "delayFeedback": 31,
+            "delayCutoff": 4400,
+            "delayMix": 26
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": false,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 24
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": 1.62,
+        "tempoBpm": 134
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "neon-breath",
+      "name": "Neon Breath",
+      "category": "Electronic",
+      "description": "Noisy attack that blooms into a wider chorus and bright hall.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 64,
+        "jetVelocity": 59,
+        "edgeInteraction": 62,
+        "turbulence": 40,
+        "cavityVolume": 93,
+        "openHoleArea": 53,
+        "apertureNeckLength": 6.8,
+        "resonatorDamping": 41,
+        "resonatorDetuning": 2,
+        "vibratoDepth": 14,
+        "attackArticulation": 42,
+        "formantColor": 68,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.63,
+            "chorusDepth": 49,
+            "chorusWidth": 100,
+            "chorusMix": 33
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 2.8,
+            "reverbDamping": 34,
+            "reverbMix": 19
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": 0.92,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "resonant-pulse",
+      "name": "Resonant Pulse",
+      "category": "Electronic",
+      "description": "A rounded pulse animation from stereo tremolo and a bright filtered edge.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 68,
+        "jetVelocity": 64,
+        "edgeInteraction": 67,
+        "turbulence": 15,
+        "cavityVolume": 105,
+        "openHoleArea": 58,
+        "apertureNeckLength": 6.4,
+        "resonatorDamping": 36,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 3,
+        "attackArticulation": 59,
+        "formantColor": 73,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": true,
+          "parameters": {
+            "filterHz": 1730,
+            "filterQ": 1.2,
+            "filterDb": 3.8
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": true,
+          "parameters": {
+            "tremoloRate": 6.35,
+            "tremoloDepth": 59
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 155,
+            "delayFeedback": 25,
+            "delayCutoff": 4400,
+            "delayMix": 15
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": false,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 24
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 12,
+        "gainCompensationDb": 0.59,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "vaporwave-vessel",
+      "name": "Vaporwave Vessel",
+      "category": "Electronic",
+      "description": "Thick, slow chorus under a warm low-passed echo.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 59,
+        "jetVelocity": 49,
+        "edgeInteraction": 54,
+        "turbulence": 21,
+        "cavityVolume": 157,
+        "openHoleArea": 51,
+        "apertureNeckLength": 9.6,
+        "resonatorDamping": 42,
+        "resonatorDetuning": -6,
+        "vibratoDepth": 16,
+        "attackArticulation": 34,
+        "formantColor": 50,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 22,
+            "driveMix": 18
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.37,
+            "chorusDepth": 60,
+            "chorusWidth": 96,
+            "chorusMix": 40
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 490,
+            "delayFeedback": 36,
+            "delayCutoff": 1600,
+            "delayMix": 22
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 2.9,
+            "reverbDamping": 52,
+            "reverbMix": 18
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": 3.99,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "glitch-ocarina",
+      "name": "Glitch Ocarina",
+      "category": "Electronic",
+      "description": "Bitwise grain with lower clock rate and asymmetric repeats.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 69,
+        "jetVelocity": 70,
+        "edgeInteraction": 66,
+        "turbulence": 28,
+        "cavityVolume": 79,
+        "openHoleArea": 46,
+        "apertureNeckLength": 5.5,
+        "resonatorDamping": 43,
+        "resonatorDetuning": 4,
+        "vibratoDepth": 4,
+        "attackArticulation": 74,
+        "formantColor": 65,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": true,
+          "parameters": {
+            "crusherBits": 5,
+            "crusherMix": 66
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": true,
+          "parameters": {
+            "reducerRate": 3900,
+            "reducerMix": 59
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 186,
+            "delayFeedback": 22,
+            "delayCutoff": 4400,
+            "delayMix": 25
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": false,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 2.2,
+            "reverbDamping": 52,
+            "reverbMix": 24
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": -2.26,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "fm-airglass",
+      "name": "FM Airglass",
+      "category": "Electronic",
+      "description": "An audio-rate FM carrier follows the vessel pitch and brightens as the modeled signal drives it.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 66,
+        "jetVelocity": 61,
+        "edgeInteraction": 66,
+        "turbulence": 16,
+        "cavityVolume": 94,
+        "openHoleArea": 52,
+        "apertureNeckLength": 6.7,
+        "resonatorDamping": 36,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 9,
+        "attackArticulation": 45,
+        "formantColor": 61,
+        "portamento": 42,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": true,
+          "parameters": {
+            "fmRatio": 2.7,
+            "fmIndex": 3.8,
+            "fmMix": 59
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 1.8,
+            "reverbDamping": 52,
+            "reverbMix": 21
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 2.2,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "ambient-drone",
+      "name": "Ambient Drone",
+      "category": "Electronic",
+      "description": "Polyphonic air pad with deep modulation and long cavern decay.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 59,
+        "jetVelocity": 46,
+        "edgeInteraction": 49,
+        "turbulence": 29,
+        "cavityVolume": 245,
+        "openHoleArea": 50,
+        "apertureNeckLength": 11,
+        "resonatorDamping": 36,
+        "resonatorDetuning": -5,
+        "vibratoDepth": 20,
+        "attackArticulation": 20,
+        "formantColor": 42,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": true,
+          "parameters": {
+            "tremoloRate": 0.52,
+            "tremoloDepth": 29
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.24,
+            "chorusDepth": 53,
+            "chorusWidth": 77,
+            "chorusMix": 32
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 3,
+            "reverbDecay": 8.5,
+            "reverbDamping": 65,
+            "reverbMix": 42
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 16,
+        "gainCompensationDb": 5.49,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "granular-illusion",
+      "name": "Granular Illusion",
+      "category": "Electronic",
+      "description": "Overlapping transposed grains from the live vessel create a moving glass cloud.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 63,
+        "jetVelocity": 57,
+        "edgeInteraction": 63,
+        "turbulence": 20,
+        "cavityVolume": 96,
+        "openHoleArea": 51,
+        "apertureNeckLength": 7,
+        "resonatorDamping": 39,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 8,
+        "attackArticulation": 42,
+        "formantColor": 64,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": true,
+          "parameters": {
+            "grainSize": 106,
+            "grainPitch": 9,
+            "grainMix": 54
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 410,
+            "delayFeedback": 30,
+            "delayCutoff": 4400,
+            "delayMix": 14
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 3,
+            "reverbDecay": 3.7,
+            "reverbDamping": 52,
+            "reverbMix": 21
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": 3.61,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "digital-spirit",
+      "name": "Digital Spirit",
+      "category": "Electronic",
+      "description": "Small, bright digital resonance with a sliding pitch and octave shimmer.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 67,
+        "jetVelocity": 67,
+        "edgeInteraction": 69,
+        "turbulence": 14,
+        "cavityVolume": 64,
+        "openHoleArea": 54,
+        "apertureNeckLength": 5.2,
+        "resonatorDamping": 41,
+        "resonatorDetuning": 3,
+        "vibratoDepth": 13,
+        "attackArticulation": 54,
+        "formantColor": 70,
+        "portamento": 61,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 1,
+            "driveAmount": 21,
+            "driveMix": 17
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": true,
+          "parameters": {
+            "reducerRate": 9200,
+            "reducerMix": 20
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 4.1,
+            "reverbDamping": 52,
+            "reverbMix": 29
+          }
+        }
+      ],
+      "performance": {
+        "model": "electronicHybrid",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.91,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "celtic-dawn",
+      "name": "Celtic Dawn",
+      "category": "Cinematic",
+      "description": "Warm glass-and-ceramic dawn tone with a diffused hall.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 61,
+        "jetVelocity": 49,
+        "edgeInteraction": 48,
+        "turbulence": 22,
+        "cavityVolume": 142,
+        "openHoleArea": 51,
+        "apertureNeckLength": 8.2,
+        "resonatorDamping": 37,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 11,
+        "attackArticulation": 39,
+        "formantColor": 44,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 3.1,
+            "reverbDamping": 52,
+            "reverbMix": 29
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 12,
+        "gainCompensationDb": 0.55,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "druids-lament",
+      "name": "Druid's Lament",
+      "category": "Cinematic",
+      "description": "Low solo vessel with an expressive breath-first attack and long legato.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 64,
+        "jetVelocity": 42,
+        "edgeInteraction": 56,
+        "turbulence": 34,
+        "cavityVolume": 250,
+        "openHoleArea": 42,
+        "apertureNeckLength": 11.5,
+        "resonatorDamping": 41,
+        "resonatorDetuning": -7,
+        "vibratoDepth": 17,
+        "attackArticulation": 25,
+        "formantColor": 34,
+        "portamento": 77,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 71,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 2,
+            "reverbDecay": 3.5,
+            "reverbDamping": 65,
+            "reverbMix": 29
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 0.98,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "mystic-cathedral",
+      "name": "Mystic Cathedral",
+      "category": "Cinematic",
+      "description": "Glass registers over a spacious octave-up cathedral tail.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 64,
+        "jetVelocity": 58,
+        "edgeInteraction": 57,
+        "turbulence": 15,
+        "cavityVolume": 120,
+        "openHoleArea": 52,
+        "apertureNeckLength": 8,
+        "resonatorDamping": 35,
+        "resonatorDetuning": 0,
+        "vibratoDepth": 8,
+        "attackArticulation": 40,
+        "formantColor": 68,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 265,
+            "delayFeedback": 23,
+            "delayCutoff": 4400,
+            "delayMix": 13
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 7.4,
+            "reverbDamping": 55,
+            "reverbMix": 39
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 12,
+        "gainCompensationDb": 3.5,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "frozen-kingdom",
+      "name": "Frozen Kingdom",
+      "category": "Cinematic",
+      "description": "A bright, fluttering chamber voice with a cold harmonic wake.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 63,
+        "jetVelocity": 64,
+        "edgeInteraction": 64,
+        "turbulence": 18,
+        "cavityVolume": 64,
+        "openHoleArea": 47,
+        "apertureNeckLength": 5.8,
+        "resonatorDamping": 41,
+        "resonatorDetuning": 4,
+        "vibratoDepth": 7,
+        "attackArticulation": 53,
+        "formantColor": 74,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.79,
+            "chorusDepth": 35,
+            "chorusWidth": 96,
+            "chorusMix": 31
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 5.8,
+            "reverbDamping": 27,
+            "reverbMix": 31
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 12,
+        "gainCompensationDb": 3.65,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "etherwind",
+      "name": "Etherwind",
+      "category": "Cinematic",
+      "description": "Air haze around a gentle rising grain texture and long hall.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 60,
+        "jetVelocity": 46,
+        "edgeInteraction": 54,
+        "turbulence": 36,
+        "cavityVolume": 145,
+        "openHoleArea": 50,
+        "apertureNeckLength": 8.9,
+        "resonatorDamping": 40,
+        "resonatorDetuning": -2,
+        "vibratoDepth": 17,
+        "attackArticulation": 24,
+        "formantColor": 61,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": true,
+          "parameters": {
+            "grainSize": 145,
+            "grainPitch": 5,
+            "grainMix": 29
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 1,
+            "reverbDecay": 6.1,
+            "reverbDamping": 48,
+            "reverbMix": 38
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 10,
+        "gainCompensationDb": 3.86,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "dark-ritual",
+      "name": "Dark Ritual",
+      "category": "Cinematic",
+      "description": "A dark, unstable vessel with slow tremolo and cavern reflections.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 68,
+        "jetVelocity": 42,
+        "edgeInteraction": 61,
+        "turbulence": 32,
+        "cavityVolume": 274,
+        "openHoleArea": 40,
+        "apertureNeckLength": 13,
+        "resonatorDamping": 43,
+        "resonatorDetuning": -8,
+        "vibratoDepth": 12,
+        "attackArticulation": 36,
+        "formantColor": 29,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 26,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": true,
+          "parameters": {
+            "tremoloRate": 1.84,
+            "tremoloDepth": 39
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 3,
+            "reverbDecay": 6.9,
+            "reverbDamping": 76,
+            "reverbMix": 37
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 8,
+        "gainCompensationDb": 3.22,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "celestial-choir",
+      "name": "Celestial Choir",
+      "category": "Cinematic",
+      "description": "Wide polyphonic glass choir with celestial octave reflections.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 61,
+        "jetVelocity": 54,
+        "edgeInteraction": 48,
+        "turbulence": 15,
+        "cavityVolume": 124,
+        "openHoleArea": 49,
+        "apertureNeckLength": 8,
+        "resonatorDamping": 36,
+        "resonatorDetuning": 1,
+        "vibratoDepth": 20,
+        "attackArticulation": 25,
+        "formantColor": 62,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": true,
+          "parameters": {
+            "chorusRate": 0.46,
+            "chorusDepth": 57,
+            "chorusWidth": 100,
+            "chorusMix": 37
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": false,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 300,
+            "delayFeedback": 32,
+            "delayCutoff": 4400,
+            "delayMix": 23
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 8.4,
+            "reverbDamping": 43,
+            "reverbMix": 39
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 16,
+        "gainCompensationDb": 5.63,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "desert-wanderer",
+      "name": "Desert Wanderer",
+      "category": "Cinematic",
+      "description": "Dry reed-like front with warm drive and a distant filtered echo.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 63,
+        "jetVelocity": 55,
+        "edgeInteraction": 67,
+        "turbulence": 37,
+        "cavityVolume": 184,
+        "openHoleArea": 44,
+        "apertureNeckLength": 9.8,
+        "resonatorDamping": 45,
+        "resonatorDetuning": -4,
+        "vibratoDepth": 11,
+        "attackArticulation": 56,
+        "formantColor": 43,
+        "portamento": 67,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": true,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 18,
+            "driveMix": 15
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 320,
+            "delayFeedback": 28,
+            "delayCutoff": 2200,
+            "delayMix": 17
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 0,
+            "reverbDecay": 0.9,
+            "reverbDamping": 52,
+            "reverbMix": 11
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": -0.19,
+        "tempoBpm": 120
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "astral-passage",
+      "name": "Astral Passage",
+      "category": "Cinematic",
+      "description": "Bright chamber pad whose shifted grains drift into a long stereo path.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 65,
+        "jetVelocity": 58,
+        "edgeInteraction": 58,
+        "turbulence": 22,
+        "cavityVolume": 103,
+        "openHoleArea": 54,
+        "apertureNeckLength": 7.2,
+        "resonatorDamping": 37,
+        "resonatorDetuning": 1,
+        "vibratoDepth": 13,
+        "attackArticulation": 36,
+        "formantColor": 68,
+        "portamento": 32,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 1,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": true,
+          "parameters": {
+            "grainSize": 117,
+            "grainPitch": 12,
+            "grainMix": 27
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 1,
+            "delaySync": 1,
+            "delayDivision": 4,
+            "delayTime": 300,
+            "delayFeedback": 36,
+            "delayCutoff": 4400,
+            "delayMix": 22
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 4,
+            "reverbDecay": 7.2,
+            "reverbDamping": 52,
+            "reverbMix": 34
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "poly",
+        "voiceLimit": 13,
+        "gainCompensationDb": 4.39,
+        "tempoBpm": 84
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "the-last-breath",
+      "name": "The Last Breath",
+      "category": "Cinematic",
+      "description": "Quiet, close wind lead that falls into a long, heavily damped cavern.",
+      "parameters": {
+        "masterGain": 70,
+        "breathPressure": 57,
+        "jetVelocity": 44,
+        "edgeInteraction": 54,
+        "turbulence": 36,
+        "cavityVolume": 217,
+        "openHoleArea": 40,
+        "apertureNeckLength": 10.4,
+        "resonatorDamping": 43,
+        "resonatorDetuning": -5,
+        "vibratoDepth": 16,
+        "attackArticulation": 21,
+        "formantColor": 37,
+        "portamento": 75,
+        "bendRange": 2,
+        "velocityResponse": 72,
+        "aftertouchResponse": 40,
+        "breathCurve": 0.72,
+        "turbulenceColor": 45,
+        "excitationShape": 45,
+        "harmonicEnhancement": 20
+      },
+      "effects": [
+        {
+          "id": "filter",
+          "enabled": false,
+          "parameters": {
+            "filterHz": 2100,
+            "filterQ": 0.8,
+            "filterDb": 0
+          }
+        },
+        {
+          "id": "drive",
+          "enabled": false,
+          "parameters": {
+            "driveMode": 0,
+            "driveAmount": 28,
+            "driveMix": 25
+          }
+        },
+        {
+          "id": "fm",
+          "enabled": false,
+          "parameters": {
+            "fmRatio": 2,
+            "fmIndex": 1.1,
+            "fmMix": 22
+          }
+        },
+        {
+          "id": "grain",
+          "enabled": false,
+          "parameters": {
+            "grainSize": 75,
+            "grainPitch": 7,
+            "grainMix": 22
+          }
+        },
+        {
+          "id": "tremolo",
+          "enabled": false,
+          "parameters": {
+            "tremoloRate": 4.2,
+            "tremoloDepth": 30
+          }
+        },
+        {
+          "id": "phaser",
+          "enabled": false,
+          "parameters": {
+            "phaserRate": 0.65,
+            "phaserDepth": 64,
+            "phaserMix": 28
+          }
+        },
+        {
+          "id": "chorus",
+          "enabled": false,
+          "parameters": {
+            "chorusRate": 0.73,
+            "chorusDepth": 42,
+            "chorusWidth": 77,
+            "chorusMix": 28
+          }
+        },
+        {
+          "id": "crusher",
+          "enabled": false,
+          "parameters": {
+            "crusherBits": 10,
+            "crusherMix": 38
+          }
+        },
+        {
+          "id": "reducer",
+          "enabled": false,
+          "parameters": {
+            "reducerRate": 6500,
+            "reducerMix": 42
+          }
+        },
+        {
+          "id": "delay",
+          "enabled": true,
+          "parameters": {
+            "delayMode": 0,
+            "delaySync": 0,
+            "delayDivision": 2,
+            "delayTime": 465,
+            "delayFeedback": 29,
+            "delayCutoff": 1800,
+            "delayMix": 16
+          }
+        },
+        {
+          "id": "reverb",
+          "enabled": true,
+          "parameters": {
+            "reverbMode": 3,
+            "reverbDecay": 8.2,
+            "reverbDamping": 78,
+            "reverbMix": 42
+          }
+        }
+      ],
+      "performance": {
+        "model": "crystalResonator",
+        "voiceMode": "mono",
+        "voiceLimit": 8,
+        "gainCompensationDb": 3.98,
+        "tempoBpm": 120
+      }
+    }
+  ]
 }

@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a101b">
-  <meta name="application-version" content="0.3.0">
+  <meta name="application-version" content="0.4.0">
   <title>Ocarina of Resonance</title>
   <meta name="description" content="Play a physically modeled vessel flute.">
-  <link rel="stylesheet" href="./assets/style.css?v=0.3.0">
-  <script type="module" src="./assets/main.js?v=0.3.0"></script>
+  <link rel="stylesheet" href="./assets/style.css?v=0.4.0">
+  <script type="module" src="./assets/main.js?v=0.4.0"></script>
 </head>
 <body>
   <main class="instrument" aria-label="Ocarina of Resonance">
@@ -16,6 +16,15 @@
       <div class="brand"><h1>Ocarina <span>of Resonance</span></h1><p>Physical modeling synthesizer</p></div>
       <div class="audio-status"><button id="start" type="button" disabled>Start audio</button><span id="status" role="status">Loading instrument</span></div>
     </header>
+
+    <section class="presets" aria-label="Preset library">
+      <label class="setting">Bank<select id="bank" aria-label="Bank"><option value="">All banks</option></select></label>
+      <label class="setting preset-name">Preset<select id="preset" aria-label="Preset"></select></label>
+      <div class="preset-nav"><button id="prev-preset" aria-label="Previous preset" type="button">‹</button><button id="next-preset" aria-label="Next preset" type="button">›</button></div>
+      <div class="preset-actions"><button id="save-preset" type="button">Save</button><button id="rename-preset" type="button" disabled>Rename</button><button id="import-preset" type="button">Import</button><button id="export-preset" type="button">Export</button></div>
+      <p id="preset-info" role="status"></p>
+      <input id="preset-input" type="file" accept=".orpreset,.json,application/json" hidden>
+    </section>
 
     <section class="transport" aria-label="Instrument settings">
       <label class="setting">Sound model<select id="model"></select></label>
@@ -30,7 +39,7 @@
       <section class="vessel" aria-label="Ocarina finger holes">
         <div class="stage-shell">
           <div class="stage" id="stage">
-            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.3.0" alt="Royal-blue ceramic ocarina with twelve drilled finger holes and gold Celtic inlay" draggable="false">
+            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.4.0" alt="Royal-blue ceramic ocarina with twelve drilled finger holes and gold Celtic inlay" draggable="false">
             <div class="holes" id="holes"></div>
           </div>
         </div>
@@ -49,7 +58,15 @@
       <div class="key-scroll"><fieldset id="keys" disabled aria-label="Piano keys"></fieldset></div>
       <input id="keyboard-scroll" type="range" min="0" max="1000" value="0" aria-label="Scroll keyboard" hidden>
     </section>
+    <details id="effects" class="effects"><summary>Effects</summary><div id="effect-global"></div><div id="effect-list"></div></details>
     <details class="diagnostics" id="diagnostics" hidden><summary>Audio diagnostics</summary><button id="test-tone" type="button">Play A4 test tone</button><button id="profile" type="button">Profile 16 voices</button><output id="diagnostic-result"></output></details>
+    <dialog id="preset-dialog">
+      <form method="dialog">
+        <label id="preset-dialog-label" for="preset-title">Preset name</label>
+        <input id="preset-title" aria-label="Preset name" maxlength="80" required>
+        <div class="preset-actions"><button type="submit" value="cancel" formnovalidate>Cancel</button><button id="confirm-preset" type="submit" value="save">Save</button></div>
+      </form>
+    </dialog>
   </main>
 </body>
 </html>

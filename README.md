@@ -1,12 +1,14 @@
 # Ocarina of Resonance
 
-Ocarina of Resonance is a vessel-flute synthesizer in development for Windows VST3, web, and Android. Version 0.3.0 places 12 live synthesis dials inside the finger holes of a glazed blue-and-gold Celtic ocarina. Choose Ceramic Authentic, Retro Fantasy, Crystal Resonator, or Electronic Hybrid and play in mono legato or with up to 16 voices.
+Ocarina of Resonance is a vessel-flute synthesizer in development for Windows VST3, web, and Android. Version 0.4.0 combines 12 synthesis dials inside the finger holes of a glazed blue-and-gold Celtic ocarina with 40 factory presets and 11 stereo effects. Choose Ceramic Authentic, Retro Fantasy, Crystal Resonator, or Electronic Hybrid and play in mono legato or with up to 16 voices.
 
-[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
+[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
 
 ## Play and edit
 
 Drag a hole vertically to adjust the parameter. Use the mouse wheel or arrow keys for steps. Select **Fine** or hold Shift for smaller changes. Click or tap a hole to inspect its value and units, enter an exact number, or select **Reset**. A desktop double-click also resets the hole. The piano supports four octaves per range, octave buttons, and a dedicated scroll control when the window is narrow.
+
+Choose a **Bank** and **Preset** to load a factory sound. Expand **Effects** to change individual processors, preset gain, or delay tempo. Use **Save** to keep edits in your local library and **Rename** to update a saved preset's name. Export an `.orpreset` file and open it with **Import** on any platform.
 
 ## Windows VST3
 

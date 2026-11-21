@@ -17,6 +17,15 @@
       <div class="audio-status"><button id="start" type="button" disabled>Start audio</button><span id="status" role="status">Loading instrument</span></div>
     </header>
 
+    <section class="presets" aria-label="Preset library">
+      <label class="setting">Bank<select id="bank" aria-label="Bank"><option value="">All banks</option></select></label>
+      <label class="setting preset-name">Preset<select id="preset" aria-label="Preset"></select></label>
+      <div class="preset-nav"><button id="prev-preset" aria-label="Previous preset" type="button">‹</button><button id="next-preset" aria-label="Next preset" type="button">›</button></div>
+      <div class="preset-actions"><button id="save-preset" type="button">Save</button><button id="rename-preset" type="button" disabled>Rename</button><button id="import-preset" type="button">Import</button><button id="export-preset" type="button">Export</button></div>
+      <p id="preset-info" role="status"></p>
+      <input id="preset-input" type="file" accept=".orpreset,.json,application/json" hidden>
+    </section>
+
     <section class="transport" aria-label="Instrument settings">
       <label class="setting">Sound model<select id="model"></select></label>
       <label class="setting">Polyphony<select id="polyphony"></select></label>
@@ -49,7 +58,15 @@
       <div class="key-scroll"><fieldset id="keys" disabled aria-label="Piano keys"></fieldset></div>
       <input id="keyboard-scroll" type="range" min="0" max="1000" value="0" aria-label="Scroll keyboard" hidden>
     </section>
+    <details id="effects" class="effects"><summary>Effects</summary><div id="effect-global"></div><div id="effect-list"></div></details>
     <details class="diagnostics" id="diagnostics" hidden><summary>Audio diagnostics</summary><button id="test-tone" type="button">Play A4 test tone</button><button id="profile" type="button">Profile 16 voices</button><output id="diagnostic-result"></output></details>
+    <dialog id="preset-dialog">
+      <form method="dialog">
+        <label id="preset-dialog-label" for="preset-title">Preset name</label>
+        <input id="preset-title" aria-label="Preset name" maxlength="80" required>
+        <div class="preset-actions"><button type="submit" value="cancel" formnovalidate>Cancel</button><button id="confirm-preset" type="submit" value="save">Save</button></div>
+      </form>
+    </dialog>
   </main>
 </body>
 </html>

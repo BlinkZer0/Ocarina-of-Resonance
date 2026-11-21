@@ -1,3 +1,4 @@
+import { PresetFormat } from './presets.js';
 const get = (id) => document.getElementById(id);
 const start = get('start');
 const status = get('status');
@@ -23,6 +24,17 @@ const editing = new Set();
 const holes = new Map();
 const piano = new Map();
 const playing = new Map();
+const bank = get('bank');
+const presetSelect = get('preset');
+const rename = get('rename-preset');
+const notice = get('preset-info');
+const presetDialog = get('preset-dialog');
+const presetTitle = get('preset-title');
+let presetFormat;
+let factory = [], users = [];
+let current;
+let renaming = false;
+const libraryKey = 'ocarina-resonance-user-presets-v1';
 const pitches = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
 const noteName = (note) => pitches[note % 12] + (Math.floor(note / 12) - 1);
 const compact = (value) => String(Number(value.toFixed(2)));
@@ -35,6 +47,8 @@ function send(message) {
         let payload;
         if (message.type === 'parameter')
             payload = { index: message.index, value: message.value };
+        else if (message.type === 'patch')
+            payload = { patch: message.values };
         else if (message.type === 'note')
             payload = { key: message.key, source: message.source, on: message.on };
         else if (message.type === 'release')
@@ -51,6 +65,29 @@ function asset(name) {
     return resource;
 }
 function paintTelemetry(update) {
+    if (update.preset !== undefined && presetFormat) {
+        const restored = update.preset ?? undefined;
+        if (restored?.id !== current?.id || restored?.name !== current?.name) {
+            current = restored;
+            refreshPresets();
+            notice.textContent = current?.description || '';
+        }
+    }
+    if (update.library && presetFormat) {
+        users = update.library.flatMap(json => {
+            try {
+                return [presetFormat.read(JSON.parse(json))];
+            }
+            catch {
+                return [];
+            }
+        });
+        refreshPresets();
+    }
+    if (update.presetFile !== undefined && presetFormat)
+        importPreset(update.presetFile);
+    if (update.fileStatus !== undefined)
+        notice.textContent = update.fileStatus;
     if (update.params && values) {
         for (const control of controls) {
             const value = update.params[control.index];
@@ -202,7 +239,7 @@ function makeRange(control, parent) {
     input.type = 'range';
     input.min = String(control.min);
     input.max = String(control.max);
-    input.step = 'any';
+    input.step = control.id === 'crusherBits' ? '1' : 'any';
     input.setAttribute('aria-label', control.name);
     label.append(caption, input);
     parent.append(label);
@@ -231,6 +268,220 @@ function makeRange(control, parent) {
         else
             change(control, input.valueAsNumber);
     });
+}
+function makeEffects(specs) {
+    const global = get('effect-global');
+    for (const id of ['tempo', 'patchGain'])
+        makeRange(presetFormat.controls.get(id), global);
+    const parent = get('effect-list');
+    for (const spec of specs) {
+        const details = document.createElement('details');
+        details.className = 'effect';
+        const summary = document.createElement('summary');
+        summary.textContent = spec.name;
+        const panel = document.createElement('div');
+        panel.className = 'effect-controls';
+        const bypass = presetFormat.controls.get(spec.id + 'Enabled');
+        const label = document.createElement('label');
+        label.className = 'effect-bypass';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('aria-label', spec.name + ' enabled');
+        label.append(checkbox, 'Enabled');
+        bindings.set(bypass.index, value => { checkbox.checked = value >= .5; });
+        checkbox.addEventListener('change', () => change(bypass, Number(checkbox.checked)));
+        paint(bypass, values[bypass.index]);
+        panel.append(label);
+        for (const id of spec.controls) {
+            const control = presetFormat.controls.get(id);
+            if (!spec.choices[id]) {
+                makeRange(control, panel);
+                continue;
+            }
+            const choice = document.createElement('label');
+            choice.className = 'setting';
+            const select = document.createElement('select');
+            select.setAttribute('aria-label', spec.name + ' ' + control.name);
+            spec.choices[id].forEach((name, index) => select.add(new Option(name, String(index))));
+            bindings.set(control.index, value => { select.value = String(Math.round(value)); });
+            paint(control, values[control.index]);
+            select.addEventListener('change', () => change(control, Number(select.value)));
+            choice.append(control.name, select);
+            panel.append(choice);
+        }
+        details.append(summary, panel);
+        parent.append(details);
+    }
+}
+function visiblePresets() {
+    return [...factory, ...users].filter(preset => !bank.value || preset.category === bank.value);
+}
+function refreshPresets() {
+    const selectedBank = bank.value;
+    bank.replaceChildren(new Option('All banks', ''));
+    for (const category of new Set([...factory, ...users].map(preset => preset.category)))
+        bank.add(new Option(category));
+    bank.value = [...bank.options].some(option => option.value === selectedBank) ? selectedBank : '';
+    presetSelect.replaceChildren(new Option('Current sound', ''));
+    for (const preset of visiblePresets())
+        presetSelect.add(new Option(preset.name, preset.id));
+    presetSelect.value = [...presetSelect.options].some(option => option.value === current?.id) ? current.id : '';
+    rename.disabled = !users.some(preset => preset.id === current?.id);
+}
+function loadPreset(preset) {
+    const snapshot = presetFormat.values(preset);
+    const { id, name, category, description } = preset;
+    controls.forEach(control => paint(control, snapshot[control.index]));
+    send({ type: 'patch', values: snapshot, preset: { id, name, category, description } });
+    current = preset;
+    if (bank.value && bank.value !== preset.category)
+        bank.value = '';
+    refreshPresets();
+    notice.textContent = preset.description;
+}
+function rememberPreset(preset) {
+    const updated = [...users.filter(entry => entry.id !== preset.id), preset];
+    if (desktop || android) {
+        send({ type: 'savePreset', id: preset.id, name: preset.name, json: JSON.stringify(preset) });
+    }
+    else {
+        try {
+            localStorage.setItem(libraryKey, JSON.stringify(updated));
+        }
+        catch {
+            throw new Error('Browser storage was unavailable. Export a copy to keep it.');
+        }
+    }
+    users = updated;
+}
+function importPreset(json) {
+    try {
+        if (json.length > 128 * 1024)
+            throw new Error('Preset files must be 128 KB or smaller.');
+        const preset = presetFormat.read(JSON.parse(json));
+        const existing = users.find(entry => entry.id === preset.id);
+        if (factory.some(entry => entry.id === preset.id) || (existing && JSON.stringify(existing) !== JSON.stringify(preset)))
+            preset.id = crypto.randomUUID();
+        rememberPreset(preset);
+        loadPreset(preset);
+        notice.textContent = 'Imported ' + preset.name + '.';
+    }
+    catch (error) {
+        notice.textContent = error instanceof Error ? error.message : 'Could not import preset.';
+    }
+}
+function setupLibrary(catalogue) {
+    presetFormat = new PresetFormat(controls, catalogue.effects);
+    factory = catalogue.factory.map(preset => presetFormat.read(preset));
+    if (!android && !desktop) {
+        try {
+            const saved = JSON.parse(localStorage.getItem(libraryKey) || '[]');
+            if (Array.isArray(saved))
+                users = saved.flatMap(item => {
+                    try {
+                        return [presetFormat.read(item)];
+                    }
+                    catch {
+                        return [];
+                    }
+                });
+        }
+        catch {
+            notice.textContent = 'Could not open browser preset storage.';
+        }
+    }
+    refreshPresets();
+    bank.addEventListener('change', refreshPresets);
+    presetSelect.addEventListener('change', () => {
+        const selected = visiblePresets().find(preset => preset.id === presetSelect.value);
+        if (selected)
+            loadPreset(selected);
+    });
+    const step = (direction) => {
+        const options = visiblePresets();
+        if (options.length === 0)
+            return;
+        const index = options.findIndex(option => option.id === current?.id);
+        const target = index === -1 ? direction > 0 ? 0 : options.length - 1 : (index + direction + options.length) % options.length;
+        loadPreset(options[target]);
+    };
+    get('prev-preset').addEventListener('click', () => step(-1));
+    get('next-preset').addEventListener('click', () => step(1));
+    const open = (editName) => {
+        renaming = editName;
+        presetDialog.returnValue = '';
+        get('confirm-preset').textContent = editName ? 'Rename' : 'Save';
+        presetTitle.value = current?.name || '';
+        presetDialog.showModal();
+        presetTitle.select();
+    };
+    get('save-preset').addEventListener('click', () => open(false));
+    rename.addEventListener('click', () => open(true));
+    presetDialog.addEventListener('close', () => {
+        if (presetDialog.returnValue !== 'save' || !presetTitle.value.trim())
+            return;
+        try {
+            const name = presetTitle.value.trim();
+            const existing = users.find(preset => preset.id === current?.id);
+            if (renaming && !existing)
+                return;
+            const preset = renaming && existing ? { ...existing, name } : presetFormat.capture(values, {
+                id: existing?.name === name ? existing.id : crypto.randomUUID(), name, category: 'User', description: current?.description || '',
+            });
+            rememberPreset(preset);
+            current = preset;
+            if (desktop) {
+                const { id, category, description } = preset;
+                send({ type: 'identifyPreset', preset: { id, name, category, description } });
+            }
+            bank.value = '';
+            refreshPresets();
+            notice.textContent = (renaming ? 'Renamed to ' : 'Saved ') + name + '.';
+        }
+        catch (error) {
+            notice.textContent = error instanceof Error ? error.message : 'Could not save preset.';
+        }
+    });
+    const input = get('preset-input');
+    get('import-preset').addEventListener('click', () => {
+        if (desktop || android)
+            send({ type: 'importPreset' });
+        else
+            input.click();
+    });
+    input.addEventListener('change', () => {
+        const file = input.files?.[0];
+        input.value = '';
+        if (!file)
+            return;
+        if (file.size > 128 * 1024) {
+            notice.textContent = 'Preset files must be 128 KB or smaller.';
+            return;
+        }
+        void file.text().then(importPreset, () => { notice.textContent = 'Could not read preset file.'; });
+    });
+    get('export-preset').addEventListener('click', () => {
+        try {
+            const preset = presetFormat.capture(values, { id: current?.id || crypto.randomUUID(), name: current?.name || 'Ocarina of Resonance',
+                category: current?.category || 'User', description: current?.description || '' });
+            const json = JSON.stringify(preset, null, 2) + '\n';
+            if (desktop || android) {
+                send({ type: 'exportPreset', id: preset.id, name: preset.name, json });
+                return;
+            }
+            const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = preset.name.replace(/[^\p{Letter}\p{Number} ._-]+/gu, '-') + '.orpreset';
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+        }
+        catch (error) {
+            notice.textContent = error instanceof Error ? error.message : 'Could not export preset.';
+        }
+    });
+    if (android || desktop)
+        window.addEventListener('focus', () => send({ type: 'listPresets' }));
 }
 function keyDown(id, key) {
     if (playing.has(id))
@@ -338,8 +589,7 @@ async function startAudio() {
         node.connect(next.destination);
         context = next;
         worklet = node;
-        for (const control of controls)
-            send({ type: 'parameter', index: control.index, value: values[control.index] });
+        send({ type: 'patch', values });
         keyboard.disabled = false;
         start.hidden = true;
         status.textContent = 'Audio ready · ' + context.sampleRate + ' Hz';
@@ -358,6 +608,8 @@ async function initialise() {
     const catalogue = await response.json();
     controls = catalogue.controls;
     values = controls.map(control => control.initial);
+    setupLibrary(catalogue);
+    makeEffects(catalogue.effects);
     stage.style.setProperty('--aspect', String(catalogue.face.width / catalogue.face.height));
     const faceWindow = stage.parentElement;
     new ResizeObserver(() => {
@@ -424,4 +676,3 @@ async function initialise() {
     }
 }
 void initialise().catch(() => { status.textContent = 'The instrument controls could not load.'; });
-export {};

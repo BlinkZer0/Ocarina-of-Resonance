@@ -54,23 +54,28 @@ int main(int argc, char** argv) {
 
     juce::AudioProcessorParameter* master = nullptr;
     juce::AudioProcessorParameter* model = nullptr;
+    juce::AudioProcessorParameter* delay = nullptr;
     for (auto* parameter : plugin->getParameters()) {
         if (parameter->getName(64) == "Master Volume")
             master = parameter;
         if (parameter->getName(64) == "Sound Model")
             model = parameter;
+        if (parameter->getName(64) == "Delay enabled")
+            delay = parameter;
     }
-    if (master == nullptr || model == nullptr)
+    if (master == nullptr || model == nullptr || delay == nullptr)
         return 6;
 
     master->setValueNotifyingHost(0.42f);
     model->setValueNotifyingHost(1.0f);
+    delay->setValueNotifyingHost(1.0f);
     juce::MemoryBlock state;
     plugin->getStateInformation(state);
     master->setValueNotifyingHost(0.1f);
     model->setValueNotifyingHost(0.0f);
+    delay->setValueNotifyingHost(0.0f);
     plugin->setStateInformation(state.getData(), static_cast<int>(state.getSize()));
-    if (std::abs(master->getValue() - 0.42f) > 0.001f || model->getValue() != 1.0f)
+    if (std::abs(master->getValue() - 0.42f) > 0.001f || model->getValue() != 1.0f || delay->getValue() != 1.0f)
         return 7;
     plugin->releaseResources();
     return 0;

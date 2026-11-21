@@ -1,11 +1,11 @@
-#include "dsp/VoiceManager.h"
+#include "dsp/InstrumentEngine.h"
 
 #include <emscripten/emscripten.h>
 
 namespace {
-ocarina::VoiceManager voice;
+ocarina::InstrumentEngine voice;
 constexpr int capacity = 256;
-float samples[capacity];
+float samples[capacity * 2];
 }
 
 extern "C" {
@@ -31,8 +31,11 @@ EMSCRIPTEN_KEEPALIVE void performance(int model, int voices) {
 }
 
 EMSCRIPTEN_KEEPALIVE float* render(int count) {
-    for (int index = 0; index < count && index < capacity; ++index)
-        samples[index] = voice.nextSample();
+    for (int index = 0; index < count && index < capacity; ++index) {
+        const auto frame = voice.nextFrame();
+        samples[index] = frame.left;
+        samples[index + capacity] = frame.right;
+    }
     return samples;
 }
 }

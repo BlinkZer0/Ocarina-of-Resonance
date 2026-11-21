@@ -1,4 +1,4 @@
-#include "dsp/VoiceManager.h"
+#include "dsp/InstrumentEngine.h"
 
 #include <jni.h>
 #include <oboe/Oboe.h>
@@ -39,6 +39,15 @@ public:
         queue.push({ocarina::EventType::releaseSource, source, 0, 0, 0.0f});
     }
 
+    bool patch(const std::array<float, ocarina::parameterCount>& values) noexcept {
+        std::array<ocarina::Event, ocarina::parameterCount> events;
+        for (size_t index = 0; index < values.size(); ++index) {
+            if (!std::isfinite(values[index])) return false;
+            events[index] = {ocarina::EventType::parameter, 0, 0, static_cast<uint8_t>(index), values[index]};
+        }
+        return queue.pushBatch(events);
+    }
+
     void beginProfile() noexcept {
         for (auto& bucket : histogram)
             bucket.store(0, std::memory_order_relaxed);
@@ -76,12 +85,16 @@ public:
         int32_t sounding = 0;
         float outputPeak = 0;
         for (int32_t frame = 0; frame < frames; ++frame) {
-            const float sample = voice.nextSample();
-            outputPeak = std::max(outputPeak, std::abs(sample));
-            if (std::abs(sample) > 0.0001f)
+            const auto sample = voice.nextFrame();
+            const float peakValue = std::max(std::abs(sample.left), std::abs(sample.right));
+            outputPeak = std::max(outputPeak, peakValue);
+            if (peakValue > 0.0001f)
                 ++sounding;
-            for (int channel = 0; channel < channels; ++channel)
-                *output++ = sample;
+            if (channels == 1) *output++ = .5f * (sample.left + sample.right);
+            else {
+                *output++ = sample.left;
+                *output++ = sample.right;
+            }
         }
         audibleFrames.fetch_add(sounding, std::memory_order_relaxed);
         const int activeVoices = voice.soundingVoices();
@@ -103,7 +116,7 @@ public:
     std::atomic<oboe::Result> error {oboe::Result::OK};
 
 private:
-    ocarina::VoiceManager voice;
+    ocarina::InstrumentEngine voice;
     ocarina::EventQueue queue;
     std::array<std::atomic<int>, 101> histogram {};
     std::atomic<int> peak {0};
@@ -182,6 +195,17 @@ Java_com_blinkzer0_ocarina_MainActivity_setPerformance(JNIEnv*, jobject, jlong h
 extern "C" JNIEXPORT void JNICALL
 Java_com_blinkzer0_ocarina_MainActivity_setParameter(JNIEnv*, jobject, jlong handle, jint index, jfloat value) {
     output(handle)->renderer->parameter(index, value);
+}
+
+extern "C" JNIEXPORT jint JNICALL
+Java_com_blinkzer0_ocarina_MainActivity_parameterCount(JNIEnv*, jobject) { return ocarina::parameterCount; }
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_blinkzer0_ocarina_MainActivity_setPatch(JNIEnv* env, jobject, jlong handle, jfloatArray input) {
+    std::array<float, ocarina::parameterCount> values;
+    if (env->GetArrayLength(input) != static_cast<jsize>(values.size())) return false;
+    env->GetFloatArrayRegion(input, 0, static_cast<jsize>(values.size()), values.data());
+    return !env->ExceptionCheck() && output(handle)->renderer->patch(values);
 }
 
 extern "C" JNIEXPORT void JNICALL

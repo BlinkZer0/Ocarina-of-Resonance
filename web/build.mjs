@@ -22,7 +22,7 @@ mkdirSync(assets, { recursive: true });
 const dsp = join(root, 'src', 'dsp');
 const sources = readdirSync(dsp).filter(name => name.endsWith('.cpp')).sort().map(name => join(dsp, name));
 run(compiler, [
-  '-std=c++20', '-O3', '--no-entry', '-sSTANDALONE_WASM=1', '-sALLOW_MEMORY_GROWTH=0',
+  '-std=c++20', '-O3', '--no-entry', '-sSTANDALONE_WASM=1', '-sALLOW_MEMORY_GROWTH=0', '-sINITIAL_MEMORY=33554432',
   '-I', join(root, 'src'), ...sources, join(web, 'wasm.cpp'),
   '-o', join(assets, 'ocarina.wasm'),
 ]);
@@ -47,6 +47,15 @@ if (!(face.width > 0 && face.height > 0) || face.centers.length !== 12
     || face.centers.some(point => point.length !== 2 || point.some(value => !(value > 0 && value < 100)))) {
   throw new Error('The instrument artwork needs twelve valid finger-hole centers.');
 }
-writeFileSync(join(assets, 'parameters.json'), JSON.stringify({ controls, models, face }, null, 2) + '\n');
+const effects = JSON.parse(readFileSync(join(root, 'presets', 'effects.json'), 'utf8'));
+const { PresetFormat } = await import(new URL('../docs/assets/presets.js', import.meta.url));
+const format = new PresetFormat(controls, effects);
+const factory = JSON.parse(readFileSync(join(root, 'presets', 'factory.json'), 'utf8')).map(preset => format.read(preset));
+if (factory.length !== 40 || new Set(factory.map(preset => preset.id)).size !== 40
+    || ['Authentic', 'Retro', 'Electronic', 'Cinematic'].some(bank => factory.filter(preset => preset.category === bank).length !== 10)) {
+  throw new Error('Factory library must contain four banks of ten unique presets.');
+}
+writeFileSync(join(assets, 'parameters.json'), JSON.stringify({ controls, models, face, effects, factory }, null, 2) + '\n');
+writeFileSync(join(root, 'presets', 'factory-vectors.tsv'), factory.map(preset => [preset.id, ...format.values(preset)].join('\t')).join('\n') + '\n');
 writeFileSync(join(publish, '.nojekyll'), '');
 console.log(`Built docs/ for Ocarina of Resonance ${version}`);

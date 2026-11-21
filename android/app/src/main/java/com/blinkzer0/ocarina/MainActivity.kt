@@ -1,6 +1,7 @@
 package com.blinkzer0.ocarina
 
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.graphics.Color
 import android.os.Build
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.AtomicFile
 import android.view.WindowInsets
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
@@ -17,6 +19,8 @@ import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.io.InputStream
 
 class MainActivity : Activity() {
     private val handler = Handler(Looper.getMainLooper())
@@ -26,6 +30,9 @@ class MainActivity : Activity() {
     private var audioStatus = "Opening audio"
     private var diagnostic = ""
     private val values = mutableMapOf<Int, Float>()
+    private val controlCount by lazy { parameterCount() }
+    private var pendingExport: String? = null
+    private var pendingFileEvent: Pair<String, Any>? = null
     private var benchmarking = false
     private var benchmarkXruns = 0
     private var testStartFrames = 0L
@@ -61,6 +68,7 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        pendingExport = savedInstanceState?.getString("pendingExport")
         savedInstanceState?.getFloatArray("instrument")?.forEachIndexed { index, value ->
             if (value.isFinite()) values[index] = value
         }
@@ -125,7 +133,8 @@ class MainActivity : Activity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putFloatArray("instrument", FloatArray(PARAMETER_COUNT) { values[it] ?: Float.NaN })
+        outState.putFloatArray("instrument", FloatArray(controlCount) { values[it] ?: Float.NaN })
+        outState.putString("pendingExport", pendingExport)
         super.onSaveInstanceState(outState)
     }
 
@@ -140,7 +149,7 @@ class MainActivity : Activity() {
     private inner class InstrumentBridge {
         @JavascriptInterface
         fun message(json: String) {
-            if (json.length > 512) return
+            if (json.length > MAX_PRESET_BYTES + 4096) return
             val event = runCatching { JSONObject(json) }.getOrNull() ?: return
             handler.post { if (!isDestroyed) receive(event) }
         }
@@ -151,11 +160,37 @@ class MainActivity : Activity() {
             "ready" -> {
                 ready = true
                 publish(includeControls = true)
+                sendLibrary()
+                pendingFileEvent?.let { sendFileEvent(it.first, it.second) }
+                pendingFileEvent = null
+            }
+            "listPresets" -> sendLibrary()
+            "importPreset" -> chooseFile(export = false)
+            "savePreset", "exportPreset" -> {
+                val id = event.optString("id")
+                val json = event.optString("json")
+                if (!PRESET_ID.matches(id) || json.isEmpty() || json.toByteArray(Charsets.UTF_8).size > MAX_PRESET_BYTES) {
+                    sendFileEvent("fileStatus", "Invalid preset data.")
+                    return
+                }
+                if (event.optString("type") == "exportPreset") {
+                    pendingExport = json
+                    chooseFile(export = true, name = event.optString("name"))
+                } else {
+                    savePreset(id, json)
+                }
+            }
+            "patch" -> {
+                val packet = event.optJSONArray("values") ?: return
+                if (packet.length() != controlCount) return
+                val snapshot = FloatArray(controlCount) { packet.optDouble(it, Double.NaN).toFloat() }
+                if (snapshot.any { !it.isFinite() }) return
+                applyPatch(snapshot)
             }
             "parameter" -> {
                 val index = event.optInt("index", -1)
                 val value = event.optDouble("value", Double.NaN).toFloat()
-                if (index !in 0 until PARAMETER_COUNT || !value.isFinite()) return
+                if (index !in 0 until controlCount || !value.isFinite()) return
                 values[index] = value
                 if (audio != 0L && (!benchmarking || index !in MODEL..VOICE_LIMIT))
                     setParameter(audio, index, value)
@@ -184,6 +219,109 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun applyPatch(snapshot: FloatArray) {
+        if (benchmarking) {
+            handler.removeCallbacks(finishBenchmark)
+            if (audio != 0L) {
+                endProfile(audio, benchmarkXruns)
+                releaseKeyboard(audio, BENCHMARK_SOURCE)
+            }
+            benchmarking = false
+        }
+        if (audio != 0L && !setPatch(audio, snapshot)) {
+            publish(includeControls = true)
+            sendFileEvent("fileStatus", "Audio controls are busy. Select the preset again.")
+            return
+        }
+        snapshot.forEachIndexed { index, value -> values[index] = value }
+    }
+
+    private fun readPreset(stream: InputStream): String {
+        val bytes = ByteArray(MAX_PRESET_BYTES + 1)
+        var count = 0
+        while (count < bytes.size) {
+            val next = stream.read(bytes, count, bytes.size - count)
+            if (next < 0) break
+            count += next
+        }
+        require(count in 1..MAX_PRESET_BYTES) { "Preset files must be 128 KB or smaller." }
+        return String(bytes, 0, count, Charsets.UTF_8)
+    }
+
+    private val presetDirectory: File get() = File(filesDir, "presets")
+
+    private fun savePreset(id: String, json: String) {
+        try {
+            presetDirectory.mkdirs()
+            val file = AtomicFile(File(presetDirectory, "patch-$id.orpreset"))
+            val stream = file.startWrite()
+            try {
+                stream.write(json.toByteArray(Charsets.UTF_8))
+                file.finishWrite(stream)
+            } catch (error: Exception) {
+                file.failWrite(stream)
+                throw error
+            }
+            sendLibrary()
+        } catch (error: Exception) {
+            Log.w("OcarinaPreset", "Could not save preset", error)
+            sendFileEvent("fileStatus", "Could not save in the Ocarina preset folder.")
+        }
+    }
+
+    private fun sendLibrary() {
+        val library = JSONArray()
+        for (entry in presetDirectory.listFiles()?.sortedBy { it.name }.orEmpty()) {
+            if (entry.isFile && entry.extension == "orpreset" && entry.length() in 1..MAX_PRESET_BYTES.toLong()) {
+                runCatching { AtomicFile(entry).openRead().use(::readPreset) }.getOrNull()?.let { library.put(it) }
+            }
+        }
+        sendFileEvent("library", library)
+    }
+
+    private fun sendFileEvent(key: String, value: Any) {
+        if (ready) web.evaluateJavascript("window.ocarinaReceive?.(" + JSONObject().put(key, value) + ")", null)
+        else if (key != "library") pendingFileEvent = key to value
+    }
+
+    @Suppress("DEPRECATION")
+    private fun chooseFile(export: Boolean, name: String = "") {
+        val intent = Intent(if (export) Intent.ACTION_CREATE_DOCUMENT else Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = if (export) "application/octet-stream" else "*/*"
+            if (export) {
+                val title = name.replace(Regex("[^\\p{L}\\p{N} ._-]"), "-").trim().take(80).ifEmpty { "Ocarina of Resonance" }
+                putExtra(Intent.EXTRA_TITLE, "$title.orpreset")
+            }
+        }
+        try { startActivityForResult(intent, if (export) EXPORT_PRESET else IMPORT_PRESET) }
+        catch (error: android.content.ActivityNotFoundException) { sendFileEvent("fileStatus", "System file picker is unavailable.") }
+    }
+
+    @Deprecated("Android system document picker callback")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val json = pendingExport
+        if (requestCode == EXPORT_PRESET) pendingExport = null
+        val uri = data?.data ?: return
+        if (resultCode != RESULT_OK) return
+        try {
+            when (requestCode) {
+                IMPORT_PRESET -> {
+                    val preset = contentResolver.openInputStream(uri)?.use(::readPreset) ?: error("Could not open preset file.")
+                    sendFileEvent("presetFile", preset)
+                }
+                EXPORT_PRESET -> if (json != null) {
+                    val stream = contentResolver.openOutputStream(uri, "wt") ?: error("Could not open preset file.")
+                    stream.use { it.write(json.toByteArray(Charsets.UTF_8)) }
+                    sendFileEvent("fileStatus", "Preset exported.")
+                }
+            }
+        } catch (error: Exception) {
+            sendFileEvent("fileStatus", error.message ?: "Preset file operation failed.")
+        }
+    }
+
     private fun publish(includeControls: Boolean = false) {
         if (!ready) return
         val stats = if (audio != 0L) telemetry(audio) else floatArrayOf(0f, 0f, -1f)
@@ -203,6 +341,8 @@ class MainActivity : Activity() {
     private external fun sendNote(handle: Long, on: Boolean, key: Int, source: Int)
     private external fun releaseKeyboard(handle: Long, source: Int)
     private external fun setParameter(handle: Long, index: Int, value: Float)
+    private external fun parameterCount(): Int
+    private external fun setPatch(handle: Long, values: FloatArray): Boolean
     private external fun telemetry(handle: Long): FloatArray
     private external fun setPerformance(handle: Long, model: Int, voices: Int)
     private external fun beginProfile(handle: Long): Int
@@ -212,7 +352,10 @@ class MainActivity : Activity() {
 
     companion object {
         private const val ASSET_HOST = "appassets.androidplatform.net"
-        private const val PARAMETER_COUNT = 24
+        private const val MAX_PRESET_BYTES = 128 * 1024
+        private const val IMPORT_PRESET = 21
+        private const val EXPORT_PRESET = 22
+        private val PRESET_ID = Regex("[a-z0-9][a-z0-9-]{0,95}")
         private const val MODEL = 13
         private const val VOICE_MODE = 14
         private const val VOICE_LIMIT = 15
@@ -222,6 +365,7 @@ class MainActivity : Activity() {
         private val assetsByPath = mapOf(
             "/index.html" to "text/html",
             "/assets/main.js" to "text/javascript",
+            "/assets/presets.js" to "text/javascript",
             "/assets/style.css" to "text/css",
             "/assets/parameters.json" to "application/json",
             "/assets/ocarina.webp" to "image/webp",

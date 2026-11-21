@@ -1,0 +1,402 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": "classic-blue-ceramic",
+    "name": "Classic Blue Ceramic",
+    "category": "Authentic",
+    "description": "Balanced glazed ceramic with a clear attack and a short wooden-room reflection.",
+    "parameters": {"breathPressure":55,"jetVelocity":50,"edgeInteraction":48,"turbulence":17,"cavityVolume":112,"openHoleArea":45,"apertureNeckLength":7,"resonatorDamping":34,"resonatorDetuning":0,"vibratoDepth":7,"attackArticulation":46,"formantColor":46},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.7,"reverbMix":10,"reverbDamping":58}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":-0.67}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "alto-c-ocarina",
+    "name": "Alto C Ocarina",
+    "category": "Authentic",
+    "description": "A focused alto center with low breath noise and natural quarter-tone expression.",
+    "parameters": {"breathPressure":57,"jetVelocity":52,"edgeInteraction":45,"turbulence":13,"cavityVolume":145,"openHoleArea":50,"apertureNeckLength":8.2,"resonatorDamping":35,"resonatorDetuning":-1,"vibratoDepth":5,"attackArticulation":44,"formantColor":39,"portamento":17},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.9,"reverbMix":9}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-0.89}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "soprano-c-ocarina",
+    "name": "Soprano C Ocarina",
+    "category": "Authentic",
+    "description": "Small bright vessel, quick tongue, and a clean response for high melodies.",
+    "parameters": {"breathPressure":61,"jetVelocity":63,"edgeInteraction":62,"turbulence":15,"cavityVolume":47,"openHoleArea":37,"apertureNeckLength":4.5,"resonatorDamping":42,"resonatorDetuning":2,"vibratoDepth":4,"attackArticulation":77,"formantColor":72},
+    "effects": [{"id":"filter","enabled":true,"parameters":{"filterHz":2360,"filterQ":0.8,"filterDb":2.3}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.52,"reverbMix":8}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":6,"gainCompensationDb":-1.58}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bass-ocarina",
+    "name": "Bass Ocarina",
+    "category": "Authentic",
+    "description": "Large, dark chamber and wide breath for low-register playing.",
+    "parameters": {"breathPressure":58,"jetVelocity":37,"edgeInteraction":40,"turbulence":20,"cavityVolume":375,"openHoleArea":43,"apertureNeckLength":15,"resonatorDamping":46,"resonatorDetuning":-5,"vibratoDepth":4,"attackArticulation":27,"formantColor":21,"portamento":38},
+    "effects": [{"id":"filter","enabled":true,"parameters":{"filterHz":720,"filterQ":0.8,"filterDb":2.4}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.76,"reverbMix":14}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-0.07}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "warm-clay-vessel",
+    "name": "Warm Clay Vessel",
+    "category": "Authentic",
+    "description": "Soft terracotta resonance with rounded transients and light tube warmth.",
+    "parameters": {"breathPressure":55,"jetVelocity":40,"edgeInteraction":43,"turbulence":22,"cavityVolume":202,"openHoleArea":46,"apertureNeckLength":11.5,"resonatorDamping":41,"resonatorDetuning":-3,"vibratoDepth":5,"attackArticulation":28,"formantColor":33},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":0,"driveAmount":14,"driveMix":13}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.85,"reverbMix":12}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":7,"gainCompensationDb":-0.08}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "concert-ceramic",
+    "name": "Concert Ceramic",
+    "category": "Authentic",
+    "description": "A clean projection patch with crisp articulation and a concert hall tail.",
+    "parameters": {"breathPressure":62,"jetVelocity":61,"edgeInteraction":52,"turbulence":12,"cavityVolume":108,"openHoleArea":55,"apertureNeckLength":7.1,"resonatorDamping":34,"resonatorDetuning":0,"vibratoDepth":10,"attackArticulation":62,"formantColor":51},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":2.4,"reverbMix":18,"reverbDamping":40}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":-1.11}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "wooden-vessel-flute",
+    "name": "Wooden Vessel Flute",
+    "category": "Authentic",
+    "description": "An airy edge with muted high overtones and a close room.",
+    "parameters": {"breathPressure":53,"jetVelocity":44,"edgeInteraction":62,"turbulence":31,"cavityVolume":167,"openHoleArea":53,"apertureNeckLength":8.1,"resonatorDamping":46,"resonatorDetuning":-2,"vibratoDepth":9,"attackArticulation":39,"formantColor":34},
+    "effects": [{"id":"filter","enabled":true,"parameters":{"filterHz":4200,"filterQ":1,"filterDb":-3.8}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.62,"reverbMix":14}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":6,"gainCompensationDb":0.37}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "breath-of-the-highlands",
+    "name": "Breath of the Highlands",
+    "category": "Authentic",
+    "description": "Wind-forward articulation with a singing swell over a distant hall.",
+    "parameters": {"breathPressure":64,"jetVelocity":57,"edgeInteraction":59,"turbulence":35,"cavityVolume":149,"openHoleArea":51,"apertureNeckLength":9,"resonatorDamping":39,"resonatorDetuning":1,"vibratoDepth":14,"attackArticulation":42,"formantColor":48,"portamento":45,"breathCurve":0.71},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":2.7,"reverbMix":25,"reverbDamping":59}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-0.41}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "ancient-folk-ocarina",
+    "name": "Ancient Folk Ocarina",
+    "category": "Authentic",
+    "description": "Drier handmade vessel with gentle pitch movement and a textured edge.",
+    "parameters": {"breathPressure":57,"jetVelocity":45,"edgeInteraction":66,"turbulence":26,"cavityVolume":128,"openHoleArea":35,"apertureNeckLength":9.3,"resonatorDamping":46,"resonatorDetuning":-7,"vibratoDepth":13,"attackArticulation":52,"formantColor":42},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":0,"driveAmount":10,"driveMix":9}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.55,"reverbMix":8}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"poly","voiceLimit":5,"gainCompensationDb":-1.07}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "soloist-expressive",
+    "name": "Soloist Expressive",
+    "category": "Authentic",
+    "description": "Expressive monophonic lead with soft legato and strong pressure and velocity response.",
+    "parameters": {"breathPressure":67,"jetVelocity":56,"edgeInteraction":55,"turbulence":19,"cavityVolume":116,"openHoleArea":48,"apertureNeckLength":7.8,"resonatorDamping":35,"resonatorDetuning":0,"vibratoDepth":17,"attackArticulation":51,"formantColor":50,"portamento":55,"aftertouchResponse":82,"velocityResponse":87},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":1.7,"reverbMix":14}}],
+    "performance": {"model":"ceramicAuthentic","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-1.66}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "heros-blue-ocarina",
+    "name": "Hero's Blue Ocarina",
+    "category": "Retro",
+    "description": "Rounded lead with a short temple reflection and a firm, clean attack.",
+    "parameters": {"breathPressure":58,"jetVelocity":52,"edgeInteraction":49,"turbulence":9,"cavityVolume":101,"openHoleArea":49,"apertureNeckLength":7,"resonatorDamping":32,"resonatorDetuning":0,"vibratoDepth":4,"attackArticulation":53,"formantColor":43},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":2,"reverbDecay":1.35,"reverbMix":15,"reverbDamping":57}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":-0.71}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "time-traveler",
+    "name": "Time Traveler",
+    "category": "Retro",
+    "description": "Stable solo lead with dotted-note echoes paced for melodic phrases.",
+    "parameters": {"breathPressure":56,"jetVelocity":47,"edgeInteraction":43,"turbulence":7,"cavityVolume":116,"openHoleArea":39,"apertureNeckLength":7.3,"resonatorDamping":38,"resonatorDetuning":-2,"vibratoDepth":5,"attackArticulation":49,"formantColor":37,"portamento":43},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delaySync":1,"delayDivision":3,"delayFeedback":26,"delayMix":21}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbMix":11}}],
+    "performance": {"model":"retroFantasy","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":1.82,"tempoBpm":108}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "forest-melody",
+    "name": "Forest Melody",
+    "category": "Retro",
+    "description": "Soft woody retro pipe with stereo chorus and a green, close room.",
+    "parameters": {"breathPressure":55,"jetVelocity":43,"edgeInteraction":48,"turbulence":17,"cavityVolume":147,"openHoleArea":44,"apertureNeckLength":9,"resonatorDamping":39,"resonatorDetuning":-3,"vibratoDepth":7,"attackArticulation":35,"formantColor":40},
+    "effects": [{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.5,"chorusDepth":26,"chorusWidth":58,"chorusMix":19}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":1.2,"reverbMix":15}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":1.69}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "sacred-temple",
+    "name": "Sacred Temple",
+    "category": "Retro",
+    "description": "Rounded vessel receding into stone temple reflections.",
+    "parameters": {"breathPressure":59,"jetVelocity":53,"edgeInteraction":52,"turbulence":10,"cavityVolume":107,"openHoleArea":46,"apertureNeckLength":7.6,"resonatorDamping":34,"resonatorDetuning":1,"vibratoDepth":5,"attackArticulation":45,"formantColor":45},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":2,"reverbDecay":4.1,"reverbMix":36,"reverbDamping":54}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":3.01}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "moonlit-serenade",
+    "name": "Moonlit Serenade",
+    "category": "Retro",
+    "description": "Soft solo voice with a slow pitch shimmer and quiet stereo delay.",
+    "parameters": {"breathPressure":54,"jetVelocity":40,"edgeInteraction":42,"turbulence":8,"cavityVolume":151,"openHoleArea":45,"apertureNeckLength":9.5,"resonatorDamping":38,"resonatorDetuning":-2,"vibratoDepth":12,"attackArticulation":28,"formantColor":32,"portamento":52},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayTime":385,"delayFeedback":19,"delayMode":0,"delayMix":17}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":2.7,"reverbMix":22}}],
+    "performance": {"model":"retroFantasy","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":1.33}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "lost-woods",
+    "name": "Lost Woods",
+    "category": "Retro",
+    "description": "Quick plucked-air onset with compact filtered reflection.",
+    "parameters": {"breathPressure":60,"jetVelocity":58,"edgeInteraction":58,"turbulence":12,"cavityVolume":86,"openHoleArea":49,"apertureNeckLength":5.9,"resonatorDamping":46,"resonatorDetuning":2,"vibratoDepth":3,"attackArticulation":76,"formantColor":53},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayTime":122,"delayFeedback":17,"delayCutoff":2600,"delayMix":19}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.47,"reverbMix":8}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":9,"gainCompensationDb":-0.22}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "ancient-kingdom",
+    "name": "Ancient Kingdom",
+    "category": "Retro",
+    "description": "Dark melody tone with wide low-passed echoes and resonant cavern depth.",
+    "parameters": {"breathPressure":63,"jetVelocity":45,"edgeInteraction":43,"turbulence":16,"cavityVolume":191,"openHoleArea":46,"apertureNeckLength":11,"resonatorDamping":41,"resonatorDetuning":-4,"vibratoDepth":6,"attackArticulation":33,"formantColor":33},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayMode":1,"delaySync":1,"delayDivision":2,"delayFeedback":32,"delayCutoff":2100,"delayMix":18}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":3,"reverbDecay":3.9,"reverbMix":25}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":7,"gainCompensationDb":2.19,"tempoBpm":92}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "fairy-fountain",
+    "name": "Fairy Fountain",
+    "category": "Retro",
+    "description": "Glassy high-register tone with a soft octave-up halo.",
+    "parameters": {"breathPressure":62,"jetVelocity":60,"edgeInteraction":55,"turbulence":10,"cavityVolume":59,"openHoleArea":45,"apertureNeckLength":5.1,"resonatorDamping":36,"resonatorDetuning":1,"vibratoDepth":9,"attackArticulation":57,"formantColor":65},
+    "effects": [{"id":"chorus","enabled":true,"parameters":{"chorusDepth":20,"chorusRate":0.62,"chorusMix":16}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":4.6,"reverbMix":26,"reverbDamping":42}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":1.86}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "twilight-echo",
+    "name": "Twilight Echo",
+    "category": "Retro",
+    "description": "A restrained, dusky solo lead with syncopated ping-pong echoes.",
+    "parameters": {"breathPressure":56,"jetVelocity":46,"edgeInteraction":45,"turbulence":13,"cavityVolume":137,"openHoleArea":43,"apertureNeckLength":8.6,"resonatorDamping":42,"resonatorDetuning":-4,"vibratoDepth":10,"attackArticulation":42,"formantColor":33,"portamento":54},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayMode":1,"delaySync":1,"delayDivision":5,"delayFeedback":40,"delayCutoff":3200,"delayMix":29}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":2,"reverbDecay":2.2,"reverbMix":13}}],
+    "performance": {"model":"retroFantasy","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":3.75,"tempoBpm":97}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "eight-bit-dreamer",
+    "name": "Eight-Bit Dreamer",
+    "category": "Retro",
+    "description": "Bright chip-like tones with stepped quantization and rate reduction.",
+    "parameters": {"breathPressure":64,"jetVelocity":61,"edgeInteraction":57,"turbulence":6,"cavityVolume":72,"openHoleArea":49,"apertureNeckLength":6.3,"resonatorDamping":37,"resonatorDetuning":0,"vibratoDepth":2,"attackArticulation":72,"formantColor":54},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":1,"driveAmount":40,"driveMix":17}},{"id":"crusher","enabled":true,"parameters":{"crusherBits":6,"crusherMix":45}},{"id":"reducer","enabled":true,"parameters":{"reducerRate":11400,"reducerMix":34}},{"id":"delay","enabled":true,"parameters":{"delayTime":165,"delayFeedback":18,"delayMix":12}}],
+    "performance": {"model":"retroFantasy","voiceMode":"poly","voiceLimit":12,"gainCompensationDb":-3.46}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "syntharina",
+    "name": "Syntharina",
+    "category": "Electronic",
+    "description": "Glossy lead with tight stereo chorus and a light soft-clip edge.",
+    "parameters": {"breathPressure":65,"jetVelocity":65,"edgeInteraction":63,"turbulence":18,"cavityVolume":84,"openHoleArea":62,"apertureNeckLength":6.4,"resonatorDamping":34,"resonatorDetuning":0,"vibratoDepth":7,"attackArticulation":60,"formantColor":71},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":2,"driveAmount":31,"driveMix":21}},{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.84,"chorusDepth":31,"chorusMix":24}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":-2.28}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "cyber-flute",
+    "name": "Cyber Flute",
+    "category": "Electronic",
+    "description": "Focused cyber-wind with a fast stereo phaser and filtered ping-pong delay.",
+    "parameters": {"breathPressure":65,"jetVelocity":67,"edgeInteraction":72,"turbulence":21,"cavityVolume":72,"openHoleArea":66,"apertureNeckLength":6,"resonatorDamping":39,"resonatorDetuning":-1,"vibratoDepth":5,"attackArticulation":63,"formantColor":69},
+    "effects": [{"id":"phaser","enabled":true,"parameters":{"phaserRate":1.48,"phaserDepth":63,"phaserMix":44}},{"id":"delay","enabled":true,"parameters":{"delayMode":1,"delaySync":1,"delayDivision":1,"delayFeedback":31,"delayMix":26}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":1.62,"tempoBpm":134}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "neon-breath",
+    "name": "Neon Breath",
+    "category": "Electronic",
+    "description": "Noisy attack that blooms into a wider chorus and bright hall.",
+    "parameters": {"breathPressure":64,"jetVelocity":59,"edgeInteraction":62,"turbulence":40,"cavityVolume":93,"openHoleArea":53,"apertureNeckLength":6.8,"resonatorDamping":41,"resonatorDetuning":2,"vibratoDepth":14,"attackArticulation":42,"formantColor":68},
+    "effects": [{"id":"chorus","enabled":true,"parameters":{"chorusWidth":100,"chorusRate":0.63,"chorusDepth":49,"chorusMix":33}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":2.8,"reverbMix":19,"reverbDamping":34}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":0.92}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "resonant-pulse",
+    "name": "Resonant Pulse",
+    "category": "Electronic",
+    "description": "A rounded pulse animation from stereo tremolo and a bright filtered edge.",
+    "parameters": {"breathPressure":68,"jetVelocity":64,"edgeInteraction":67,"turbulence":15,"cavityVolume":105,"openHoleArea":58,"apertureNeckLength":6.4,"resonatorDamping":36,"resonatorDetuning":0,"vibratoDepth":3,"attackArticulation":59,"formantColor":73},
+    "effects": [{"id":"filter","enabled":true,"parameters":{"filterHz":1730,"filterQ":1.2,"filterDb":3.8}},{"id":"tremolo","enabled":true,"parameters":{"tremoloRate":6.35,"tremoloDepth":59}},{"id":"delay","enabled":true,"parameters":{"delayTime":155,"delayFeedback":25,"delayMix":15}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":12,"gainCompensationDb":0.59}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "vaporwave-vessel",
+    "name": "Vaporwave Vessel",
+    "category": "Electronic",
+    "description": "Thick, slow chorus under a warm low-passed echo.",
+    "parameters": {"breathPressure":59,"jetVelocity":49,"edgeInteraction":54,"turbulence":21,"cavityVolume":157,"openHoleArea":51,"apertureNeckLength":9.6,"resonatorDamping":42,"resonatorDetuning":-6,"vibratoDepth":16,"attackArticulation":34,"formantColor":50},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":0,"driveAmount":22,"driveMix":18}},{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.37,"chorusDepth":60,"chorusWidth":96,"chorusMix":40}},{"id":"delay","enabled":true,"parameters":{"delayTime":490,"delayFeedback":36,"delayCutoff":1600,"delayMix":22}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":2.9,"reverbMix":18}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":3.99}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "glitch-ocarina",
+    "name": "Glitch Ocarina",
+    "category": "Electronic",
+    "description": "Bitwise grain with lower clock rate and asymmetric repeats.",
+    "parameters": {"breathPressure":69,"jetVelocity":70,"edgeInteraction":66,"turbulence":28,"cavityVolume":79,"openHoleArea":46,"apertureNeckLength":5.5,"resonatorDamping":43,"resonatorDetuning":4,"vibratoDepth":4,"attackArticulation":74,"formantColor":65},
+    "effects": [{"id":"crusher","enabled":true,"parameters":{"crusherBits":5,"crusherMix":66}},{"id":"reducer","enabled":true,"parameters":{"reducerRate":3900,"reducerMix":59}},{"id":"delay","enabled":true,"parameters":{"delayMode":1,"delayTime":186,"delayFeedback":22,"delayMix":25}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":-2.26}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "fm-airglass",
+    "name": "FM Airglass",
+    "category": "Electronic",
+    "description": "An audio-rate FM carrier follows the vessel pitch and brightens as the modeled signal drives it.",
+    "parameters": {"breathPressure":66,"jetVelocity":61,"edgeInteraction":66,"turbulence":16,"cavityVolume":94,"openHoleArea":52,"apertureNeckLength":6.7,"resonatorDamping":36,"resonatorDetuning":0,"vibratoDepth":9,"attackArticulation":45,"formantColor":61,"portamento":42},
+    "effects": [{"id":"fm","enabled":true,"parameters":{"fmRatio":2.7,"fmIndex":3.8,"fmMix":59}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":1.8,"reverbMix":21}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":2.2}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "ambient-drone",
+    "name": "Ambient Drone",
+    "category": "Electronic",
+    "description": "Polyphonic air pad with deep modulation and long cavern decay.",
+    "parameters": {"breathPressure":59,"jetVelocity":46,"edgeInteraction":49,"turbulence":29,"cavityVolume":245,"openHoleArea":50,"apertureNeckLength":11,"resonatorDamping":36,"resonatorDetuning":-5,"vibratoDepth":20,"attackArticulation":20,"formantColor":42},
+    "effects": [{"id":"tremolo","enabled":true,"parameters":{"tremoloRate":0.52,"tremoloDepth":29}},{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.24,"chorusDepth":53,"chorusMix":32}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":3,"reverbDecay":8.5,"reverbMix":42,"reverbDamping":65}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":16,"gainCompensationDb":5.49}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "granular-illusion",
+    "name": "Granular Illusion",
+    "category": "Electronic",
+    "description": "Overlapping transposed grains from the live vessel create a moving glass cloud.",
+    "parameters": {"breathPressure":63,"jetVelocity":57,"edgeInteraction":63,"turbulence":20,"cavityVolume":96,"openHoleArea":51,"apertureNeckLength":7,"resonatorDamping":39,"resonatorDetuning":0,"vibratoDepth":8,"attackArticulation":42,"formantColor":64},
+    "effects": [{"id":"grain","enabled":true,"parameters":{"grainSize":106,"grainPitch":9,"grainMix":54}},{"id":"delay","enabled":true,"parameters":{"delayTime":410,"delayMode":1,"delayFeedback":30,"delayMix":14}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":3,"reverbDecay":3.7,"reverbMix":21}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":3.61}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "digital-spirit",
+    "name": "Digital Spirit",
+    "category": "Electronic",
+    "description": "Small, bright digital resonance with a sliding pitch and octave shimmer.",
+    "parameters": {"breathPressure":67,"jetVelocity":67,"edgeInteraction":69,"turbulence":14,"cavityVolume":64,"openHoleArea":54,"apertureNeckLength":5.2,"resonatorDamping":41,"resonatorDetuning":3,"vibratoDepth":13,"attackArticulation":54,"formantColor":70,"portamento":61},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":1,"driveAmount":21,"driveMix":17}},{"id":"reducer","enabled":true,"parameters":{"reducerRate":9200,"reducerMix":20}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":4.1,"reverbMix":29}}],
+    "performance": {"model":"electronicHybrid","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-0.91}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "celtic-dawn",
+    "name": "Celtic Dawn",
+    "category": "Cinematic",
+    "description": "Warm glass-and-ceramic dawn tone with a diffused hall.",
+    "parameters": {"breathPressure":61,"jetVelocity":49,"edgeInteraction":48,"turbulence":22,"cavityVolume":142,"openHoleArea":51,"apertureNeckLength":8.2,"resonatorDamping":37,"resonatorDetuning":0,"vibratoDepth":11,"attackArticulation":39,"formantColor":44},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":3.1,"reverbMix":29,"reverbDamping":52}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":12,"gainCompensationDb":0.55}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "druids-lament",
+    "name": "Druid's Lament",
+    "category": "Cinematic",
+    "description": "Low solo vessel with an expressive breath-first attack and long legato.",
+    "parameters": {"breathPressure":64,"jetVelocity":42,"edgeInteraction":56,"turbulence":34,"cavityVolume":250,"openHoleArea":42,"apertureNeckLength":11.5,"resonatorDamping":41,"resonatorDetuning":-7,"vibratoDepth":17,"attackArticulation":25,"formantColor":34,"portamento":77,"aftertouchResponse":71},
+    "effects": [{"id":"reverb","enabled":true,"parameters":{"reverbMode":2,"reverbDecay":3.5,"reverbMix":29,"reverbDamping":65}}],
+    "performance": {"model":"crystalResonator","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":0.98}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "mystic-cathedral",
+    "name": "Mystic Cathedral",
+    "category": "Cinematic",
+    "description": "Glass registers over a spacious octave-up cathedral tail.",
+    "parameters": {"breathPressure":64,"jetVelocity":58,"edgeInteraction":57,"turbulence":15,"cavityVolume":120,"openHoleArea":52,"apertureNeckLength":8,"resonatorDamping":35,"resonatorDetuning":0,"vibratoDepth":8,"attackArticulation":40,"formantColor":68},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayTime":265,"delayFeedback":23,"delayMix":13}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":7.4,"reverbMix":39,"reverbDamping":55}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":12,"gainCompensationDb":3.5}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "frozen-kingdom",
+    "name": "Frozen Kingdom",
+    "category": "Cinematic",
+    "description": "A bright, fluttering chamber voice with a cold harmonic wake.",
+    "parameters": {"breathPressure":63,"jetVelocity":64,"edgeInteraction":64,"turbulence":18,"cavityVolume":64,"openHoleArea":47,"apertureNeckLength":5.8,"resonatorDamping":41,"resonatorDetuning":4,"vibratoDepth":7,"attackArticulation":53,"formantColor":74},
+    "effects": [{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.79,"chorusDepth":35,"chorusWidth":96,"chorusMix":31}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":5.8,"reverbMix":31,"reverbDamping":27}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":12,"gainCompensationDb":3.65}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "etherwind",
+    "name": "Etherwind",
+    "category": "Cinematic",
+    "description": "Air haze around a gentle rising grain texture and long hall.",
+    "parameters": {"breathPressure":60,"jetVelocity":46,"edgeInteraction":54,"turbulence":36,"cavityVolume":145,"openHoleArea":50,"apertureNeckLength":8.9,"resonatorDamping":40,"resonatorDetuning":-2,"vibratoDepth":17,"attackArticulation":24,"formantColor":61},
+    "effects": [{"id":"grain","enabled":true,"parameters":{"grainSize":145,"grainPitch":5,"grainMix":29}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":1,"reverbDecay":6.1,"reverbMix":38,"reverbDamping":48}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":10,"gainCompensationDb":3.86}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "dark-ritual",
+    "name": "Dark Ritual",
+    "category": "Cinematic",
+    "description": "A dark, unstable vessel with slow tremolo and cavern reflections.",
+    "parameters": {"breathPressure":68,"jetVelocity":42,"edgeInteraction":61,"turbulence":32,"cavityVolume":274,"openHoleArea":40,"apertureNeckLength":13,"resonatorDamping":43,"resonatorDetuning":-8,"vibratoDepth":12,"attackArticulation":36,"formantColor":29},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":0,"driveAmount":26,"driveMix":25}},{"id":"tremolo","enabled":true,"parameters":{"tremoloRate":1.84,"tremoloDepth":39}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":3,"reverbDecay":6.9,"reverbMix":37,"reverbDamping":76}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":8,"gainCompensationDb":3.22}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "celestial-choir",
+    "name": "Celestial Choir",
+    "category": "Cinematic",
+    "description": "Wide polyphonic glass choir with celestial octave reflections.",
+    "parameters": {"breathPressure":61,"jetVelocity":54,"edgeInteraction":48,"turbulence":15,"cavityVolume":124,"openHoleArea":49,"apertureNeckLength":8,"resonatorDamping":36,"resonatorDetuning":1,"vibratoDepth":20,"attackArticulation":25,"formantColor":62},
+    "effects": [{"id":"chorus","enabled":true,"parameters":{"chorusRate":0.46,"chorusDepth":57,"chorusWidth":100,"chorusMix":37}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":8.4,"reverbMix":39,"reverbDamping":43}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":16,"gainCompensationDb":5.63}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "desert-wanderer",
+    "name": "Desert Wanderer",
+    "category": "Cinematic",
+    "description": "Dry reed-like front with warm drive and a distant filtered echo.",
+    "parameters": {"breathPressure":63,"jetVelocity":55,"edgeInteraction":67,"turbulence":37,"cavityVolume":184,"openHoleArea":44,"apertureNeckLength":9.8,"resonatorDamping":45,"resonatorDetuning":-4,"vibratoDepth":11,"attackArticulation":56,"formantColor":43,"portamento":67},
+    "effects": [{"id":"drive","enabled":true,"parameters":{"driveMode":0,"driveAmount":18,"driveMix":15}},{"id":"delay","enabled":true,"parameters":{"delayTime":320,"delayFeedback":28,"delayCutoff":2200,"delayMix":17}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":0,"reverbDecay":0.9,"reverbMix":11}}],
+    "performance": {"model":"crystalResonator","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":-0.19}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "astral-passage",
+    "name": "Astral Passage",
+    "category": "Cinematic",
+    "description": "Bright chamber pad whose shifted grains drift into a long stereo path.",
+    "parameters": {"breathPressure":65,"jetVelocity":58,"edgeInteraction":58,"turbulence":22,"cavityVolume":103,"openHoleArea":54,"apertureNeckLength":7.2,"resonatorDamping":37,"resonatorDetuning":1,"vibratoDepth":13,"attackArticulation":36,"formantColor":68},
+    "effects": [{"id":"grain","enabled":true,"parameters":{"grainSize":117,"grainPitch":12,"grainMix":27}},{"id":"delay","enabled":true,"parameters":{"delayMode":1,"delaySync":1,"delayDivision":4,"delayFeedback":36,"delayMix":22}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":4,"reverbDecay":7.2,"reverbMix":34}}],
+    "performance": {"model":"crystalResonator","voiceMode":"poly","voiceLimit":13,"gainCompensationDb":4.39,"tempoBpm":84}
+  },
+  {
+    "schemaVersion": 1,
+    "id": "the-last-breath",
+    "name": "The Last Breath",
+    "category": "Cinematic",
+    "description": "Quiet, close wind lead that falls into a long, heavily damped cavern.",
+    "parameters": {"breathPressure":57,"jetVelocity":44,"edgeInteraction":54,"turbulence":36,"cavityVolume":217,"openHoleArea":40,"apertureNeckLength":10.4,"resonatorDamping":43,"resonatorDetuning":-5,"vibratoDepth":16,"attackArticulation":21,"formantColor":37,"portamento":75,"breathCurve":0.72},
+    "effects": [{"id":"delay","enabled":true,"parameters":{"delayTime":465,"delayFeedback":29,"delayCutoff":1800,"delayMix":16}},{"id":"reverb","enabled":true,"parameters":{"reverbMode":3,"reverbDecay":8.2,"reverbMix":42,"reverbDamping":78}}],
+    "performance": {"model":"crystalResonator","voiceMode":"mono","voiceLimit":8,"gainCompensationDb":3.98}
+  }
+]
