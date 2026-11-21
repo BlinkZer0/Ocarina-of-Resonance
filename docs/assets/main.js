@@ -886,7 +886,9 @@ async function initialise() {
     keysWindow.addEventListener('scroll', syncKeyboardScroll);
     new ResizeObserver(syncKeyboardScroll).observe(keysWindow);
     get('test-tone').addEventListener('click', () => send({ type: 'test' }));
-    get('profile').addEventListener('click', () => send({ type: 'profile' }));
+    get('profile').addEventListener('click', () => send({ type: 'profile', extended: false }));
+    get('profile-extended').addEventListener('click', () => send({ type: 'profile', extended: true }));
+    get('profile-stop').addEventListener('click', () => send({ type: 'stopProfile' }));
     buildPiano();
     get('sustain').addEventListener('click', () => {
         const sustain = get('sustain');

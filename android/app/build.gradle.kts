@@ -48,6 +48,14 @@ android {
     buildTypes {
         debug { applicationIdSuffix = ".debug" }
         release { signingConfig = signingConfigs.findByName("release") }
+        create("benchmark") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".benchmark"
+            isDebuggable = true
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += "release"
+            externalNativeBuild.cmake.arguments += "-DCMAKE_BUILD_TYPE=Release"
+        }
     }
 
     compileOptions {

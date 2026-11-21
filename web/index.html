@@ -126,7 +126,14 @@
       </div>
     </details>
     <details id="effects" class="effects"><summary>Effects</summary><div id="effect-global"></div><div id="effect-list"></div></details>
-    <details class="diagnostics" id="diagnostics" hidden><summary>Audio diagnostics</summary><button id="test-tone" type="button">Play A4 test tone</button><button id="profile" type="button">Profile 16 voices</button><output id="diagnostic-result"></output></details>
+    <details class="diagnostics" id="diagnostics" hidden>
+      <summary>Audio diagnostics</summary>
+      <button id="test-tone" type="button">Play A4 test tone</button>
+      <button id="profile" type="button">Profile 16 voices</button>
+      <button id="profile-extended" type="button">Profile 16 voices for 10 min</button>
+      <button id="profile-stop" type="button">Stop profile</button>
+      <output id="diagnostic-result"></output>
+    </details>
     <dialog id="preset-dialog">
       <form method="dialog">
         <label id="preset-dialog-label" for="preset-title">Preset name</label>

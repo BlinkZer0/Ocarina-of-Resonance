@@ -14,12 +14,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.util.AtomicFile
 import android.util.Base64
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -44,6 +46,7 @@ class MainActivity : Activity() {
     private var pendingFileEvent: Pair<String, Any>? = null
     private var benchmarking = false
     private var benchmarkXruns = 0
+    private var benchmarkStart = 0L
     private var testStartFrames = 0L
     private var sequence: IntArray? = null
     private var lastCC: JSONArray? = null
@@ -115,8 +118,10 @@ class MainActivity : Activity() {
         }
     }
     private val finishBenchmark = Runnable {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (audio != 0L) {
-            diagnostic = endProfile(audio, benchmarkXruns)
+            val elapsed = (SystemClock.elapsedRealtime() - benchmarkStart) / 1000
+            diagnostic = "$elapsed s | " + endProfile(audio, benchmarkXruns)
             for (note in benchmarkNotes) sendNote(audio, false, note, BENCHMARK_SOURCE)
             benchmarking = false
             val savedVoices = if (values[VOICE_MODE] == 0f) 0 else (values[VOICE_LIMIT] ?: 16f).toInt()
@@ -227,6 +232,10 @@ class MainActivity : Activity() {
         handler.removeCallbacks(meterPoll)
         handler.removeCallbacks(finishTest)
         handler.removeCallbacks(finishBenchmark)
+        if (benchmarking) {
+            diagnostic = "Audio stopped during profiling."
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
         benchmarking = false
         if (audio != 0L) {
             handler.removeCallbacks(finishClose)
@@ -365,15 +374,22 @@ class MainActivity : Activity() {
                 handler.postDelayed(finishTest, 500)
             }
             "profile" -> if (debug && audio != 0L && !benchmarking) {
+                val duration = if (event.optBoolean("extended")) 600_000L else 4_000L
                 benchmarking = true
+                benchmarkStart = SystemClock.elapsedRealtime()
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 handler.removeCallbacks(finishTest)
                 releaseKeyboard(audio, KEYBOARD_SOURCE)
                 sendNote(audio, false, 69, TEST_SOURCE)
                 setPerformance(audio, (values[MODEL] ?: 0f).toInt(), 16)
                 benchmarkXruns = beginProfile(audio)
                 for (note in benchmarkNotes) sendNote(audio, true, note, BENCHMARK_SOURCE)
-                diagnostic = "Profiling 16 voices…"
-                handler.postDelayed(finishBenchmark, 4000)
+                diagnostic = "Profiling 16 voices for ${duration / 1000} s…"
+                handler.postDelayed(finishBenchmark, duration)
+            }
+            "stopProfile" -> if (debug && benchmarking) {
+                handler.removeCallbacks(finishBenchmark)
+                finishBenchmark.run()
             }
         }
     }
@@ -428,6 +444,7 @@ class MainActivity : Activity() {
     private fun applyPatch(snapshot: FloatArray) {
         if (benchmarking) {
             handler.removeCallbacks(finishBenchmark)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             if (audio != 0L) {
                 endProfile(audio, benchmarkXruns)
                 releaseKeyboard(audio, BENCHMARK_SOURCE)

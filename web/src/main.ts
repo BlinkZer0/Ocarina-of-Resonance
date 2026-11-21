@@ -9,7 +9,8 @@ type Telemetry = { peak?: number; voices?: number; note?: number; params?: numbe
   library?: string[]; presetFile?: string; fileStatus?: string; preset?: PresetIdentity | null;
   tick?: number; transport?: number; sequence?: number[]; held?: number[]; midiCC?: [number, number]; midiMap?: number[];
   midiFile?: string; midiNotice?: string; midiInputStatus?: string; exitFullscreen?: boolean; audioSettings?: [number, number] };
-type Request = { type: 'ready' | 'release' | 'test' | 'profile' | 'importPreset' | 'listPresets' | 'discoverMidi' | 'importMidi' | 'resumeAudio' }
+type Request = { type: 'ready' | 'release' | 'test' | 'stopProfile' | 'importPreset' | 'listPresets' | 'discoverMidi' | 'importMidi' | 'resumeAudio' }
+  | { type: 'profile'; extended: boolean }
   | { type: 'begin' | 'end'; index: number }
   | { type: 'parameter'; index: number; value: number }
   | { type: 'patch'; values: number[]; preset?: PresetIdentity }
@@ -828,7 +829,9 @@ async function initialise(): Promise<void> {
   keysWindow.addEventListener('scroll', syncKeyboardScroll);
   new ResizeObserver(syncKeyboardScroll).observe(keysWindow);
   get('test-tone').addEventListener('click', () => send({ type: 'test' }));
-  get('profile').addEventListener('click', () => send({ type: 'profile' }));
+  get('profile').addEventListener('click', () => send({ type: 'profile', extended: false }));
+  get('profile-extended').addEventListener('click', () => send({ type: 'profile', extended: true }));
+  get('profile-stop').addEventListener('click', () => send({ type: 'stopProfile' }));
   buildPiano();
   get('sustain').addEventListener('click', () => {
     const sustain = get('sustain');

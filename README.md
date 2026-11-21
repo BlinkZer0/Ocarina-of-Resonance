@@ -2,7 +2,7 @@
 
 Ocarina of Resonance is a vessel-flute synthesizer for Windows VST3, web, and Android. Version 0.6.0 adds coordinated packaging for all three platforms. Play the blue-and-gold transverse ocarina with the piano roll, MIDI controllers, four sound models, 40 factory presets, and 11 stereo effects in mono legato or with up to 16 voices.
 
-[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Packaging and signing](design/PHASE_6.md) · [Phase 5 performance and MIDI](design/PHASE_5.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
+[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Release validation](design/PHASE_7.md) · [Packaging and signing](design/PHASE_6.md) · [Phase 5 performance and MIDI](design/PHASE_5.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
 
 ## Play and edit
 
@@ -28,7 +28,7 @@ Run `npm test` from `web/` after installing Playwright Chromium with `npx playwr
 
 Open `android/` as an Android Studio project, or set `JAVA_HOME` to JDK 21 and `ANDROID_HOME` to the SDK. Install platform 36, NDK 29.0.14206865, and CMake 3.31.6. Run `android/build.bat`, or `sh ./gradlew assembleDebug` from `android/` on Unix. The output is `android/app/build/outputs/apk/debug/app-debug.apk`.
 
-Select an unlocked ARM64 phone with `adb devices -l`. Install with `adb -s <device> install -r android/app/build/outputs/apk/debug/app-debug.apk`. The panel is bundled for offline use and plays through the native Oboe engine. The debug APK includes **Audio diagnostics** with the A4 test tone and **Profile 16 voices**. Timings and xruns appear under the `OcarinaAudio` log tag.
+Select an unlocked ARM64 phone with `adb devices -l`. Install with `adb -s <device> install -r android/app/build/outputs/apk/debug/app-debug.apk`. The panel is bundled for offline use and plays through the native Oboe engine. **Audio diagnostics** in the debug APK includes an A4 test tone and short and 10-minute 16-voice profiles. Timings and xruns appear in the panel and under the `OcarinaAudio` log tag. For release-optimized DSP measurements, run `android/build.bat assembleBenchmark` and install `android/app/build/outputs/apk/benchmark/app-benchmark.apk`. This debug-signed test package has a separate app ID and retains the diagnostics.
 
 Connect a class-compliant USB MIDI controller or select **Find Bluetooth MIDI** under **MIDI input**. Use **Audio output** to choose a latency mode and an automatic or explicit buffer in device bursts. The status line reports the active backend, sample rate, and buffer.
 
