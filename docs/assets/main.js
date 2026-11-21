@@ -170,7 +170,7 @@ function makeHole(control, label, position) {
     engraving.textContent = label;
     button.append(ring, engraving);
     holes.set(control.index, button);
-    get(position ? 'holes' : 'thumb-controls').append(button);
+    get(position ? position.hand + '-holes' : 'thumb-controls').append(button);
     bindings.set(control.index, (value) => {
         const valueText = (compact(value) + ' ' + control.unit).trim();
         button.setAttribute('aria-valuenow', compact(value));
@@ -623,7 +623,7 @@ async function initialise() {
     new ResizeObserver(() => {
         if (faceWindow.scrollWidth <= faceWindow.clientWidth)
             return;
-        const targets = Array.from(get('holes').children, button => button.getBoundingClientRect());
+        const targets = Array.from(get('holes').querySelectorAll('.face-hole'), button => button.getBoundingClientRect());
         const left = Math.min(...targets.map(target => target.left));
         const right = Math.max(...targets.map(target => target.right));
         const bounds = faceWindow.getBoundingClientRect();

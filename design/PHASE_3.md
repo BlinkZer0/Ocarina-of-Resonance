@@ -1,6 +1,6 @@
 # Phase 3 Instrument Interface
 
-Version 0.4.1 follows the traditional transverse layout. Eight main holes and two smaller subholes sit on the glazed face. Attack Articulation and Formant Color sit just below it as thumb controls. The front recesses and their gold indicators share the positions in `ui/holes.json`, which keeps the visible openings and touch targets aligned.
+Version 0.4.1 follows the traditional transverse layout. Four staggered main holes and one subhole sit on the glazed face for each hand. Attack Articulation and Formant Color sit just below it as thumb controls. The front recesses and their gold indicators share the positions in `ui/holes.json`, which keeps the visible openings and touch targets aligned.
 
 Version 0.3.0 uses a shared instrument panel for the VST3, the GitHub Pages build, and Android. The 12 dial centers are measured from the drilled finger holes in the artwork and stored as percentages of its dimensions. The bezel overlays share those centers at every panel size. On narrow screens, the stage preserves distinct touch targets and permits panning at the outer edges.
 

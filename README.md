@@ -1,6 +1,6 @@
 # Ocarina of Resonance
 
-Ocarina of Resonance is a vessel-flute synthesizer in development for Windows VST3, web, and Android. Version 0.4.1 places eight main dials and two smaller subhole dials on the face of a glazed blue-and-gold transverse ocarina. Two thumb dials sit below it. Explore four sound models, 40 factory presets, and 11 stereo effects in mono legato or with up to 16 voices.
+Ocarina of Resonance is a vessel-flute synthesizer in development for Windows VST3, web, and Android. Version 0.4.1 staggers four main dials and one smaller subhole dial for each hand on a glazed blue-and-gold transverse ocarina. Two thumb dials sit below it. Explore four sound models, 40 factory presets, and 11 stereo effects in mono legato or with up to 16 voices.
 
 [Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
 

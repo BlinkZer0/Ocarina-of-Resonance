@@ -45,10 +45,11 @@ if (models.length !== 4) throw new Error('Could not read the sound models from t
 const face = JSON.parse(readFileSync(join(root, 'ui', 'holes.json'), 'utf8'));
 const front = Object.entries(face.front);
 const holeIds = new Set(controls.slice(1, 13).map(control => control.id));
+const hands = ['left', 'right'].map(hand => front.filter(([, hole]) => hole.hand === hand));
 if (!(face.width > 0 && face.height > 0) || front.length !== 10
-    || front.filter(([, hole]) => hole.subhole === true).length !== 2
+    || hands.some(holes => holes.length !== 5 || holes.filter(([, hole]) => hole.subhole === true).length !== 1)
     || front.some(([id, { x, y }]) => !holeIds.has(id) || !(x > 0 && x < 100 && y > 0 && y < 100))) {
-  throw new Error('The instrument artwork needs eight front holes and two subholes with valid coordinates and parameter IDs.');
+  throw new Error('Each hand needs four front holes and one subhole with valid coordinates and parameter IDs.');
 }
 const effects = JSON.parse(readFileSync(join(root, 'presets', 'effects.json'), 'utf8'));
 const { PresetFormat } = await import(new URL('../docs/assets/presets.js', import.meta.url));

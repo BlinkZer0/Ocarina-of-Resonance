@@ -1,7 +1,7 @@
 import type { VoiceMessage } from './worklet.js';
 import { PresetFormat, type Control, type Effect, type Preset } from './presets.js';
 
-type HolePosition = { x: number; y: number; subhole?: boolean; labelAbove?: boolean };
+type HolePosition = { hand: 'left' | 'right'; x: number; y: number; subhole?: boolean; labelAbove?: boolean };
 type Catalogue = { controls: Control[]; models: string[]; face: { width: number; height: number; front: Partial<Record<string, HolePosition>> }; effects: Effect[]; factory: Preset[] };
 type PresetIdentity = Pick<Preset, 'id' | 'name' | 'category' | 'description'>;
 type Telemetry = { peak?: number; voices?: number; note?: number; params?: number[]; status?: string; debug?: boolean; diagnostic?: string;
@@ -183,7 +183,7 @@ function makeHole(control: Control, label: string, position?: HolePosition): voi
   engraving.textContent = label;
   button.append(ring, engraving);
   holes.set(control.index, button);
-  get(position ? 'holes' : 'thumb-controls').append(button);
+  get(position ? position.hand + '-holes' : 'thumb-controls').append(button);
 
   bindings.set(control.index, (value) => {
     const valueText = (compact(value) + ' ' + control.unit).trim();
@@ -585,7 +585,7 @@ async function initialise(): Promise<void> {
   const faceWindow = stage.parentElement!;
   new ResizeObserver(() => {
     if (faceWindow.scrollWidth <= faceWindow.clientWidth) return;
-    const targets = Array.from(get('holes').children, button => button.getBoundingClientRect());
+    const targets = Array.from(get('holes').querySelectorAll('.face-hole'), button => button.getBoundingClientRect());
     const left = Math.min(...targets.map(target => target.left));
     const right = Math.max(...targets.map(target => target.right));
     const bounds = faceWindow.getBoundingClientRect();

@@ -191,7 +191,7 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
 }
 .thumb-controls {
   display: grid;
-  grid-template-columns: 1fr auto auto 1fr;
+  grid-template-columns: 1fr auto clamp(.5rem, 5vw, 2.3rem) auto 1fr;
   align-items: center;
   gap: clamp(.4rem, 2vw, .9rem);
   max-width: 31rem;
@@ -203,6 +203,7 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
   background: linear-gradient(90deg, transparent, #8c6942);
 }
 .thumb-controls::after { transform: scaleX(-1); }
+.thumb-controls .thumb-hole + .thumb-hole { grid-column: 4; }
 .thumb-hole {
   --rim: 1.7rem;
   display: flex;

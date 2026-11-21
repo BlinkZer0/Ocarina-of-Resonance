@@ -27,6 +27,11 @@ test('the ocarina and thumb controls send all twelve values and shape the soundi
     assert.equal(await holes.count(), 12);
     assert.equal(await page.locator('#holes .face-hole').count(), 10);
     assert.equal(await page.locator('#holes .subhole').count(), 2);
+    for (const hand of ['left', 'right']) {
+      const group = page.getByRole('group', { name: hand + '-hand finger holes' });
+      assert.equal(await group.getByRole('slider').count(), 5);
+      assert.equal(await group.locator('.subhole').count(), 1);
+    }
     assert.deepEqual(await page.locator('#thumb-controls .thumb-hole').evaluateAll(
       buttons => buttons.map(button => button.dataset.parameter)), ['attackArticulation', 'formantColor']);
     const aligned = await page.evaluate(async front => {
@@ -57,7 +62,8 @@ test('the ocarina and thumb controls send all twelve values and shape the soundi
       await hole.press('ArrowUp');
       assert.ok(Number(await hole.getAttribute('aria-valuenow')) > Number(initial));
     }
-    assert.deepEqual(await page.evaluate(() => window.parameterEvents), Array.from({ length: 12 }, (_, i) => i + 1));
+    assert.deepEqual(await page.evaluate(() => window.parameterEvents.toSorted((a, b) => a - b)),
+      Array.from({ length: 12 }, (_, i) => i + 1));
 
     const breath = holes.first();
     await breath.dblclick();
@@ -96,7 +102,9 @@ test('phone layout supports independent touches and a separate keyboard scroll c
     await page.goto(address);
     const holes = page.locator('.hole');
     await holes.last().waitFor();
-    const first = await holes.nth(0).boundingBox(), second = await holes.nth(1).boundingBox();
+    const left = page.getByRole('slider', { name: 'Breath Pressure', exact: true });
+    const right = page.getByRole('slider', { name: 'Aperture Neck Length', exact: true });
+    const first = await left.boundingBox(), second = await right.boundingBox();
     assert.ok(first.width >= 44 && first.height >= 44 && second.x >= first.x + first.width);
     const client = await context.newCDPSession(page);
     await page.getByRole('checkbox', { name: 'Fine' }).check();
@@ -107,9 +115,9 @@ test('phone layout supports independent touches and a separate keyboard scroll c
     await touch('touchStart', [p1, p2]);
     await touch('touchMove', [{ ...p1, y: p1.y - 33 }, { ...p2, y: p2.y + 28 }]);
     await touch('touchEnd', []);
-    const breath = Number(await holes.nth(0).getAttribute('aria-valuenow'));
-    const jet = Number(await holes.nth(1).getAttribute('aria-valuenow'));
-    assert.ok(breath > 55 && breath < 61 && jet < 50 && jet > 44);
+    const breath = Number(await left.getAttribute('aria-valuenow'));
+    const neck = Number(await right.getAttribute('aria-valuenow'));
+    assert.ok(breath > 55 && breath < 61 && neck < 7 && neck > 5);
     assert.equal(await page.evaluate(() => window.scrollY), 0);
     assert.equal(await page.locator('#keys .key').count(), 48);
     const scroll = page.getByRole('slider', { name: 'Scroll keyboard' });
