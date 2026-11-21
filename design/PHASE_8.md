@@ -40,6 +40,12 @@ The Windows ZIP includes the Steinberg VST3 and Microsoft WebView2 loader notice
 
 The current build passed three Windows tests and 10 browser tests. The public Pages deployment served the same JavaScript as commit `1991c64` and played an imported MIDI pattern through the Wasm worklet. The new browser test also starts audio with the previous panel markup. The final GitHub rehearsal completed all three builds and collected the verified Windows and web ZIPs and the separate Android debug APK. The rebuilt debug APK updated the installation on the Samsung, opened AAudio, and rendered 21,941 non-silent frames for the A4 test. [Pages deployment](https://github.com/BlinkZer0/Ocarina-of-Resonance/actions/runs/44937065920) · [Rehearsal artifacts](https://github.com/BlinkZer0/Ocarina-of-Resonance/actions/runs/44937598240#artifacts)
 
+## Signed candidate staging
+
+Tag `v0.6.0-rc.1` points to build commit `9132fc1`. Its manual Android-only run accepted the candidate ref and stopped at the missing production credentials. It uploaded no artifacts and skipped the Pages and release jobs. The workflow passed actionlint and the version checker passed 12 standard and candidate tag cases. [Candidate source](https://github.com/BlinkZer0/Ocarina-of-Resonance/tree/v0.6.0-rc.1) · [Signing gate run](https://github.com/BlinkZer0/Ocarina-of-Resonance/actions/runs/44948607676)
+
+A local rehearsal used a disposable QA key to sign the standalone APK, AAB, and bundletool universal APK set. The standalone and bundle-derived APKs matched the expected signer, version code 7, and 16 KB alignment. The standalone APK launched on the Samsung after installation with ADB. The APK set installed over it with the same signer and launched. The QA installation and private key were removed after the test. [Candidate build and device commands](PHASE_6.md#signed-android-candidate)
+
 ## Remaining release checks
 
 - Configure the owner's signing credentials in the protected GitHub environment. Build a production-signed candidate from a candidate tag, exercise direct installation and the generated bundletool APK set on hardware, and verify offline playback before tagging the verified commit. [GitHub signing environment](https://github.com/BlinkZer0/Ocarina-of-Resonance/settings/environments) · [Signed Android candidate](PHASE_6.md#signed-android-candidate)
