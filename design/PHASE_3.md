@@ -21,3 +21,10 @@ Final artwork edit prompt
 ## Repeat browser verification
 
 Run `npm ci`, `npm run build`, and `npm test` from `web/` with the supported browser installed. The functional tests check the rendered dial centers against the artwork, exercise all twelve parameters, verify that breath changes the sounding voice, and exercise independent touches, fine adjustment, and keyboard navigation at a phone viewport.
+
+## Verification results
+
+- The tested desktop, portrait phone, landscape phone, and tablet layouts kept all twelve knobs centered over the drilled openings. Touch targets stayed distinct at viewport widths down to 320 CSS pixels.
+- In REAPER 7.86, the embedded editor sent a breath-pressure gesture to the host, reflected a host automation change on the dial, and played its on-screen keyboard through the native engine. The VST3 also passed all 47 Steinberg validator checks.
+- The hosted build served byte-identical artwork, parameter metadata, and Wasm. Edge verified that the breath dial changed a held note and that releasing the key cleared it. [Live instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/)
+- The ARM64 debug APK passed signature and alignment checks and installed on the Samsung SM-S948U1. Final on-device touch and audio verification is pending while the phone is locked.
