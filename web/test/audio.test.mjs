@@ -39,3 +39,20 @@ test('plays and releases a Wasm voice under the Pages project subpath', async ()
     server.close();
   }
 });
+
+test('starts with a cached panel that predates the extra Android diagnostics', async (t) => {
+  const { server, address } = await startServer(0);
+  t.after(() => server.close());
+  const browser = await chromium.launch({ executablePath: process.env.OCARINA_BROWSER || undefined });
+  t.after(() => browser.close());
+  const page = await browser.newPage();
+  await page.route(address, async route => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(/<button id="profile-(?:extended|stop)"[^>]*>[^<]*<\/button>/g, '');
+    await route.fulfill({ response, body });
+  });
+  await page.goto(address);
+  assert.equal(await page.locator('#profile-extended, #profile-stop').count(), 0);
+  await page.getByRole('button', { name: 'Start audio' }).click();
+  await page.getByText(/^Audio ready/).waitFor();
+});
