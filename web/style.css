@@ -319,7 +319,11 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
   position: fixed; z-index: 10; inset: 0; margin: 0; border-radius: 0; overflow: auto;
   background: radial-gradient(ellipse at top, #203451, #101a29 62%);
 }
-.performance-full.sequencer .roll-scroll { height: calc(100dvh - 13.5rem); min-height: 12rem; }
+.performance-full.sequencer .roll-body {
+  height: calc(100dvh - 2.8rem);
+  grid-template-rows: auto auto auto minmax(12rem, 1fr);
+}
+.performance-full.sequencer .roll-scroll { height: auto; min-height: 0; }
 .performance-full.keyboard { display: flex; flex-direction: column; justify-content: center; gap: .45rem; }
 .performance-full.keyboard #keys { height: clamp(9rem, 45dvh, 30rem); }
 .diagnostics { margin-top: .5rem; color: var(--muted); }
@@ -353,7 +357,9 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
   .keyboard { padding: .45rem; }
   .keyboard-top { gap: .35rem; }
   .keyboard-top button, .roll-toolbar button, .roll-options input[type="number"], .roll-options select { min-height: 42px; }
-  .performance-full.sequencer .roll-scroll { height: calc(100dvh - 18rem); }
+  .roll-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .roll-toolbar:first-child .roll-options { grid-column: 1 / -1; grid-row: 2; }
+  .roll-toolbar:nth-child(2) { grid-template-columns: minmax(0, 1fr); }
   #keys { height: 5.5rem; }
 }
 

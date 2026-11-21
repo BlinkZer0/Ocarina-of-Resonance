@@ -135,8 +135,10 @@ function paintTelemetry(update) {
     }
     if (update.status !== undefined && status.textContent !== update.status)
         status.textContent = update.status;
-    if (android && update.status !== undefined)
+    if (android && update.status !== undefined) {
         keyboard.disabled = !update.status.startsWith('Audio ready');
+        start.hidden = !keyboard.disabled;
+    }
     if (update.debug)
         get('diagnostics').hidden = false;
     if (update.diagnostic !== undefined)
@@ -899,6 +901,8 @@ async function initialise() {
     setupMidi();
     if (android) {
         get('android-audio').hidden = false;
+        start.disabled = false;
+        start.addEventListener('click', () => send({ type: 'resumeAudio' }));
         const mode = get('audio-mode');
         const buffer = get('audio-bursts');
         for (let bursts = 1; bursts <= 8; ++bursts)

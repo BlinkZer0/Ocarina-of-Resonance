@@ -296,6 +296,7 @@ class MainActivity : Activity() {
             }
             "discoverMidi" -> discoverMidi()
             "fullscreen" -> setFullscreen(event.optBoolean("enabled"))
+            "resumeAudio" -> if (focusHeld) startStream() else requestFocus()
             "audioSettings" -> {
                 audioMode = event.optInt("mode", 1).coerceIn(0, 2)
                 audioBursts = event.optInt("bursts", 0).coerceIn(0, 8)

@@ -9,7 +9,7 @@ type Telemetry = { peak?: number; voices?: number; note?: number; params?: numbe
   library?: string[]; presetFile?: string; fileStatus?: string; preset?: PresetIdentity | null;
   tick?: number; transport?: number; sequence?: number[]; held?: number[]; midiCC?: [number, number]; midiMap?: number[];
   midiFile?: string; midiNotice?: string; midiInputStatus?: string; exitFullscreen?: boolean; audioSettings?: [number, number] };
-type Request = { type: 'ready' | 'release' | 'test' | 'profile' | 'importPreset' | 'listPresets' | 'discoverMidi' | 'importMidi' }
+type Request = { type: 'ready' | 'release' | 'test' | 'profile' | 'importPreset' | 'listPresets' | 'discoverMidi' | 'importMidi' | 'resumeAudio' }
   | { type: 'begin' | 'end'; index: number }
   | { type: 'parameter'; index: number; value: number }
   | { type: 'patch'; values: number[]; preset?: PresetIdentity }
@@ -147,7 +147,10 @@ function paintTelemetry(update: Telemetry): void {
     }
   }
   if (update.status !== undefined && status.textContent !== update.status) status.textContent = update.status;
-  if (android && update.status !== undefined) keyboard.disabled = !update.status.startsWith('Audio ready');
+  if (android && update.status !== undefined) {
+    keyboard.disabled = !update.status.startsWith('Audio ready');
+    start.hidden = !keyboard.disabled;
+  }
   if (update.debug) get('diagnostics').hidden = false;
   if (update.diagnostic !== undefined) get('diagnostic-result').textContent = update.diagnostic;
   if (update.peak !== undefined) {
@@ -840,6 +843,8 @@ async function initialise(): Promise<void> {
   setupMidi();
   if (android) {
     get('android-audio').hidden = false;
+    start.disabled = false;
+    start.addEventListener('click', () => send({ type: 'resumeAudio' }));
     const mode = get<HTMLSelectElement>('audio-mode');
     const buffer = get<HTMLSelectElement>('audio-bursts');
     for (let bursts = 1; bursts <= 8; ++bursts) buffer.add(new Option(bursts + (bursts === 1 ? ' burst' : ' bursts'), String(bursts)));
