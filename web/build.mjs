@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,9 +19,11 @@ function run(command, args) {
 }
 
 mkdirSync(assets, { recursive: true });
+const dsp = join(root, 'src', 'dsp');
+const sources = readdirSync(dsp).filter(name => name.endsWith('.cpp')).sort().map(name => join(dsp, name));
 run(compiler, [
   '-std=c++20', '-O3', '--no-entry', '-sSTANDALONE_WASM=1', '-sALLOW_MEMORY_GROWTH=0',
-  '-I', join(root, 'src'), join(root, 'src', 'dsp', 'PrototypeVoice.cpp'), join(web, 'wasm.cpp'),
+  '-I', join(root, 'src'), ...sources, join(web, 'wasm.cpp'),
   '-o', join(assets, 'ocarina.wasm'),
 ]);
 run(process.execPath, [join(web, 'node_modules', 'typescript', 'bin', 'tsc')]);

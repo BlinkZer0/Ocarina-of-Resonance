@@ -1,9 +1,9 @@
-#include "dsp/PrototypeVoice.h"
+#include "dsp/VoiceManager.h"
 
 #include <emscripten/emscripten.h>
 
 namespace {
-ocarina::PrototypeVoice voice;
+ocarina::VoiceManager voice;
 constexpr int capacity = 256;
 float samples[capacity];
 }
@@ -19,6 +19,12 @@ EMSCRIPTEN_KEEPALIVE void note(int on, int key, int source) {
 }
 
 EMSCRIPTEN_KEEPALIVE void release() { voice.releaseAll(); }
+
+EMSCRIPTEN_KEEPALIVE void performance(int model, int voices) {
+    voice.setParameter(ocarina::model, static_cast<float>(model));
+    voice.setParameter(ocarina::voiceLimit, static_cast<float>(voices));
+    voice.setParameter(ocarina::voiceMode, voices == 0 ? 0.0f : 1.0f);
+}
 
 EMSCRIPTEN_KEEPALIVE float* render(int count) {
     for (int index = 0; index < count && index < capacity; ++index)

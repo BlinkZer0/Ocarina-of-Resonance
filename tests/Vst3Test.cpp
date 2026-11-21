@@ -30,7 +30,16 @@ int main(int argc, char** argv) {
     audio.clear();
     midi.addEvent(juce::MidiMessage::noteOn(1, 69, 1.0f), start);
     plugin->processBlock(audio, midi);
-    if (audio.getMagnitude(0, start) != 0.0f || audio.getMagnitude(start, blockSize - start) < 0.05f)
+    if (audio.getMagnitude(0, start) != 0.0f || audio.getMagnitude(start, blockSize - start) < 0.001f)
+        return 4;
+
+    // Allow the jet to build pressure after verifying the precise MIDI onset.
+    for (int block = 0; block < 6; ++block) {
+        audio.clear();
+        midi.clear();
+        plugin->processBlock(audio, midi);
+    }
+    if (audio.getMagnitude(0, blockSize) < 0.05f)
         return 4;
 
     midi.clear();
@@ -44,19 +53,24 @@ int main(int argc, char** argv) {
         return 5;
 
     juce::AudioProcessorParameter* master = nullptr;
+    juce::AudioProcessorParameter* model = nullptr;
     for (auto* parameter : plugin->getParameters()) {
         if (parameter->getName(64) == "Master Volume")
             master = parameter;
+        if (parameter->getName(64) == "Sound Model")
+            model = parameter;
     }
-    if (master == nullptr)
+    if (master == nullptr || model == nullptr)
         return 6;
 
     master->setValueNotifyingHost(0.42f);
+    model->setValueNotifyingHost(1.0f);
     juce::MemoryBlock state;
     plugin->getStateInformation(state);
     master->setValueNotifyingHost(0.1f);
+    model->setValueNotifyingHost(0.0f);
     plugin->setStateInformation(state.getData(), static_cast<int>(state.getSize()));
-    if (std::abs(master->getValue() - 0.42f) > 0.001f)
+    if (std::abs(master->getValue() - 0.42f) > 0.001f || model->getValue() != 1.0f)
         return 7;
     plugin->releaseResources();
     return 0;

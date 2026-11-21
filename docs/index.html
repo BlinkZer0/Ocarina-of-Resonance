@@ -4,16 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ocarina of Resonance</title>
-  <meta name="description" content="Play the Ocarina of Resonance shared-engine audio prototype.">
-  <link rel="stylesheet" href="./assets/style.css">
-  <script type="module" src="./assets/main.js"></script>
+  <meta name="description" content="Play a physically modeled vessel flute in your browser.">
+  <link rel="stylesheet" href="./assets/style.css?v=0.2.0">
+  <script type="module" src="./assets/main.js?v=0.2.0"></script>
 </head>
 <body>
   <main>
     <h1>Ocarina of Resonance</h1>
-    <p class="version">Audio prototype · v0.1.0</p>
+    <p class="version">Physical-model prototype · v0.2.0</p>
     <button id="start" type="button">Start audio</button>
     <p id="status" role="status">Start audio, then hold a note to play.</p>
+    <div class="settings">
+      <label>Sound model
+        <select id="model">
+          <option value="0">Ceramic Authentic</option>
+          <option value="1">Retro Fantasy</option>
+          <option value="2">Crystal Resonator</option>
+          <option value="3">Electronic Hybrid</option>
+        </select>
+      </label>
+      <label>Polyphony
+        <select id="polyphony"><option value="0">Mono legato</option></select>
+      </label>
+    </div>
     <fieldset id="keys" disabled>
       <legend>Play a note</legend>
       <div class="keys">
@@ -24,7 +37,7 @@
       </div>
     </fieldset>
     <label for="meter">Output</label>
-    <meter id="meter" min="0" max="0.3" value="0"></meter>
+    <meter id="meter" min="0" max="1" value="0"></meter>
   </main>
 </body>
 </html>

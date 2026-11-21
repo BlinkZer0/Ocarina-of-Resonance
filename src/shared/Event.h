@@ -7,14 +7,17 @@
 
 namespace ocarina {
 
-enum class EventType : uint8_t { noteOn, noteOff, releaseSource };
+enum class EventType : uint8_t {
+    noteOn, noteOff, releaseSource, releaseChannel, sustain, breath, expression,
+    pitchBend, channelPressure, notePressure, parameter
+};
 
 struct Event {
     EventType type;
     uint16_t source;
     uint8_t channel;  // Zero-based MIDI channel.
-    uint8_t note;     // MIDI note number.
-    float velocity;  // Normalized to [0, 1].
+    uint8_t note;    // MIDI note number, or parameter index for a parameter event.
+    float value;    // Normalized to [0, 1], bipolar for pitch bend, native units for a parameter.
     uint32_t frame = 0;
 };
 

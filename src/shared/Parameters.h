@@ -29,4 +29,35 @@ inline constexpr std::array<Parameter, 12> holes {{
     {"formantColor", "Formant Color", "%", 0.0f, 100.0f, 50.0f},
 }};
 
+enum ParameterIndex : size_t {
+    master, breathPressure, jetVelocity, edgeInteraction, turbulence, cavityVolume,
+    openHoleArea, apertureNeckLength, resonatorDamping, resonatorDetuning, vibratoDepth,
+    attackArticulation, formantColor, model, voiceMode, voiceLimit, portamento,
+    bendRange, velocityResponse, aftertouchResponse, breathCurve, turbulenceColor,
+    excitationShape, harmonicEnhancement, parameterCount
+};
+
+inline constexpr std::array<Parameter, parameterCount> parameters = [] {
+    std::array<Parameter, parameterCount> result {};
+    result[master] = masterGain;
+    for (size_t index = 0; index < holes.size(); ++index)
+        result[index + 1] = holes[index];
+    result[model] = {"model", "Sound Model", "", 0.0f, 3.0f, 0.0f};
+    result[voiceMode] = {"voiceMode", "Voice Mode", "", 0.0f, 1.0f, 1.0f};
+    result[voiceLimit] = {"voiceLimit", "Voice Limit", "voices", 1.0f, 16.0f, 16.0f};
+    result[portamento] = {"portamento", "Legato Glide", "ms", 0.0f, 250.0f, 32.0f};
+    result[bendRange] = {"bendRange", "Pitch Bend Range", "semitones", 0.0f, 24.0f, 2.0f};
+    result[velocityResponse] = {"velocityResponse", "Velocity Response", "%", 0.0f, 100.0f, 72.0f};
+    result[aftertouchResponse] = {"aftertouchResponse", "Aftertouch Response", "%", 0.0f, 100.0f, 40.0f};
+    result[breathCurve] = {"breathCurve", "Breath Response Curve", "", 0.5f, 2.0f, 1.0f};
+    result[turbulenceColor] = {"turbulenceColor", "Turbulence Color", "%", 0.0f, 100.0f, 45.0f};
+    result[excitationShape] = {"excitationShape", "Excitation Nonlinearity", "%", 0.0f, 100.0f, 45.0f};
+    result[harmonicEnhancement] = {"harmonicEnhancement", "Harmonic Enhancement", "%", 0.0f, 100.0f, 20.0f};
+    return result;
+}();
+
+inline constexpr std::array<std::string_view, 4> modelNames {
+    "Ceramic Authentic", "Retro Fantasy", "Crystal Resonator", "Electronic Hybrid"
+};
+
 } // namespace ocarina

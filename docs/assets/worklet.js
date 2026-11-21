@@ -13,6 +13,8 @@ class OcarinaVoice extends AudioWorkletProcessor {
         this.port.onmessage = ({ data }) => {
             if ('release' in data)
                 this.engine.release();
+            else if ('model' in data)
+                this.engine.performance(data.model, data.voices);
             else
                 this.engine.note(Number(data.on), data.key, data.source);
         };

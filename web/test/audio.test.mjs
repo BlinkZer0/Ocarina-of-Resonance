@@ -13,6 +13,8 @@ test('plays and releases a Wasm voice under the Pages project subpath', async ()
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(address);
       assert.equal(await page.title(), 'Ocarina of Resonance');
+      await page.getByLabel('Sound model').selectOption('2');
+      await page.getByLabel('Polyphony').selectOption('0');
       await page.getByRole('button', { name: 'Start audio' }).click();
       await page.getByText(/^Audio ready/).waitFor();
       const key = page.getByRole('button', { name: 'A4' });
