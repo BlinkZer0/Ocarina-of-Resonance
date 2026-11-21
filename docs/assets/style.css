@@ -232,7 +232,13 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
 
 .keyboard { padding: .55rem .75rem .75rem; border: 1px solid var(--line); border-radius: .55rem; background: #101a29; }
 .keyboard-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: .35rem; color: var(--muted); }
-.keyboard-top button { min-width: 2.4rem; margin-left: .28rem; }
+.keyboard-top button { min-width: 2.4rem; }
+.performance-buttons { display: flex; flex-wrap: wrap; gap: .3rem; }
+.performance-buttons button, .roll-toolbar > button, .midi-controls button { min-height: 2.3rem; padding: .25rem .55rem; }
+.performance-buttons button[aria-pressed="true"], .midi-controls button[aria-pressed="true"] {
+  background: var(--gold);
+  color: #211b14;
+}
 .key-scroll { overflow-x: auto; scrollbar-width: thin; scrollbar-color: #66563b #111a29; }
 #keyboard-scroll { height: 1.65rem; margin-top: .25rem; }
 #keys { position: relative; height: clamp(5.4rem, 10vw, 8rem); min-width: 45rem; margin: 0; padding: 0; border: 0; }
@@ -255,8 +261,67 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
   font-size: .7rem;
 }
 .key.black { z-index: 1; height: 65%; width: calc(63% / 28); color: #e2cea5; background: linear-gradient(#162035,#040810); border-color: #03060d; }
-.key[data-down="true"], .key[data-midi="true"] { background: linear-gradient(#c38c3c,#ffe09b); color: #1b130c; }
+.key[data-down="true"], .key[data-midi] { background: linear-gradient(#c38c3c,#ffe09b); color: #1b130c; }
 .key:focus-visible { z-index: 2; outline-offset: -3px; outline-color: #997024; }
+.sequencer, .midi-panel { margin-top: .65rem; border: 1px solid var(--line); border-radius: .55rem; background: #101a29; }
+.sequencer > summary, .midi-panel > summary { padding: .65rem .75rem; color: var(--gold); cursor: pointer; font-weight: 650; }
+.roll-body { display: grid; gap: .55rem; padding: .15rem .75rem .75rem; }
+.roll-toolbar, .roll-options, .midi-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .65rem; }
+.roll-options { flex: 1; }
+.roll-options label, .midi-controls label { color: var(--muted); display: flex; align-items: center; gap: .3rem; font-size: .85rem; }
+.roll-options label.toggle { min-height: 2.3rem; }
+.roll-options input[type="checkbox"] { accent-color: var(--gold); }
+.roll-options input[type="number"] { width: 4rem; min-height: 2.3rem; text-align: right; padding: .2rem .35rem; }
+.roll-options select, .midi-controls select { min-height: 2.3rem; }
+.roll-status { display: flex; flex-wrap: wrap; gap: .45rem .8rem; min-height: 1.1rem; color: var(--muted); font-size: .83rem; }
+#roll-position { min-width: 2rem; }
+.roll-scroll {
+  overflow: auto; height: min(36.5rem, 48vh); min-height: 11rem; border: 1px solid #56462f;
+  border-radius: .35rem; scrollbar-width: thin; scrollbar-color: #816747 #111a29; overscroll-behavior: contain;
+}
+.roll-content { --label: 2.9rem; width: calc(var(--label) + var(--width, 512px)); }
+.roll-ruler {
+  z-index: 4; position: sticky; top: 0; display: flex; padding-left: var(--label); background: #1b2940;
+  cursor: crosshair; color: var(--gold); height: 1.8rem; border-bottom: 1px solid #755d3c;
+}
+.roll-ruler span { flex: 0 0 256px; padding: .22rem .45rem; border-left: 1px solid #755d3c; }
+.roll-lanes { display: flex; }
+.roll-pitches {
+  position: sticky; left: 0; z-index: 3; flex: 0 0 var(--label); background: #172338;
+  border-right: 1px solid #735c3a; font-size: .8rem; color: #dfcfa8;
+}
+.roll-pitches span { display: block; height: 24px; padding: .22rem .4rem; border-bottom: 1px solid #293850; }
+.roll-pitches .accidental { background: #101a29; color: #b7b9ba; }
+.roll-grid {
+  position: relative; width: var(--width, 512px); height: 3072px; flex: none; touch-action: none; user-select: none; cursor: crosshair;
+  background:
+    repeating-linear-gradient(to right, #a38657aa 0 1px, transparent 1px 256px),
+    repeating-linear-gradient(to right, #6a6558 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(to right, #2d3d55 0 1px, transparent 1px var(--step, 16px)),
+    repeating-linear-gradient(to bottom, #24354d 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(to bottom, #162238 0 24px, #111c30 24px 48px);
+}
+.roll-grid[data-tool="scroll"] { touch-action: pan-x pan-y; cursor: grab; }
+.roll-grid[data-tool="erase"] { cursor: not-allowed; }
+.roll-note {
+  position: absolute; z-index: 1; height: 20px; min-width: 0; padding: 0; overflow: hidden; cursor: grab; touch-action: inherit;
+  border: 1px solid #ecc483; border-radius: .22rem; background: linear-gradient(0deg, #8e6331, #dcb479);
+  opacity: var(--velocity, .9);
+}
+.roll-note[aria-pressed="true"] { background: linear-gradient(0deg, #426c9c, #7aa5cc); opacity: 1; }
+.roll-resize { position: absolute; inset: 0 0 0 auto; width: min(37%, 15px); border-left: 1px solid #f7dda590; cursor: ew-resize; }
+.roll-cursor { position: absolute; top: 0; bottom: 0; z-index: 2; width: 2px; background: #ffe4a2; pointer-events: none; }
+.midi-controls { padding: .1rem .75rem .45rem; }
+.midi-panel p { margin: 0 .75rem .45rem; font-size: .83rem; color: var(--muted); }
+.midi-panel p:empty { display: none; }
+.performance-open { overflow: hidden; }
+.performance-full {
+  position: fixed; z-index: 10; inset: 0; margin: 0; border-radius: 0; overflow: auto;
+  background: radial-gradient(ellipse at top, #203451, #101a29 62%);
+}
+.performance-full.sequencer .roll-scroll { height: calc(100dvh - 13.5rem); min-height: 12rem; }
+.performance-full.keyboard { display: flex; flex-direction: column; justify-content: center; gap: .45rem; }
+.performance-full.keyboard #keys { height: clamp(9rem, 45dvh, 30rem); }
 .diagnostics { margin-top: .5rem; color: var(--muted); }
 .diagnostics output { margin-left: .6rem; }
 
@@ -286,6 +351,9 @@ input[type="range"] { width: 100%; accent-color: #d5a75d; margin: .3rem 0 0; dis
   #hole-value { width: 4.5rem; min-height: 42px; }
   #reset, .fine { min-height: 42px; }
   .keyboard { padding: .45rem; }
+  .keyboard-top { gap: .35rem; }
+  .keyboard-top button, .roll-toolbar button, .roll-options input[type="number"], .roll-options select { min-height: 42px; }
+  .performance-full.sequencer .roll-scroll { height: calc(100dvh - 18rem); }
   #keys { height: 5.5rem; }
 }
 

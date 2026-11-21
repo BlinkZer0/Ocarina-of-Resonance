@@ -1,18 +1,27 @@
 import type { VoiceMessage } from './worklet.js';
 import { PresetFormat, type Control, type Effect, type Preset } from './presets.js';
+import { PianoRoll } from './sequence.js';
 
 type HolePosition = { hand: 'left' | 'right'; x: number; y: number; subhole?: boolean; labelAbove?: boolean };
 type Catalogue = { controls: Control[]; models: string[]; face: { width: number; height: number; front: Partial<Record<string, HolePosition>> }; effects: Effect[]; factory: Preset[] };
 type PresetIdentity = Pick<Preset, 'id' | 'name' | 'category' | 'description'>;
 type Telemetry = { peak?: number; voices?: number; note?: number; params?: number[]; status?: string; debug?: boolean; diagnostic?: string;
-  library?: string[]; presetFile?: string; fileStatus?: string; preset?: PresetIdentity | null };
-type Request = { type: 'ready' | 'release' | 'test' | 'profile' | 'importPreset' | 'listPresets' }
+  library?: string[]; presetFile?: string; fileStatus?: string; preset?: PresetIdentity | null;
+  tick?: number; transport?: number; sequence?: number[]; held?: number[]; midiCC?: [number, number]; midiMap?: number[];
+  midiFile?: string; midiNotice?: string; midiInputStatus?: string; exitFullscreen?: boolean; audioSettings?: [number, number] };
+type Request = { type: 'ready' | 'release' | 'test' | 'profile' | 'importPreset' | 'listPresets' | 'discoverMidi' | 'importMidi' }
   | { type: 'begin' | 'end'; index: number }
   | { type: 'parameter'; index: number; value: number }
   | { type: 'patch'; values: number[]; preset?: PresetIdentity }
   | { type: 'identifyPreset'; preset: PresetIdentity }
   | { type: 'savePreset' | 'exportPreset'; id: string; name: string; json: string }
-  | { type: 'note'; key: number; source: number; on: boolean };
+  | { type: 'note'; key: number; source: number; on: boolean; velocity: number }
+  | { type: 'sequence'; packet: number[] }
+  | { type: 'sustain'; on: boolean }
+  | { type: 'fullscreen'; enabled: boolean }
+  | { type: 'audioSettings'; mode: number; bursts: number }
+  | { type: 'midiMap'; pairs: number[] }
+  | { type: 'exportMidi'; data: string };
 
 declare global {
   interface Window {
@@ -45,6 +54,12 @@ let controls: Control[];
 let values: number[];
 let selected: Control;
 let fromNote = 48, midiNote = -1;
+let heldNotes = [0, 0, 0, 0];
+let roll: PianoRoll;
+let fullPanel: HTMLElement | undefined;
+let audioStarting: Promise<boolean> | undefined;
+const typing = ['KeyA', 'KeyW', 'KeyS', 'KeyE', 'KeyD', 'KeyF', 'KeyT', 'KeyG', 'KeyY',
+  'KeyH', 'KeyU', 'KeyJ', 'KeyK', 'KeyO', 'KeyL', 'KeyP', 'Semicolon', 'Quote'];
 const bindings = new Map<number, (value: number) => void>();
 const editing = new Set<number>();
 const holes = new Map<number, HTMLButtonElement>();
@@ -72,8 +87,10 @@ function send(message: Request): void {
     let payload: VoiceMessage;
     if (message.type === 'parameter') payload = { index: message.index, value: message.value };
     else if (message.type === 'patch') payload = { patch: message.values };
-    else if (message.type === 'note') payload = { key: message.key, source: message.source, on: message.on };
-    else if (message.type === 'release') payload = { release: true };
+    else if (message.type === 'note') payload = { key: message.key, source: message.source, on: message.on, velocity: message.velocity };
+    else if (message.type === 'release') payload = { release: 2 };
+    else if (message.type === 'sustain') payload = { midi: [2, 0xb0, 64, message.on ? 127 : 0] };
+    else if (message.type === 'sequence') payload = { sequence: message.packet };
     else return;
     worklet.port.postMessage(payload);
   }
@@ -87,6 +104,25 @@ function asset(name: string): URL {
 }
 
 function paintTelemetry(update: Telemetry): void {
+  if (update.sequence) roll.restore(update.sequence);
+  if (update.tick !== undefined && update.transport !== undefined) roll.telemetry(update.tick, update.transport);
+  if (update.midiFile) roll.importBase64(update.midiFile);
+  if (update.midiNotice) roll.notice(update.midiNotice);
+  if (update.midiInputStatus) get('midi-input-status').textContent = update.midiInputStatus;
+  if (update.midiMap) {
+    midiMappings.clear();
+    for (let index = 0; index + 1 < update.midiMap.length; index += 2) {
+      const target = controls[update.midiMap[index + 1]];
+      if (target) midiMappings.set(update.midiMap[index], target);
+    }
+    reportMapping();
+  }
+  if (update.midiCC) receiveCC(...update.midiCC);
+  if (update.exitFullscreen && fullPanel) toggleFullscreen(fullPanel);
+  if (update.audioSettings) {
+    get<HTMLSelectElement>('audio-mode').value = String(update.audioSettings[0]);
+    get<HTMLSelectElement>('audio-bursts').value = String(update.audioSettings[1]);
+  }
   if (update.preset !== undefined && presetFormat) {
     const restored = update.preset ?? undefined;
     if (restored?.id !== current?.id || restored?.name !== current?.name) {
@@ -111,6 +147,7 @@ function paintTelemetry(update: Telemetry): void {
     }
   }
   if (update.status !== undefined && status.textContent !== update.status) status.textContent = update.status;
+  if (android && update.status !== undefined) keyboard.disabled = !update.status.startsWith('Audio ready');
   if (update.debug) get('diagnostics').hidden = false;
   if (update.diagnostic !== undefined) get('diagnostic-result').textContent = update.diagnostic;
   if (update.peak !== undefined) {
@@ -121,12 +158,16 @@ function paintTelemetry(update: Telemetry): void {
   }
   if (update.voices !== undefined) get('voices').textContent = String(update.voices);
   if (update.note !== undefined && update.note !== midiNote) {
-    piano.get(midiNote)?.removeAttribute('data-midi');
     midiNote = update.note;
     get('note').textContent = midiNote < 0 ? '—' : noteName(midiNote);
-    piano.get(midiNote)?.setAttribute('data-midi', 'true');
+  }
+  if (update.held) {
+    heldNotes = update.held;
+    for (const [key, button] of piano) button.toggleAttribute('data-midi', isHeld(key));
   }
 }
+
+function isHeld(key: number): boolean { return (heldNotes[key >> 5] & 1 << (key & 31)) !== 0; }
 
 function paint(control: Control, value: number): void {
   values[control.index] = value;
@@ -461,25 +502,26 @@ function setupLibrary(catalogue: Catalogue): void {
   if (android || desktop) window.addEventListener('focus', () => send({ type: 'listPresets' }));
 }
 
-function keyDown(id: string, key: number): void {
+function keyDown(id: string, key: number, velocity = .8): void {
   if (playing.has(id)) return;
   const first = ![...playing.values()].some(held => held.key === key);
   playing.set(id, { key, source: 2 });
   piano.get(key)?.setAttribute('data-down', 'true');
-  if (first) send({ type: 'note', key, source: 2, on: true });
+  if (first) send({ type: 'note', key, source: 2, on: true, velocity });
 }
 function keyUp(id: string): void {
   const note = playing.get(id);
   if (!note) return;
   playing.delete(id);
   if (![...playing.values()].some(held => held.key === note.key)) {
-    send({ type: 'note', ...note, on: false });
+    send({ type: 'note', ...note, on: false, velocity: 0 });
     piano.get(note.key)?.removeAttribute('data-down');
   }
 }
 function releasePiano(): void {
   playing.clear();
   for (const key of piano.values()) key.removeAttribute('data-down');
+  get('sustain').setAttribute('aria-pressed', 'false');
   send({ type: 'release' });
 }
 
@@ -496,14 +538,17 @@ function buildPiano(): void {
     button.className = black ? 'key black' : 'key';
     button.setAttribute('aria-label', name);
     button.style.setProperty('--left', String(black ? white - .315 : white++));
-    if (key === midiNote) button.dataset.midi = 'true';
+    button.toggleAttribute('data-midi', isHeld(key));
     if (key % 12 === 0 || key === 69) button.textContent = name;
     piano.set(key, button);
     keyboard.append(button);
     button.addEventListener('pointerdown', event => {
       if (event.button !== 0) return;
       button.setPointerCapture(event.pointerId);
-      keyDown('p' + event.pointerId, key);
+      const bounds = button.getBoundingClientRect();
+      const velocity = event.pressure > 0 && event.pressure !== .5 ? .25 + .75 * event.pressure
+        : .37 + .63 * Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
+      keyDown('p' + event.pointerId, key, velocity);
     });
     for (const type of ['pointerup', 'pointercancel', 'lostpointercapture'] as const)
       button.addEventListener(type, event => keyUp('p' + event.pointerId));
@@ -532,7 +577,150 @@ function syncKeyboardScroll(): void {
   scroll.value = String(track > 0 ? Math.round(1000 * keysWindow.scrollLeft / track) : 0);
 }
 
-async function startAudio(): Promise<void> {
+function toggleFullscreen(target: HTMLElement): void {
+  const next = fullPanel === target ? undefined : target;
+  fullPanel?.classList.remove('performance-full');
+  fullPanel = next;
+  fullPanel?.classList.add('performance-full');
+  document.body.classList.toggle('performance-open', fullPanel !== undefined);
+  for (const [panel, button] of [['performance-keyboard', 'keyboard-full'], ['sequencer', 'roll-full']]) {
+    const active = fullPanel?.id === panel;
+    const toggle = get(button);
+    toggle.setAttribute('aria-pressed', String(active));
+    toggle.textContent = active ? 'Exit full screen' : 'Full screen';
+  }
+  if (android) send({ type: 'fullscreen', enabled: fullPanel !== undefined });
+  syncKeyboardScroll();
+}
+
+const midiMappings = new Map<number, Control>();
+const midiKey = 'ocarina-midi-cc-v1';
+let learning = false;
+const midiTarget = get<HTMLSelectElement>('midi-target');
+
+function reportMapping(text?: string): void {
+  const mapped = [...midiMappings].find(([, control]) => control.id === midiTarget.value);
+  get('midi-mapping-status').textContent = text ?? (mapped ? 'CC ' + mapped[0] + ' controls ' + mapped[1].name + '.' : '');
+  get<HTMLButtonElement>('midi-forget').disabled = !mapped;
+}
+
+function saveMappings(): void {
+  if (desktop) {
+    send({ type: 'midiMap', pairs: [...midiMappings].flatMap(([cc, target]) => [cc, target.index]) });
+    return;
+  }
+  try { localStorage.setItem(midiKey, JSON.stringify([...midiMappings].map(([cc, target]) => [cc, target.id]))); }
+  catch { /* MIDI mappings remain available in this window. */ }
+}
+
+function receiveCC(cc: number, value: number): void {
+  if (!Number.isInteger(cc) || cc < 0 || cc > 119 || !Number.isInteger(value) || value < 0 || value > 127) return;
+  if (learning) {
+    const control = controls.find(item => item.id === midiTarget.value);
+    if (!control) return;
+    for (const [previous, mapped] of midiMappings) if (mapped === control) midiMappings.delete(previous);
+    midiMappings.set(cc, control);
+    saveMappings();
+    learning = false;
+    get('midi-learn').setAttribute('aria-pressed', 'false');
+    reportMapping();
+  }
+  const target = midiMappings.get(cc);
+  if (target && !editing.has(target.index)) change(target, target.min + (target.max - target.min) * value / 127);
+}
+
+function setupMidi(): void {
+  const discrete = new Set(['model', 'voiceMode', 'voiceLimit', 'crusherBits',
+    ...presetFormat.effects.flatMap(effect => [effect.id + 'Enabled', ...Object.keys(effect.choices)])]);
+  const targets = controls.filter(control => !discrete.has(control.id));
+  for (const target of targets) midiTarget.add(new Option(target.name, target.id));
+  midiTarget.value = 'breathPressure';
+  try {
+    const saved: unknown = desktop ? [] : JSON.parse(localStorage.getItem(midiKey) || '[]');
+    if (Array.isArray(saved)) for (const entry of saved) {
+      if (!Array.isArray(entry) || !Number.isInteger(entry[0]) || entry[0] < 0 || entry[0] > 119) continue;
+      const target = targets.find(control => control.id === entry[1]);
+      if (target) midiMappings.set(entry[0], target);
+    }
+  } catch { /* Start with no mappings. */ }
+  const learn = get('midi-learn');
+  learn.addEventListener('click', () => {
+    learning = !learning;
+    learn.setAttribute('aria-pressed', String(learning));
+    reportMapping(learning ? 'Move a knob or fader on your MIDI controller.' : undefined);
+  });
+  midiTarget.addEventListener('change', () => reportMapping());
+  get('midi-forget').addEventListener('click', () => {
+    for (const [cc, target] of midiMappings) if (target.id === midiTarget.value) midiMappings.delete(cc);
+    saveMappings();
+    reportMapping();
+  });
+  reportMapping();
+  const inputStatus = get('midi-input-status');
+  const browserButton = get<HTMLButtonElement>('midi-enable');
+  const bluetooth = get('midi-discover');
+  if (desktop) inputStatus.textContent = 'MIDI input comes from the DAW track.';
+  else if (android) {
+    bluetooth.hidden = false;
+    bluetooth.addEventListener('click', () => send({ type: 'discoverMidi' }));
+  } else {
+    browserButton.hidden = false;
+    browserButton.addEventListener('click', async () => {
+      if (!navigator.requestMIDIAccess) {
+        inputStatus.textContent = 'Web MIDI is unavailable in this browser.';
+        return;
+      }
+      browserButton.disabled = true;
+      try {
+        const request = navigator.requestMIDIAccess();
+        void ensureAudio();
+        const access = await request;
+        let source = 16;
+        const inputs = new Map<string, { port: MIDIInput; source: number }>();
+        const refresh = () => {
+          const connected = new Set<string>();
+          access.inputs.forEach(port => {
+            if (port.state !== 'connected') return;
+            connected.add(port.id);
+            if (inputs.has(port.id)) return;
+            const id = source++;
+            inputs.set(port.id, { port, source: id });
+            port.onmidimessage = event => {
+              const bytes = event.data;
+              if (!bytes || bytes.length < 2) return;
+              const status = bytes[0], first = bytes[1], second = bytes[2] ?? 0;
+              if (status < 0x80 || status >= 0xf0) return;
+              worklet?.port.postMessage({ midi: [id, status, first, second] } satisfies VoiceMessage);
+              if ((status & 0xf0) === 0xb0) receiveCC(first, second);
+            };
+          });
+          for (const [key, input] of inputs) if (!connected.has(key)) {
+            input.port.onmidimessage = null;
+            worklet?.port.postMessage({ release: input.source } satisfies VoiceMessage);
+            inputs.delete(key);
+          }
+          inputStatus.textContent = connected.size ? connected.size + ' MIDI input' + (connected.size === 1 ? '' : 's') + ' connected.'
+            : 'Web MIDI enabled. Connect a MIDI controller.';
+        };
+        access.onstatechange = refresh;
+        refresh();
+      } catch {
+        inputStatus.textContent = 'MIDI access was unavailable or denied.';
+        browserButton.disabled = false;
+      }
+    });
+  }
+}
+
+function ensureAudio(): Promise<boolean> {
+  if (desktop || android) return Promise.resolve(!keyboard.disabled);
+  if (worklet && context) return context.resume().then(() => true, () => false);
+  if (audioStarting) return audioStarting;
+  audioStarting = startAudio().finally(() => { audioStarting = undefined; });
+  return audioStarting;
+}
+
+async function startAudio(): Promise<boolean> {
   start.disabled = true;
   status.textContent = 'Starting audio…';
   let next: AudioContext | undefined;
@@ -554,20 +742,25 @@ async function startAudio(): Promise<void> {
       start.disabled = false;
       start.hidden = false;
       releasePiano();
-      paintTelemetry({ peak: 0, note: -1, voices: 0, status: 'Audio stopped. Select Start audio to retry.' });
+      roll.pauseLocal();
+      paintTelemetry({ peak: 0, note: -1, voices: 0, held: [0, 0, 0, 0], tick: 0, transport: 0,
+        status: 'Audio stopped. Select Start audio to retry.' });
       void context?.close();
     };
     node.connect(next.destination);
     context = next;
     worklet = node;
     send({ type: 'patch', values });
+    send({ type: 'sequence', packet: roll.snapshot() });
     keyboard.disabled = false;
     start.hidden = true;
     status.textContent = 'Audio ready · ' + context.sampleRate + ' Hz';
+    return true;
   } catch (error) {
     if (next) await next.close();
     status.textContent = error instanceof Error ? error.message : 'Audio could not start.';
     start.disabled = false;
+    return false;
   }
 }
 
@@ -634,18 +827,48 @@ async function initialise(): Promise<void> {
   get('test-tone').addEventListener('click', () => send({ type: 'test' }));
   get('profile').addEventListener('click', () => send({ type: 'profile' }));
   buildPiano();
+  get('sustain').addEventListener('click', () => {
+    const sustain = get('sustain');
+    const on = sustain.getAttribute('aria-pressed') !== 'true';
+    sustain.setAttribute('aria-pressed', String(on));
+    send({ type: 'sustain', on });
+  });
+  get('keyboard-full').addEventListener('click', () => toggleFullscreen(get('performance-keyboard')));
+  roll = new PianoRoll({ platform: desktop ? 'desktop' : android ? 'android' : 'web', startAudio: ensureAudio,
+    send: packet => send({ type: 'sequence', packet }), fullscreen: toggleFullscreen,
+    importFile: () => send({ type: 'importMidi' }), exportFile: data => send({ type: 'exportMidi', data }) });
+  setupMidi();
+  if (android) {
+    get('android-audio').hidden = false;
+    const mode = get<HTMLSelectElement>('audio-mode');
+    const buffer = get<HTMLSelectElement>('audio-bursts');
+    for (let bursts = 1; bursts <= 8; ++bursts) buffer.add(new Option(bursts + (bursts === 1 ? ' burst' : ' bursts'), String(bursts)));
+    get('apply-audio').addEventListener('click', () => send({ type: 'audioSettings', mode: Number(mode.value), bursts: Number(buffer.value) }));
+  }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && fullPanel) { event.preventDefault(); toggleFullscreen(fullPanel); return; }
+    if (desktop || android || keyboard.disabled || event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey
+      || (event.target as HTMLElement).closest('input, select, textarea, button:not(.key), dialog, #sequencer, [contenteditable]')) return;
+    const offset = typing.indexOf(event.code);
+    if (offset < 0) return;
+    event.preventDefault();
+    keyDown('typing-' + event.code, fromNote + 12 + offset);
+  });
+  document.addEventListener('keyup', event => keyUp('typing-' + event.code));
 
   window.addEventListener('blur', releasePiano);
-  document.addEventListener('visibilitychange', () => { if (document.hidden) releasePiano(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { releasePiano(); roll.pauseLocal(); }
+  });
   if (desktop || android) {
     window.ocarinaReceive = paintTelemetry;
     desktop?.addEventListener('instrumentState', paintTelemetry);
-    keyboard.disabled = false;
+    keyboard.disabled = !desktop;
     start.hidden = true;
     send({ type: 'ready' });
   } else {
     start.disabled = false;
-    start.addEventListener('click', () => void startAudio());
+    start.addEventListener('click', () => void ensureAudio());
     status.textContent = '';
   }
 }

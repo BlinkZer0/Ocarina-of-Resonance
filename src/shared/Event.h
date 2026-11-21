@@ -10,7 +10,7 @@ namespace ocarina {
 
 enum class EventType : uint8_t {
     noteOn, noteOff, releaseSource, releaseChannel, sustain, breath, expression,
-    pitchBend, channelPressure, notePressure, parameter
+    pitchBend, channelPressure, notePressure, parameter, modulation
 };
 
 struct Event {

@@ -17,6 +17,14 @@ public:
     float nextSample() noexcept;
     int soundingVoices() const noexcept;
     int latestNote() const noexcept { return keyCount > 0 ? keys[keyCount - 1].id.note : -1; }
+    std::array<uint32_t, 4> heldNotes() const noexcept {
+        std::array<uint32_t, 4> result {};
+        for (size_t index = 0; index < keyCount; ++index) {
+            const auto note = keys[index].id.note;
+            result[note / 32] |= uint32_t {1} << (note % 32);
+        }
+        return result;
+    }
 
 private:
     struct KeyId {

@@ -10,11 +10,13 @@ void InstrumentEngine::prepare(double rate) {
     voices.setParameter(master, 100);
     voices.prepare(rate);
     effects.prepare(static_cast<float>(rate));
+    sequencer.prepare(rate);
 }
 
 void InstrumentEngine::reset() noexcept {
     voices.reset();
     effects.reset();
+    sequencer.reset();
 }
 
 void InstrumentEngine::setParameter(size_t index, float value) noexcept {

@@ -1,4 +1,6 @@
 #include "dsp/VoiceManager.h"
+#include "dsp/InstrumentEngine.h"
+#include "shared/Midi.h"
 
 #include <algorithm>
 #include <chrono>
@@ -287,6 +289,62 @@ void render(const std::filesystem::path& directory) {
     }
 }
 
+void checkSequencer() {
+    ocarina::InstrumentEngine instrument;
+    instrument.prepare(48000);
+    std::array<int32_t, 15> pattern {3840, 12000, 1, 0, 1, 1, 0, 60, 960, 1920, 90, 60, 1440, 2400, 80};
+    require(instrument.setSequence(pattern), "valid sequence snapshot");
+    auto invalid = pattern;
+    invalid[9] = 383;
+    require(!instrument.setSequence(invalid), "invalid note interval rejected");
+    instrument.beginBlock();
+    for (int frame = 0; frame <= 60000; ++frame) {
+        instrument.nextFrame();
+        const bool held = (instrument.heldNotes()[1] & (uint32_t {1} << 28)) != 0;
+        require(held == (frame >= 24000 && frame < 60000), "exact sequence onset and merged gate duration");
+    }
+    for (int frame = 60001; frame <= 120000; ++frame) instrument.nextFrame();
+    require(instrument.latestNote() == 60, "loop schedules the next iteration");
+
+    const auto midi = [&](int source, int status, int first, int second) {
+        ocarina::dispatchMidi(static_cast<uint16_t>(source), status, first, second, [&](auto event) { instrument.apply(event); });
+    };
+    midi(17, 0x92, 67, 79);
+    midi(17, 0xb2, 64, 127);
+    midi(17, 0x92, 67, 0);
+    pattern[4] = 2;
+    pattern[5] = 0;
+    require(instrument.setSequence(pattern), "stop command accepted");
+    instrument.beginBlock();
+    require(instrument.latestNote() == 67 && instrument.sequenceActivity() == 0, "stop releases only the piano roll");
+    midi(18, 0x90, 69, 64);
+    instrument.apply({EventType::releaseSource, 17, 0, 0, 0});
+    require(instrument.heldNotes()[2] == (uint32_t {1} << 5), "disconnect clears only that controller's sustained notes");
+    midi(18, 0x80, 69, 0);
+
+    pattern[3] = 1;
+    pattern[4] = 3;
+    require(instrument.setSequence(pattern), "host sync snapshot accepted");
+    instrument.beginBlock({1.5, 90, true, true});
+    require(instrument.sequenceActivity() == 2 && instrument.latestNote() == 60, "host seek restores a sustained gate");
+    for (int frame = 0; frame < 256; ++frame) instrument.nextFrame();
+    instrument.beginBlock({.5, 137, true, true});
+    require(instrument.latestNote() == -1, "host loop or seek releases earlier gates");
+    instrument.beginBlock({1.75, 137, true, true});
+    require(instrument.latestNote() == 60, "host restart uses its new position");
+    instrument.beginBlock({1.75, 137, true, false});
+    require(instrument.sequenceActivity() == 0 && instrument.latestNote() == -1, "host stop releases sequenced notes");
+
+    pattern[2] = pattern[3] = 0;
+    pattern[4] = 4;
+    pattern[5] = 1;
+    pattern[6] = 3800;
+    require(instrument.setSequence(pattern), "one-shot accepted");
+    instrument.beginBlock();
+    for (int frame = 0; frame < 2000; ++frame) instrument.nextFrame();
+    require(instrument.sequenceActivity() == 0 && instrument.sequencePosition() == 3840, "one-shot ends at the pattern boundary");
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
@@ -300,6 +358,7 @@ int main(int argc, char** argv) {
             checkModesAndArticulation();
             checkVoiceOwnership();
             checkStress();
+            checkSequencer();
         }
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';

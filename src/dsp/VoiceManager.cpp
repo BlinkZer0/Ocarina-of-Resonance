@@ -231,6 +231,7 @@ void VoiceManager::apply(Event event) noexcept {
             case EventType::expression: channel.expression.expression = value; break;
             case EventType::pitchBend: channel.expression.bend = std::clamp(event.value, -1.0f, 1.0f); break;
             case EventType::channelPressure: channel.expression.pressure = value; break;
+            case EventType::modulation: channel.expression.modulation = value; break;
             default: return;
         }
     }

@@ -1,8 +1,11 @@
 #include "dsp/InstrumentEngine.h"
+#include "shared/Midi.h"
 #include "PluginEditor.h"
 #include "OcarinaPanel.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <cmath>
+#include <limits>
 
 namespace {
 
@@ -11,8 +14,10 @@ public:
     Processor()
         : AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)),
           parameters(*this, nullptr, "OcarinaState", makeParameters()) {
-        for (size_t index = 0; index < controls.size(); ++index)
+        for (size_t index = 0; index < controls.size(); ++index) {
             controls[index] = parameters.getRawParameterValue(ocarina::parameters[index].id.data());
+            meter.mapped[index].store(unmapped, std::memory_order_relaxed);
+        }
     }
 
     void prepareToPlay(double rate, int) override { readParameters(); engine.prepare(rate); }
@@ -29,7 +34,10 @@ public:
         readParameters();
         const auto* playhead = getPlayHead();
         const auto position = playhead ? playhead->getPosition() : juce::Optional<juce::AudioPlayHead::PositionInfo>{};
-        engine.setHostTempo(position ? static_cast<float>(position->getBpm().orFallback(0.0)) : 0);
+        ocarina::HostClock clock;
+        if (position && position->getPpqPosition() && position->getBpm())
+            clock = {*position->getPpqPosition(), *position->getBpm(), true, position->getIsPlaying()};
+        engine.beginBlock(clock, position ? static_cast<float>(position->getBpm().orFallback(0.0)) : 0);
         keyboard.drain([&](auto event) { engine.apply(event); }, [&] {
             engine.apply({ocarina::EventType::releaseSource, InstrumentEditor::keyboardSource, 0, 0, 0.0f});
         });
@@ -38,18 +46,32 @@ public:
             // Channel voice MIDI messages fit in three bytes. Skip SysEx and system data.
             if (metadata.numBytes < 2 || metadata.numBytes > 3 || metadata.data[0] >= 0xf0)
                 continue;
-            const auto message = metadata.getMessage();
             const auto frame = juce::jlimit(cursor, audio.getNumSamples(), metadata.samplePosition);
             render(audio, cursor, frame);
             cursor = frame;
-            const auto channel = static_cast<uint8_t>(message.getChannel() - 1);
-            sendMidi(message, channel, static_cast<uint32_t>(frame));
+            const int status = metadata.data[0], first = metadata.data[1];
+            const int second = metadata.numBytes == 3 ? metadata.data[2] : 0;
+            ocarina::dispatchMidi(hostSource, status, first, second, [&](auto event) { engine.apply(event); }, static_cast<uint32_t>(frame));
+            if ((status & 0xf0) == 0xb0 && first < static_cast<int>(patchRevision.ccMap.size())) {
+                meter.cc.store((++ccCount << 14) | (first << 7) | second, std::memory_order_relaxed);
+                const int target = patchRevision.ccMap[static_cast<size_t>(first)].load(std::memory_order_relaxed) - 1;
+                if (target >= 0) {
+                    const auto& control = ocarina::parameters[static_cast<size_t>(target)];
+                    const float value = std::lerp(control.minimum, control.maximum, second / 127.0f);
+                    meter.mapped[static_cast<size_t>(target)].store(value, std::memory_order_relaxed);
+                    engine.setParameter(static_cast<size_t>(target), value);
+                }
+            }
         }
         render(audio, cursor, audio.getNumSamples());
         midi.clear();
         meter.peak.store(audio.getMagnitude(0, audio.getNumSamples()), std::memory_order_relaxed);
         meter.voices.store(engine.soundingVoices(), std::memory_order_relaxed);
         meter.note.store(engine.latestNote(), std::memory_order_relaxed);
+        meter.tick.store(engine.sequencePosition(), std::memory_order_relaxed);
+        meter.transport.store(engine.sequenceActivity(), std::memory_order_relaxed);
+        const auto held = engine.heldNotes();
+        for (size_t index = 0; index < held.size(); ++index) meter.held[index].store(held[index], std::memory_order_relaxed);
     }
 
     void processBlockBypassed(juce::AudioBuffer<float>& audio, juce::MidiBuffer& midi) override {
@@ -59,6 +81,8 @@ public:
         meter.peak.store(0, std::memory_order_relaxed);
         meter.voices.store(0, std::memory_order_relaxed);
         meter.note.store(-1, std::memory_order_relaxed);
+        meter.transport.store(0, std::memory_order_relaxed);
+        for (auto& word : meter.held) word.store(0, std::memory_order_relaxed);
     }
 
     const juce::String getName() const override { return JucePlugin_Name; }
@@ -72,7 +96,7 @@ public:
     bool hasEditor() const override { return true; }
     juce::AudioProcessorEditor* createEditor() override {
         if (InstrumentEditor::available())
-            return new InstrumentEditor(*this, parameters, keyboard, meter, patchRevision);
+            return new InstrumentEditor(*this, parameters, keyboard, meter, patchRevision, engine);
         return new juce::GenericAudioProcessorEditor(*this);
     }
     int getNumPrograms() override { return 1; }
@@ -84,7 +108,16 @@ public:
     void getStateInformation(juce::MemoryBlock& destination) override {
         const std::scoped_lock lock(patchRevision.writer);
         auto state = parameters.copyState();
+        for (size_t index = 0; index < controls.size(); ++index) {
+            const float value = meter.mapped[index].load(std::memory_order_relaxed);
+            if (std::isfinite(value) && controls[index]->load() == hostValues[index].load())
+                state.getChildWithProperty("id", ocarina::parameters[index].id.data()).setProperty("value", value, nullptr);
+        }
         state.setProperty("portablePreset", portablePreset(state), nullptr);
+        if (patchRevision.sequencePacket.isArray())
+            state.setProperty("pianoRoll", juce::JSON::toString(patchRevision.sequencePacket, true), nullptr);
+        if (patchRevision.mapping.isArray())
+            state.setProperty("midiMap", juce::JSON::toString(patchRevision.mapping, true), nullptr);
         if (auto xml = state.createXml())
             copyXmlToBinary(*xml, destination);
     }
@@ -102,6 +135,14 @@ public:
                 patchRevision.presetIdentity = juce::var(identity.release());
             }
             state.removeProperty("portablePreset", nullptr);
+            const auto pattern = juce::JSON::parse(state.getProperty("pianoRoll").toString());
+            if (!patchRevision.updateSequence(engine, pattern, true, true))
+                patchRevision.updateSequence(engine, juce::var(juce::Array<juce::var>{7680, 12000, 1, 0, 0, 0, 0}), true, true);
+            state.removeProperty("pianoRoll", nullptr);
+            if (!patchRevision.updateMapping(juce::JSON::parse(state.getProperty("midiMap").toString())))
+                patchRevision.updateMapping(juce::var(juce::Array<juce::var>{}));
+            state.removeProperty("midiMap", nullptr);
+            for (auto& value : meter.mapped) value.store(unmapped, std::memory_order_relaxed);
             parameters.replaceState(state);
         }
     }
@@ -183,36 +224,14 @@ private:
         for (size_t index = 0; index < snapshot.size(); ++index)
             snapshot[index] = controls[index]->load();
         if (patchRevision.sequence.load() != revision) return;
-        for (size_t index = 0; index < snapshot.size(); ++index)
-            engine.setParameter(index, snapshot[index]);
-    }
-
-    void sendMidi(const juce::MidiMessage& message, uint8_t channel, uint32_t frame) noexcept {
-        using enum ocarina::EventType;
-        const auto send = [&](ocarina::EventType type, float value = 0.0f, uint8_t note = 0) {
-            engine.apply({type, hostSource, channel, note, value, frame});
-        };
-        if (message.isNoteOn() || message.isNoteOff()) {
-            send(message.isNoteOn() ? noteOn : noteOff, message.getFloatVelocity(), static_cast<uint8_t>(message.getNoteNumber()));
-        } else if (message.isAllNotesOff() || message.isAllSoundOff()) {
-            send(releaseChannel);
-        } else if (message.isPitchWheel()) {
-            const auto bend = message.getPitchWheelValue() - 8192;
-            send(pitchBend, static_cast<float>(bend) / (bend < 0 ? 8192.0f : 8191.0f));
-        } else if (message.isAftertouch()) {
-            send(notePressure, message.getAfterTouchValue() / 127.0f, static_cast<uint8_t>(message.getNoteNumber()));
-        } else if (message.isChannelPressure()) {
-            send(channelPressure, message.getChannelPressureValue() / 127.0f);
-        } else if (message.isController()) {
-            const float value = message.getControllerValue() / 127.0f;
-            switch (message.getControllerNumber()) {
-                case 2: send(breath, value); break;
-                case 11: send(expression, value); break;
-                case 64: send(sustain, value); break;
-                case 121: send(sustain); send(breath, 1.0f); send(expression, 1.0f); send(pitchBend); send(channelPressure); break;
-                default: break;
-            }
+        for (size_t index = 0; index < snapshot.size(); ++index) {
+            const float last = hostValues[index].exchange(snapshot[index], std::memory_order_relaxed);
+            if (snapshot[index] != last || revision != appliedPatch)
+                meter.mapped[index].store(unmapped, std::memory_order_relaxed);
+            const float mapped = meter.mapped[index].load(std::memory_order_relaxed);
+            engine.setParameter(index, std::isfinite(mapped) ? mapped : snapshot[index]);
         }
+        appliedPatch = revision;
     }
 
     void render(juce::AudioBuffer<float>& audio, int start, int end) noexcept {
@@ -229,9 +248,13 @@ private:
     }
 
     static constexpr uint16_t hostSource = 1;
+    static constexpr float unmapped = std::numeric_limits<float>::quiet_NaN();
+    uint32_t ccCount = 0;
+    unsigned appliedPatch = 0;
     ocarina::InstrumentEngine engine;
     juce::AudioProcessorValueTreeState parameters;
     std::array<std::atomic<float>*, ocarina::parameterCount> controls {};
+    std::array<std::atomic<float>, ocarina::parameterCount> hostValues {};
     ocarina::EventQueue keyboard;
     InstrumentMeter meter;
     PatchRevision patchRevision;

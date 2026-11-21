@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a101b">
-  <meta name="application-version" content="0.4.1">
+  <meta name="application-version" content="0.5.0">
   <title>Ocarina of Resonance</title>
   <meta name="description" content="Play a physically modeled vessel flute.">
-  <link rel="stylesheet" href="./assets/style.css?v=0.4.1">
-  <script type="module" src="./assets/main.js?v=0.4.1"></script>
+  <link rel="stylesheet" href="./assets/style.css?v=0.5.0">
+  <script type="module" src="./assets/main.js?v=0.5.0"></script>
 </head>
 <body>
   <main class="instrument" aria-label="Ocarina of Resonance">
@@ -39,7 +39,7 @@
       <section class="vessel" aria-label="Ocarina controls">
         <div class="stage-shell">
           <div class="stage" id="stage">
-            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.4.1" alt="Royal-blue transverse ceramic ocarina with gold Celtic inlay" draggable="false">
+            <img id="art" class="ceramic" src="./assets/ocarina.webp?v=0.5.0" alt="Royal-blue transverse ceramic ocarina with gold Celtic inlay" draggable="false">
             <div class="holes" id="holes">
               <div id="left-holes" role="group" aria-label="Left-hand finger holes"></div>
               <div id="right-holes" role="group" aria-label="Right-hand finger holes"></div>
@@ -57,11 +57,74 @@
       <details class="rail articulation" open><summary>Articulation</summary><div id="articulation" class="rail-controls"></div></details>
     </div>
 
-    <section class="keyboard" aria-label="Playable piano">
-      <div class="keyboard-top"><span id="range">C3–B6</span><div><button id="lower" type="button" aria-label="Octave down">−</button><button id="higher" type="button" aria-label="Octave up">+</button></div></div>
+    <section class="keyboard" id="performance-keyboard" aria-label="Playable piano">
+      <div class="keyboard-top"><span id="range">C3–B6</span><div class="performance-buttons">
+        <button id="sustain" type="button" aria-pressed="false">Sustain</button>
+        <button id="lower" type="button" aria-label="Octave down">−</button><button id="higher" type="button" aria-label="Octave up">+</button>
+        <button id="keyboard-full" type="button" aria-pressed="false">Full screen</button>
+      </div></div>
       <div class="key-scroll"><fieldset id="keys" disabled aria-label="Piano keys"></fieldset></div>
       <input id="keyboard-scroll" type="range" min="0" max="1000" value="0" aria-label="Scroll keyboard" hidden>
     </section>
+    <details class="sequencer" id="sequencer">
+      <summary>Piano roll</summary>
+      <div class="roll-body">
+        <div class="roll-toolbar">
+          <div class="performance-buttons">
+            <button id="roll-play" type="button">Play</button><button id="roll-stop" type="button">Stop</button>
+            <button id="roll-rewind" type="button">Rewind</button>
+          </div>
+          <div class="roll-options">
+            <label>Tempo <input id="roll-tempo" type="number" min="40" max="250" step=".01" value="120"></label>
+            <label>Bars <input id="roll-bars" type="number" min="1" max="64" step="1" value="2"></label>
+            <label class="toggle"><input id="roll-loop" type="checkbox" checked> Loop</label>
+            <label class="toggle" id="roll-sync-label" hidden><input id="roll-sync" type="checkbox"> DAW sync</label>
+          </div>
+          <button id="roll-full" type="button" aria-pressed="false">Full screen</button>
+        </div>
+        <div class="roll-toolbar">
+          <div class="roll-options">
+            <label>Tool <select id="roll-tool" aria-label="Tool"><option value="draw">Draw / move</option><option value="erase">Erase</option><option value="scroll">Scroll</option></select></label>
+            <label>Snap <select id="roll-snap" aria-label="Snap"><option value="960">1/4</option><option value="480">1/8</option><option value="240" selected>1/16</option><option value="120">1/32</option><option value="320">Triplet</option></select></label>
+            <label>Velocity <input id="roll-velocity" type="number" min="1" max="127" step="1" value="102"></label>
+          </div>
+          <div class="performance-buttons">
+            <button id="roll-import" type="button">Import MIDI</button><button id="roll-export" type="button">Export MIDI</button>
+            <button id="roll-clear" type="button">Clear</button>
+          </div>
+        </div>
+        <div class="roll-status"><output id="roll-position">1.1</output><span id="roll-state">Stopped</span><span id="roll-notice" role="status"></span></div>
+        <input id="roll-file" type="file" accept=".mid,.midi,audio/midi" hidden>
+        <div class="roll-scroll" id="roll-scroll">
+          <div class="roll-content" id="roll-content">
+            <div class="roll-ruler" id="roll-ruler" tabindex="0" aria-label="Seek playback position"></div>
+            <div class="roll-lanes">
+              <div class="roll-pitches" id="roll-pitches" aria-hidden="true"></div>
+              <div class="roll-grid" id="roll-grid" tabindex="0" aria-label="Edit piano-roll notes"><div class="roll-cursor" id="roll-cursor"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
+    <details class="midi-panel" id="midi-panel">
+      <summary>MIDI input</summary>
+      <div class="midi-controls">
+        <button id="midi-enable" type="button" hidden>Enable Web MIDI</button>
+        <button id="midi-discover" type="button" hidden>Find Bluetooth MIDI</button>
+        <label>CC target <select id="midi-target" aria-label="CC target"></select></label>
+        <button id="midi-learn" type="button" aria-pressed="false">Learn CC</button>
+        <button id="midi-forget" type="button">Remove mapping</button>
+      </div>
+      <p id="midi-input-status" role="status"></p><p id="midi-mapping-status" role="status"></p>
+    </details>
+    <details class="midi-panel" id="android-audio" hidden>
+      <summary>Audio output</summary>
+      <div class="midi-controls">
+        <label>Mode <select id="audio-mode" aria-label="Audio mode"><option value="0">Low Latency</option><option value="1" selected>Balanced</option><option value="2">Stable</option></select></label>
+        <label>Buffer <select id="audio-bursts" aria-label="Audio buffer"><option value="0">Automatic</option></select></label>
+        <button id="apply-audio" type="button">Apply</button>
+      </div>
+    </details>
     <details id="effects" class="effects"><summary>Effects</summary><div id="effect-global"></div><div id="effect-list"></div></details>
     <details class="diagnostics" id="diagnostics" hidden><summary>Audio diagnostics</summary><button id="test-tone" type="button">Play A4 test tone</button><button id="profile" type="button">Profile 16 voices</button><output id="diagnostic-result"></output></details>
     <dialog id="preset-dialog">

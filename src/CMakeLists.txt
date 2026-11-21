@@ -3,6 +3,7 @@ add_library(ocarina_core STATIC
     dsp/EffectsEngine.cpp
     dsp/InstrumentEngine.cpp
     dsp/OcarinaVoice.cpp
+    dsp/Sequencer.cpp
     dsp/VesselResonator.cpp
     dsp/VoiceManager.cpp)
 target_include_directories(ocarina_core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")

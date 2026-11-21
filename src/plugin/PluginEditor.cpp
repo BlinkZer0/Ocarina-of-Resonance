@@ -16,16 +16,55 @@ bool validPresetId(const juce::String& id) {
 }
 }
 
+bool PatchRevision::updateSequence(ocarina::InstrumentEngine& engine, const juce::var& value, bool command, bool restore) {
+    auto* array = value.getArray();
+    if (!array || array->size() < 7 || array->size() > static_cast<int>(ocarina::Sequencer::packetSize)) return false;
+    std::array<int32_t, ocarina::Sequencer::packetSize> packet;
+    for (int index = 0; index < array->size(); ++index) {
+        const auto& entry = (*array)[index];
+        const double number = entry;
+        if (!(entry.isInt() || entry.isInt64() || entry.isDouble()) || !(number >= 0 && number <= INT32_MAX)
+            || std::floor(number) != number) return false;
+        packet[index] = static_cast<int32_t>(number);
+    }
+    const int next = sequenceCommand == INT32_MAX ? 1 : sequenceCommand + 1;
+    packet[4] = command ? next : sequenceCommand;
+    if (restore) packet[5] = packet[6] = 0;
+    if (!engine.setSequence(std::span(packet.data(), static_cast<size_t>(array->size())))) return false;
+    if (command) sequenceCommand = next;
+    juce::Array<juce::var> saved;
+    for (int index = 0; index < array->size(); ++index)
+        saved.add(index >= 4 && index <= 6 ? 0 : packet[index]);
+    sequencePacket = juce::var(saved);
+    return true;
+}
+
+bool PatchRevision::updateMapping(const juce::var& value) {
+    const auto* pairs = value.getArray();
+    if (!pairs || pairs->size() % 2 || pairs->size() > static_cast<int>(2 * ccMap.size())) return false;
+    std::array<int, 120> entries {};
+    for (int index = 0; index < pairs->size(); index += 2) {
+        const int cc = (*pairs)[index], parameter = (*pairs)[index + 1];
+        if (cc < 0 || cc >= static_cast<int>(entries.size()) || parameter < 0 || parameter >= static_cast<int>(ocarina::parameterCount))
+            return false;
+        entries[static_cast<size_t>(cc)] = parameter + 1;
+    }
+    mapping = value;
+    for (size_t index = 0; index < entries.size(); ++index)
+        ccMap[index].store(entries[index], std::memory_order_relaxed);
+    return true;
+}
+
 InstrumentEditor::InstrumentEditor(juce::AudioProcessor& processor, juce::AudioProcessorValueTreeState& state,
-    ocarina::EventQueue& keyboardToUse, const InstrumentMeter& meterToUse, PatchRevision& revisionToUse)
-    : AudioProcessorEditor(processor), keyboard(keyboardToUse), meter(meterToUse), revision(revisionToUse), browser(options()) {
+    ocarina::EventQueue& keyboardToUse, const InstrumentMeter& meterToUse, PatchRevision& revisionToUse, ocarina::InstrumentEngine& engineToUse)
+    : AudioProcessorEditor(processor), keyboard(keyboardToUse), meter(meterToUse), revision(revisionToUse), engine(engineToUse), browser(options()) {
     for (size_t index = 0; index < parameters.size(); ++index)
         parameters[index] = state.getParameter(ocarina::parameters[index].id.data());
     addAndMakeVisible(browser);
     setResizable(true, true);
     setResizeLimits(540, 390, 1600, 1120);
     setSize(1090, 715);
-    browser.goToURL(Browser::getResourceProviderRoot());
+    browser.goToURL(Browser::getResourceProviderRoot() + "?v=" + JucePlugin_VersionString);
     startTimerHz(20);
 }
 
@@ -61,21 +100,21 @@ Browser::Options InstrumentEditor::options() {
 
 std::optional<Browser::Resource> InstrumentEditor::resource(const juce::String& request) {
     const auto path = request.upToFirstOccurrenceOf("?", false, false);
-    struct Route { const char* path; const char* name; const char* mime; };
-    constexpr Route routes[] {
-        {"/", "index_html", "text/html"}, {"/index.html", "index_html", "text/html"},
-        {"/assets/main.js", "main_js", "text/javascript"}, {"/assets/presets.js", "presets_js", "text/javascript"}, {"/assets/style.css", "style_css", "text/css"},
-        {"/assets/parameters.json", "parameters_json", "application/json"}, {"/assets/ocarina.webp", "ocarina_webp", "image/webp"}
+    struct Route { const char* path; const char* data; int size; const char* mime; };
+    using namespace OcarinaPanel;
+    const Route routes[] {
+        {"/", index_html, index_htmlSize, "text/html"}, {"/index.html", index_html, index_htmlSize, "text/html"},
+        {"/assets/main.js", main_js, main_jsSize, "text/javascript"}, {"/assets/presets.js", presets_js, presets_jsSize, "text/javascript"},
+        {"/assets/style.css", style_css, style_cssSize, "text/css"}, {"/assets/parameters.json", parameters_json, parameters_jsonSize, "application/json"},
+        {"/assets/ocarina.webp", ocarina_webp, ocarina_webpSize, "image/webp"}, {"/assets/sequence.js", sequence_js, sequence_jsSize, "text/javascript"},
+        {"/assets/midi-file.js", midifile_js, midifile_jsSize, "text/javascript"}
     };
     for (const auto& route : routes) {
         if (path != route.path)
             continue;
-        int size = 0;
-        if (const auto* bytes = OcarinaPanel::getNamedResource(route.name, size)) {
-            std::vector<std::byte> buffer(static_cast<size_t>(size));
-            std::memcpy(buffer.data(), bytes, buffer.size());
-            return Browser::Resource {std::move(buffer), route.mime};
-        }
+        std::vector<std::byte> buffer(static_cast<size_t>(route.size));
+        std::memcpy(buffer.data(), route.data, buffer.size());
+        return Browser::Resource {std::move(buffer), route.mime};
     }
     return std::nullopt;
 }
@@ -95,7 +134,31 @@ void InstrumentEditor::receive(const juce::var& event) {
         return;
     }
     if (type == "listPresets") { sendLibrary(); return; }
-    if (type == "importPreset") { choosePresetFile(false, {}, {}); return; }
+    if (type == "importPreset") { chooseFile(false, {}, {}); return; }
+    if (type == "importMidi") { chooseFile(false, {}, {}, true); return; }
+    if (type == "exportMidi") {
+        const auto data = event.getProperty("data", {}).toString();
+        if (data.isNotEmpty() && data.length() <= 128 * 1024)
+            chooseFile(true, "Ocarina sequence", data, true);
+        return;
+    }
+    if (type == "sequence") {
+        const auto value = event.getProperty("packet", {});
+        const auto* packet = value.getArray();
+        if (!packet || packet->size() < 7) return;
+        const int command = (*packet)[4];
+        const std::scoped_lock lock(revision.writer);
+        if (revision.updateSequence(engine, value, command != lastSequenceCommand, false)) {
+            lastSequenceCommand = command;
+            displayedSequence = revision.sequencePacket;
+        }
+        return;
+    }
+    if (type == "midiMap") {
+        const std::scoped_lock lock(revision.writer);
+        if (revision.updateMapping(event.getProperty("pairs", {}))) displayedMapping = revision.mapping;
+        return;
+    }
     if (type == "savePreset" || type == "exportPreset") {
         const auto id = event.getProperty("id", {}).toString();
         const auto json = event.getProperty("json", {}).toString();
@@ -104,7 +167,7 @@ void InstrumentEditor::receive(const juce::var& event) {
             return;
         }
         if (type == "exportPreset") {
-            choosePresetFile(true, event.getProperty("name", "Ocarina of Resonance").toString(), json);
+            chooseFile(true, event.getProperty("name", "Ocarina of Resonance").toString(), json);
         } else {
             const auto dir = presetDirectory();
             if (!dir.createDirectory() || !dir.getChildFile("patch-" + id + ".orpreset").replaceWithText(json)) {
@@ -117,6 +180,10 @@ void InstrumentEditor::receive(const juce::var& event) {
     }
     if (type == "release") {
         keyboard.push({ocarina::EventType::releaseSource, keyboardSource, 0, 0, 0.0f});
+        return;
+    }
+    if (type == "sustain") {
+        keyboard.push({ocarina::EventType::sustain, keyboardSource, 0, 0, event.getProperty("on", false) ? 1.0f : 0.0f});
         return;
     }
     if (type == "patch") {
@@ -144,7 +211,7 @@ void InstrumentEditor::receive(const juce::var& event) {
         const bool down = event.getProperty("on", false);
         if (key >= 0 && key <= 127)
             keyboard.push({down ? ocarina::EventType::noteOn : ocarina::EventType::noteOff,
-                keyboardSource, 0, static_cast<uint8_t>(key), 0.8f});
+                keyboardSource, 0, static_cast<uint8_t>(key), juce::jlimit(0.01f, 1.0f, static_cast<float>(event.getProperty("velocity", 0.8)))});
         return;
     }
     const int index = event.getProperty("index", -1);
@@ -184,21 +251,32 @@ void InstrumentEditor::sendLibrary() {
     sendFileMessage("library", juce::var(files));
 }
 
-void InstrumentEditor::choosePresetFile(bool exportFile, const juce::String& name, const juce::String& json) {
+void InstrumentEditor::chooseFile(bool exportFile, const juce::String& name, const juce::String& data, bool midi) {
     if (chooser) return;
     const auto documents = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
-    const auto initial = exportFile ? documents.getChildFile(juce::File::createLegalFileName(name) + ".orpreset") : documents;
-    chooser = std::make_unique<juce::FileChooser>(exportFile ? "Export Ocarina preset" : "Import Ocarina preset",
-        initial, "*.orpreset;*.json");
+    const auto initial = exportFile ? documents.getChildFile(juce::File::createLegalFileName(name) + (midi ? ".mid" : ".orpreset")) : documents;
+    const auto title = juce::String(exportFile ? "Export " : "Import ") + (midi ? "MIDI sequence" : "Ocarina preset");
+    chooser = std::make_unique<juce::FileChooser>(title, initial, midi ? "*.mid;*.midi" : "*.orpreset;*.json");
     const int flags = juce::FileBrowserComponent::canSelectFiles
         | (exportFile ? juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::warnAboutOverwriting : juce::FileBrowserComponent::openMode);
     juce::Component::SafePointer<InstrumentEditor> self(this);
-    chooser->launchAsync(flags, [self, exportFile, json](const juce::FileChooser& completed) {
+    chooser->launchAsync(flags, [self, exportFile, data, midi](const juce::FileChooser& completed) {
         if (!self) return;
         const auto file = completed.getResult();
         if (file != juce::File()) {
-            if (exportFile) {
-                self->sendFileMessage("fileStatus", file.replaceWithText(json) ? "Preset exported." : "Could not write the preset file.");
+            if (midi) {
+                juce::MemoryBlock bytes;
+                juce::MemoryOutputStream decoded(bytes, false);
+                if (exportFile) {
+                    const bool written = juce::Base64::convertFromBase64(decoded, data) && file.replaceWithData(bytes.getData(), bytes.getSize());
+                    self->sendFileMessage("midiNotice", written ? "MIDI exported." : "Could not write MIDI.");
+                } else if (file.getSize() > 0 && file.getSize() <= maxPresetBytes && file.loadFileAsData(bytes)) {
+                    self->sendFileMessage("midiFile", juce::Base64::toBase64(bytes.getData(), bytes.getSize()));
+                } else {
+                    self->sendFileMessage("midiNotice", "MIDI files must be 128 KB or smaller.");
+                }
+            } else if (exportFile) {
+                self->sendFileMessage("fileStatus", file.replaceWithText(data) ? "Preset exported." : "Could not write the preset file.");
             } else if (file.getSize() > 0 && file.getSize() <= maxPresetBytes) {
                 self->sendFileMessage("presetFile", file.loadFileAsString());
             } else {
@@ -214,18 +292,39 @@ void InstrumentEditor::timerCallback() {
         return;
     auto result = std::make_unique<juce::DynamicObject>();
     juce::Array<juce::var> values;
-    for (const auto* parameter : parameters)
-        values.add(parameter->convertFrom0to1(parameter->getValue()));
+    for (size_t index = 0; index < parameters.size(); ++index) {
+        const auto* parameter = parameters[index];
+        const float mapped = meter.mapped[index].load(std::memory_order_relaxed);
+        values.add(std::isfinite(mapped) ? mapped : parameter->convertFrom0to1(parameter->getValue()));
+    }
     result->setProperty("params", juce::var(values));
     result->setProperty("peak", meter.peak.load(std::memory_order_relaxed));
     result->setProperty("voices", meter.voices.load(std::memory_order_relaxed));
     result->setProperty("note", meter.note.load(std::memory_order_relaxed));
     result->setProperty("status", "VST3 audio ready");
+    result->setProperty("tick", meter.tick.load(std::memory_order_relaxed));
+    result->setProperty("transport", meter.transport.load(std::memory_order_relaxed));
+    juce::Array<juce::var> held;
+    for (const auto& word : meter.held) held.add(static_cast<juce::int64>(word.load(std::memory_order_relaxed)));
+    result->setProperty("held", juce::var(held));
+    const auto cc = meter.cc.load(std::memory_order_relaxed);
+    if (cc != lastCC) {
+        lastCC = cc;
+        result->setProperty("midiCC", juce::var(juce::Array<juce::var>{int((cc >> 7) & 127), int(cc & 127)}));
+    }
     {
         const std::scoped_lock lock(revision.writer);
         if (revision.presetIdentity != displayedPreset) {
             displayedPreset = revision.presetIdentity;
             result->setProperty("preset", revision.presetIdentity);
+        }
+        if (!revision.sequencePacket.equals(displayedSequence)) {
+            displayedSequence = revision.sequencePacket;
+            result->setProperty("sequence", displayedSequence);
+        }
+        if (!revision.mapping.equals(displayedMapping)) {
+            displayedMapping = revision.mapping;
+            result->setProperty("midiMap", displayedMapping);
         }
     }
     browser.emitEventIfBrowserIsVisible("instrumentState", juce::var(result.release()));

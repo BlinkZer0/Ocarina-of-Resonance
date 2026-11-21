@@ -46,7 +46,8 @@ void OcarinaVoice::update(const ModelControls& c, int samples) noexcept {
     pitch += (targetPitch - pitch) * (c.portamento > 0.0f
         ? -std::expm1(-duration / (c.portamento * 0.001f)) : 1.0f);
     bend += (expression.bend - bend) * (strike ? 1.0f : -std::expm1(-duration / 0.006f));
-    const float vibrato = std::sin(tau * lfo) * c.vibrato * std::clamp((time - 0.12f) * 3.0f, 0.0f, 1.0f);
+    const float vibrato = std::sin(tau * lfo) * (c.vibrato + 38.0f * expression.modulation)
+        * std::clamp((time - 0.12f) * 3.0f, 0.0f, 1.0f);
     const float cents = c.geometryCents + c.detune + (pressure - 0.55f) * 12.0f + instability * 2.8f + vibrato;
     const float frequency = std::min(440.0f * std::exp2((pitch - 69.0f + bend * c.bendRange + cents * 0.01f) / 12.0f),
         c.rate * 0.44f);

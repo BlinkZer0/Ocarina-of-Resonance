@@ -13,7 +13,7 @@ struct ModelControls {
 };
 
 struct VoiceExpression {
-    float breath = 1, expression = 1, bend = 0, pressure = 0;
+    float breath = 1, expression = 1, bend = 0, pressure = 0, modulation = 0;
 };
 
 class OcarinaVoice {
