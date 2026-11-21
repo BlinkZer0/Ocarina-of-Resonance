@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Release artifacts are verified against the same notice bytes on every runner.
+licenses/**/*.txt text eol=lf
