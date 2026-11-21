@@ -149,24 +149,27 @@ private:
 
 class AudioOutput final {
 public:
-    oboe::Result open(int mode, int requestedBursts) {
+    oboe::Result open(int mode, int requestedBursts, int deviceId, bool forceOpenSLES) {
         const int bursts = requestedBursts > 0 ? requestedBursts : mode == 0 ? 2 : mode == 2 ? 5 : 3;
+        if (forceOpenSLES)
+            return openStream(oboe::AudioApi::OpenSLES, oboe::SharingMode::Shared, bursts, oboe::kUnspecified);
         auto result = openStream(oboe::AudioApi::Unspecified,
-            mode == 0 ? oboe::SharingMode::Exclusive : oboe::SharingMode::Shared, bursts);
+            mode == 0 ? oboe::SharingMode::Exclusive : oboe::SharingMode::Shared, bursts, deviceId);
         if (result != oboe::Result::OK && mode == 0)
-            result = openStream(oboe::AudioApi::Unspecified, oboe::SharingMode::Shared, bursts);
+            result = openStream(oboe::AudioApi::Unspecified, oboe::SharingMode::Shared, bursts, deviceId);
         if (result != oboe::Result::OK)
-            result = openStream(oboe::AudioApi::OpenSLES, oboe::SharingMode::Shared, bursts);
+            result = openStream(oboe::AudioApi::OpenSLES, oboe::SharingMode::Shared, bursts, oboe::kUnspecified);
         return result;
     }
 
-    oboe::Result openStream(oboe::AudioApi backend, oboe::SharingMode sharing, int bursts) {
+    oboe::Result openStream(oboe::AudioApi backend, oboe::SharingMode sharing, int bursts, int deviceId) {
         renderer->error.store(oboe::Result::OK, std::memory_order_relaxed);
         oboe::AudioStreamBuilder builder;
         builder.setAudioApi(backend);
         builder.setDirection(oboe::Direction::Output);
         builder.setPerformanceMode(oboe::PerformanceMode::LowLatency);
         builder.setSharingMode(sharing);
+        builder.setDeviceId(deviceId);
         builder.setUsage(oboe::Usage::Media);
         builder.setContentType(oboe::ContentType::Music);
         builder.setChannelCount(2);
@@ -216,9 +219,9 @@ AudioOutput* output(jlong handle) noexcept { return reinterpret_cast<AudioOutput
 } // namespace
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_blinkzer0_ocarina_MainActivity_openAudio(JNIEnv* env, jobject, jint mode, jint bursts) {
+Java_com_blinkzer0_ocarina_MainActivity_openAudio(JNIEnv* env, jobject, jint mode, jint bursts, jint deviceId, jboolean forceOpenSLES) {
     auto instance = std::make_unique<AudioOutput>();
-    const auto result = instance->open(mode, bursts);
+    const auto result = instance->open(mode, bursts, deviceId, forceOpenSLES);
     if (result != oboe::Result::OK) {
         env->ThrowNew(env->FindClass("java/lang/IllegalStateException"), oboe::convertToText(result));
         return 0;

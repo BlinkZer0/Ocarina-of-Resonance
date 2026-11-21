@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.AudioAttributes
+import android.media.AudioDeviceInfo
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
@@ -210,7 +211,14 @@ class MainActivity : Activity() {
         handler.removeCallbacks(finishClose)
         finishClose.run()
         try {
-            audio = openAudio(audioMode, audioBursts)
+            val testSpeaker = debug && intent.getBooleanExtra("testSpeaker", false)
+            val forceOpenSLES = debug && intent.getBooleanExtra("testOpenSLES", false)
+            val deviceId = if (testSpeaker) {
+                audioManager?.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+                    ?.firstOrNull { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }?.id
+                    ?: throw IllegalStateException("Built-in speaker unavailable")
+            } else 0
+            audio = openAudio(audioMode, audioBursts, deviceId, forceOpenSLES)
             for ((index, value) in values) setParameter(audio, index, value)
             sequence?.copyOf()?.let {
                 it[4] = sequenceCommand
@@ -579,7 +587,7 @@ class MainActivity : Activity() {
         web.evaluateJavascript("window.ocarinaReceive?.($state)", null)
     }
 
-    private external fun openAudio(mode: Int, bursts: Int): Long
+    private external fun openAudio(mode: Int, bursts: Int, deviceId: Int, forceOpenSLES: Boolean): Long
     private external fun closeAudio(handle: Long)
     private external fun fadeAudio(handle: Long)
     private external fun audioFailed(handle: Long): Boolean

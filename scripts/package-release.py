@@ -24,6 +24,7 @@ BUNDLETOOL_VERSION = "1.18.3"
 BUNDLETOOL_SHA256 = "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29"
 VST3_METADATA = "Contents/Resources/moduleinfo.json"
 VST3_BINARY = "Contents/x86_64-win/Ocarina of Resonance.vst3"
+VST3_NOTICES = "Contents/Resources/licenses/"
 
 
 def require(condition, explanation):
@@ -93,11 +94,30 @@ def check_web(read):
     read(".nojekyll")
 
 
+def notice_files(platform):
+    files = sorted((ROOT / "licenses" / platform).glob("*.txt"))
+    require(files, f"Missing source notices for {platform}.")
+    return files
+
+
+def check_notices(read, platform, prefix):
+    for file in notice_files(platform):
+        require(read(prefix + file.name) == file.read_bytes(), f"Missing or mismatched notice {file.name}.")
+
+
 def archive(platform, source, output):
     read = lambda name: (source / name).read_bytes()
+    added_notices = []
     if platform == "windows":
         require(source.name == BUNDLE, f"Select the {BUNDLE} directory.")
         check_windows_bundle(read)
+        for file in notice_files(platform):
+            relative = VST3_NOTICES + file.name
+            existing = source / relative
+            if existing.exists():
+                require(read(relative) == file.read_bytes(), f"Mismatched archive notice {file.name}.")
+            else:
+                added_notices.append((file, f"{BUNDLE}/{relative}"))
     else:
         check_web(read)
     output.mkdir(parents=True, exist_ok=True)
@@ -108,6 +128,8 @@ def archive(platform, source, output):
                 require(not file.is_symlink(), f"Package assets must be regular files. Found {file.name}.")
                 relative = file.relative_to(source)
                 release.write(file, Path(BUNDLE) / relative if platform == "windows" else relative)
+        for file, name in added_notices:
+            release.write(file, name)
     print(path)
 
 
@@ -170,6 +192,7 @@ def validate_apk(path, debug):
     require(("application-debuggable" in badging) == debug, "The APK has the wrong debuggable setting.")
     with ZipFile(path) as apk:
         check_panel(apk.read, "assets/")
+        check_notices(apk.read, "android", "assets/licenses/")
         validate_native(apk, "lib/", True)
     return signers[0].lower(), identity[2]
 
@@ -188,6 +211,7 @@ def validate_aab(path, bundletool, signer, version_code):
     require(manifest.find("application").get(android + "debuggable") != "true", "The AAB is debuggable.")
     with ZipFile(path) as bundle:
         check_panel(bundle.read, "base/assets/")
+        check_notices(bundle.read, "android", "base/assets/licenses/")
         validate_native(bundle, "base/lib/", False)
 
 
@@ -213,7 +237,9 @@ def package_android(args):
 def checksums(directory, rehearsal):
     names = asset_names()
     with ZipFile(directory / names["windows"]) as windows:
-        check_windows_bundle(lambda path: windows.read(f"{BUNDLE}/{path}"))
+        read_windows = lambda path: windows.read(f"{BUNDLE}/{path}")
+        check_windows_bundle(read_windows)
+        check_notices(read_windows, "windows", VST3_NOTICES)
         require(windows.testzip() is None, "Corrupt Windows archive.")
     with ZipFile(directory / names["web"]) as web:
         check_web(web.read)

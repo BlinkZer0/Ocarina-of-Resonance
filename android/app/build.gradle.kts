@@ -85,6 +85,9 @@ val syncPanel = tasks.register<Sync>("syncInstrumentPanel") {
         include("index.html", "assets/main.js", "assets/presets.js", "assets/sequence.js", "assets/midi-file.js",
             "assets/style.css", "assets/parameters.json", "assets/ocarina.webp")
     }
+    from(rootProject.file("../licenses/android")) {
+        into("licenses")
+    }
     into(panelDirectory)
 }
 android.sourceSets.named("main") { assets.srcDir(panelDirectory) }

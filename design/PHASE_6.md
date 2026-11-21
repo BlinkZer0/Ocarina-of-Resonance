@@ -44,7 +44,7 @@ py scripts/package-release.py android release --apk android/app/build/outputs/ap
 py scripts/package-release.py checksums dist/v0.6.0
 ```
 
-On Linux or macOS use `sh android/gradlew -p android` and `python3` in the corresponding commands. To pin verification to your expected certificate add `--certificate-sha256` with its public fingerprint. The verifier checks app IDs and versions, shared panel assets, APK signature and ZIP alignment, ARM64 ELF load alignment, AAB structure and page-alignment settings, and matching certificates across the two Android formats. [Android 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes) · [Bundletool](https://developer.android.com/tools/bundletool)
+On Linux or macOS use `sh android/gradlew -p android` and `python3` in the corresponding commands. To pin verification to your expected certificate add `--certificate-sha256` with its public fingerprint. The verifier checks app IDs and versions, shared panel assets and notices, APK signature and ZIP alignment, ARM64 ELF load alignment, AAB structure and page-alignment settings, and matching certificates across the two Android formats. [Third-party notices](../licenses/README.md) · [Android 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes) · [Bundletool](https://developer.android.com/tools/bundletool)
 
 ## GitHub release
 
@@ -59,7 +59,7 @@ For a public release, add these environment secrets in repository **Settings →
 | `ANDROID_KEY_ALIAS` | Release key alias |
 | `ANDROID_KEY_PASSWORD` | Release key password |
 
-Allow matching release tags in the `release-signing` and `github-pages` deployment environments. Keep the existing Pages development branch policy. Use the environment's reviewer controls when available. Update the [public release notes](RELEASE_NOTES.md), run the rehearsal, then push the version tag for the intended commit. The tag workflow checks the version before building, signs the Android outputs with a temporary keystore on the runner, verifies the packages, and deploys Pages from the same tested web output. GitHub creates the public Release after these jobs succeed. [GitHub deployment environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/managing-environments-for-deployment) · [GitHub release publication](https://cli.github.com/manual/gh_release_create)
+Allow matching release tags in the `release-signing` and `github-pages` deployment environments. Keep the existing Pages development branch policy. Use the environment's reviewer controls when available. Build the signed candidate locally and exercise the APK and AAB on the device before pushing the version tag. Update the [public release notes](RELEASE_NOTES.md), run the rehearsal, then tag the verified commit. The tag workflow checks the version before building, signs the Android outputs with a temporary keystore on the runner, verifies the packages, and deploys Pages from the same tested web output. GitHub creates the public Release after these jobs succeed. [GitHub deployment environments](https://docs.github.com/en/actions/deployment/targeting-different-environments/managing-environments-for-deployment) · [GitHub release publication](https://cli.github.com/manual/gh_release_create)
 
 ## Direct install and Google Play
 
@@ -69,7 +69,7 @@ Google Play accepts an AAB signed with an upload key and signs the APKs it deliv
 
 Google's current developer-verification protections apply to participating stores in selected regions. Google announced an expansion beginning in January 2027 that will gradually reach other installation sources. Review the rollout and register the production package and signing certificate as applicable before distributing. [Android developer verification](https://developer.android.com/developer-verification) · [2027 rollout](https://developer.android.com/blog/posts/android-developer-verification-2027)
 
-The Windows build uses JUCE 8. JUCE's license terms apply when distributing the plugin. [JUCE 8 licensing](https://juce.com/legal/juce-8-licence/)
+The Windows ZIP includes the Steinberg VST3 SDK and Microsoft WebView2 loader notices. Confirm which JUCE 8 license covers the plugin distribution. [Third-party notices](../licenses/README.md) · [JUCE 8 licensing](https://juce.com/legal/juce-8-licence/)
 
 ## 0.6.0 packaging evidence
 
