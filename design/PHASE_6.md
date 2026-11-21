@@ -70,3 +70,12 @@ Google Play accepts an AAB signed with an upload key and signs the APKs it deliv
 Google's current developer-verification protections apply to participating stores in selected regions. Google announced an expansion beginning in January 2027 that will gradually reach other installation sources. Review the rollout and register the production package and signing certificate as applicable before distributing. [Android developer verification](https://developer.android.com/developer-verification) · [2027 rollout](https://developer.android.com/blog/posts/android-developer-verification-2027)
 
 The Windows build uses JUCE 8. JUCE's license terms apply when distributing the plugin. [JUCE 8 licensing](https://juce.com/legal/juce-8-licence/)
+
+## 0.6.0 packaging evidence
+
+Build commit `38eb624` produced and checked the packages.
+
+- The extracted Windows ZIP passed the VST3 host test. REAPER loaded the extracted bundle and played its piano roll with DAW sync.
+- The extracted web ZIP and the live Pages build both imported MIDI and rendered and stopped audio through the worklet. The deployed panel and Wasm assets matched the local build. [GitHub Pages deployment](https://github.com/BlinkZer0/Ocarina-of-Resonance/actions/runs/44915107286)
+- The debug APK and both QA-signed Android formats reported version 0.6.0 and version code 7. The packaging verifier checked ARM64 ELF segments, APK alignment, AAB alignment settings, and the APK and AAB certificates. The Samsung SM-S948U1 launched the signed QA APK and installed bundletool's universal APK over it using the same certificate. The phone ran with 4 KB pages during that test.
+- The version check rejected a mismatched tag. Both Gradle release tasks rejected absent credentials, and the package verifier rejected a mismatched certificate. The temporary QA signing key was removed after verification. Production signing and the public Release require the owner's key. [GitHub packaging rehearsal](https://github.com/BlinkZer0/Ocarina-of-Resonance/actions/runs/44915105172)
