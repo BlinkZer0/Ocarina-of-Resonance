@@ -1,0 +1,170 @@
+name: Package and release Ocarina of Resonance
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify the common version
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          args=()
+          if [[ "$REF_TYPE" == tag ]]; then args+=(--tag "$REF_NAME"); fi
+          version=$(python scripts/package-release.py version "${args[@]}")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: version
+    uses: ./.github/workflows/ci.yml
+    with:
+      package_release: true
+
+  sign-android:
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: version
+    runs-on: ubuntu-latest
+    environment: release-signing
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check signing credentials
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for secret in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [[ -z "${!secret}" ]]; then
+              echo "::error::Set $secret in the release-signing environment before publishing."
+              exit 1
+            fi
+          done
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+        with:
+          packages: 'platforms;android-36 build-tools;36.0.0 ndk;29.0.14206865 cmake;3.31.6'
+      - name: Fetch verified bundletool
+        run: python scripts/package-release.py bundletool "$RUNNER_TEMP/bundletool"
+      - name: Build and verify signed APK and AAB
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          umask 077
+          signing_dir=$(mktemp -d "$RUNNER_TEMP/ocarina-signing.XXXXXX")
+          trap 'rm -rf -- "$signing_dir"' EXIT
+          export ANDROID_RELEASE_KEYSTORE="$signing_dir/release.keystore"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_RELEASE_KEYSTORE"
+          unset ANDROID_KEYSTORE_BASE64
+          keytool -exportcert -keystore "$ANDROID_RELEASE_KEYSTORE" -alias "$ANDROID_KEY_ALIAS" \
+            -storepass:env ANDROID_KEYSTORE_PASSWORD -file "$signing_dir/signer.der"
+          signer=$(sha256sum "$signing_dir/signer.der" | cut -d' ' -f1)
+          sh android/gradlew -p android --no-daemon assembleRelease bundleRelease
+          python scripts/package-release.py android release \
+            --apk android/app/build/outputs/apk/release/app-release.apk \
+            --aab android/app/build/outputs/bundle/release/app-release.aab \
+            --bundletool "$RUNNER_TEMP/bundletool/bundletool-all-1.18.3.jar" \
+            --certificate-sha256 "$signer" --output dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          path: dist/*
+          if-no-files-found: error
+
+  collect:
+    if: ${{ !cancelled() && needs.version.result == 'success' && needs.build.result == 'success' && (needs.sign-android.result == 'success' || github.event_name == 'workflow_dispatch') }}
+    needs: [version, build, sign-android]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
+          path: dist
+      - name: Verify archives and write checksums
+        env:
+          RELEASE_EVENT: ${{ github.event_name }}
+        run: |
+          args=()
+          if [[ "$RELEASE_EVENT" == workflow_dispatch ]]; then args+=(--rehearsal); fi
+          python scripts/package-release.py checksums dist "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: checked-packages
+          path: dist/
+          if-no-files-found: error
+
+  stage-pages:
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: collect
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Web-static
+          path: docs
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+
+  deploy-pages:
+    needs: stage-pages
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deploy
+
+  publish:
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: [version, collect, deploy-pages]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: checked-packages
+          path: dist
+      - name: Publish verified release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          (cd dist && sha256sum --check SHA256SUMS.txt)
+          gh release create "v$VERSION" --verify-tag --title "Ocarina of Resonance v$VERSION" \
+            --notes-file design/RELEASE_NOTES.md dist/*.vst3.zip dist/*.apk dist/*.aab dist/*-Web-*.zip dist/SHA256SUMS.txt

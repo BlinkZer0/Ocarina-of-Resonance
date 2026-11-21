@@ -1,8 +1,8 @@
 # Ocarina of Resonance
 
-Ocarina of Resonance is a vessel-flute synthesizer for Windows VST3, web, and Android. Version 0.5.0 adds a piano roll, MIDI file exchange, and controller input. The blue-and-gold transverse ocarina has four main dials and one smaller subhole dial per hand, with two thumb dials below it. Explore four sound models, 40 factory presets, and 11 stereo effects in mono legato or with up to 16 voices.
+Ocarina of Resonance is a vessel-flute synthesizer for Windows VST3, web, and Android. Version 0.6.0 adds coordinated packaging for all three platforms. Play the blue-and-gold transverse ocarina with the piano roll, MIDI controllers, four sound models, 40 factory presets, and 11 stereo effects in mono legato or with up to 16 voices.
 
-[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Phase 5 performance and MIDI](design/PHASE_5.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
+[Play the instrument](https://blinkzer0.github.io/Ocarina-of-Resonance/) · [Implementation and release plan](PLAN.md) · [Packaging and signing](design/PHASE_6.md) · [Phase 5 performance and MIDI](design/PHASE_5.md) · [Phase 4 effects and presets](design/PHASE_4.md) · [Phase 3 instrument interface](design/PHASE_3.md) · [Phase 2 DSP and verification](design/PHASE_2.md) · [Phase 1 architecture](design/PHASE_1.md) · [Preset schema](presets/schema-v1.json)
 
 ## Play and edit
 
@@ -31,3 +31,5 @@ Open `android/` as an Android Studio project, or set `JAVA_HOME` to JDK 21 and `
 Select an unlocked ARM64 phone with `adb devices -l`. Install with `adb -s <device> install -r android/app/build/outputs/apk/debug/app-debug.apk`. The panel is bundled for offline use and plays through the native Oboe engine. The debug APK includes **Audio diagnostics** with the A4 test tone and **Profile 16 voices**. Timings and xruns appear under the `OcarinaAudio` log tag.
 
 Connect a class-compliant USB MIDI controller or select **Find Bluetooth MIDI** under **MIDI input**. Use **Audio output** to choose a latency mode and an automatic or explicit buffer in device bursts. The status line reports the active backend, sample rate, and buffer.
+
+For a signed direct-install APK and a Play-ready AAB, configure a release keystore and run `android/build.bat assembleRelease bundleRelease`. The packaging guide covers local signing, artifact checks, and the protected GitHub Actions release. [Packaging and signing](design/PHASE_6.md)

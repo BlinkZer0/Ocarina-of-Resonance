@@ -9,5 +9,9 @@
 /android/local.properties
 *.jks
 *.keystore
+*.p12
+*.pfx
+*.key
+*keystore*.base64
 *signing.properties
 keystore.properties
