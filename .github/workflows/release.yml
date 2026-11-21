@@ -38,7 +38,7 @@ jobs:
           mode=rehearsal
           if [[ "$SIGN_CANDIDATE" == true ]]; then
             if [[ "$REF_TYPE" != tag ]]; then
-              echo "::error::Select a candidate tag such as v0.6.0-rc.1 for Android signing."
+              echo "::error::Select a vX.Y.Z-rc.N tag matching VERSION for Android signing."
               exit 1
             fi
             mode=android-candidate

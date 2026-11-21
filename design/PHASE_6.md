@@ -1,6 +1,6 @@
 # Phase 6 Packaging and Deployment
 
-`VERSION` supplies the VST3 version, web asset version, Android version name, and artifact filenames. Increase Android's integer `versionCode` for each Android update. Version 0.6.0 uses code 7. A release tag must match `VERSION` exactly.
+`VERSION` supplies the VST3 version, web asset version, Android version name, and artifact filenames. Increase Android's integer `versionCode` for each Android update. Version 1.0.0 uses code 8. A release tag must match `VERSION` exactly.
 
 ## Artifacts
 
@@ -21,9 +21,9 @@ Use the Windows and web build commands in the [README](../README.md). Use JDK 21
 ```powershell
 .\build.bat
 .\android\build.bat assembleDebug
-py scripts/package-release.py windows "build/windows/src/plugin/OcarinaVST_artefacts/Release/VST3/Ocarina of Resonance.vst3" dist/v0.6.0
-py scripts/package-release.py web docs dist/v0.6.0
-py scripts/package-release.py android debug --apk android/app/build/outputs/apk/debug/app-debug.apk --output dist/v0.6.0
+py scripts/package-release.py windows "build/windows/src/plugin/OcarinaVST_artefacts/Release/VST3/Ocarina of Resonance.vst3" dist/v1.0.0
+py scripts/package-release.py web docs dist/v1.0.0
+py scripts/package-release.py android debug --apk android/app/build/outputs/apk/debug/app-debug.apk --output dist/v1.0.0
 ```
 
 For a signed local build, create `android/signing.properties`, which Git ignores. Use a private keystore outside the repository and forward slashes in Windows paths. The property names are below.
@@ -40,8 +40,8 @@ Alternatively set all four environment variables in the build process. Use `ANDR
 ```powershell
 .\android\build.bat --no-daemon assembleRelease bundleRelease
 py scripts/package-release.py bundletool build/tools
-py scripts/package-release.py android release --apk android/app/build/outputs/apk/release/app-release.apk --aab android/app/build/outputs/bundle/release/app-release.aab --bundletool build/tools/bundletool-all-1.18.3.jar --output dist/v0.6.0
-py scripts/package-release.py checksums dist/v0.6.0
+py scripts/package-release.py android release --apk android/app/build/outputs/apk/release/app-release.apk --aab android/app/build/outputs/bundle/release/app-release.aab --bundletool build/tools/bundletool-all-1.18.3.jar --output dist/v1.0.0
+py scripts/package-release.py checksums dist/v1.0.0
 ```
 
 On Linux or macOS use `sh android/gradlew -p android` and `python3` in the corresponding commands. To pin verification to your expected certificate add `--certificate-sha256` with its public fingerprint. The verifier checks app IDs and versions, shared panel assets and notices, APK signature and ZIP alignment, ARM64 ELF load alignment, AAB structure and page-alignment settings, and matching certificates across the two Android formats. [Third-party notices](../licenses/README.md) · [Android 16 KB page sizes](https://developer.android.com/guide/practices/page-sizes) · [Bundletool](https://developer.android.com/tools/bundletool)
@@ -61,18 +61,18 @@ For a signed Android candidate or public release, add these environment secrets 
 
 ### Signed Android candidate
 
-Use a candidate tag such as `v0.6.0-rc.1` on the commit to test. The version portion must match `VERSION`. For later candidates, increase the final number. Push the candidate tag and dispatch the workflow on that tag with the signing option enabled.
+Use a candidate tag such as `v1.0.0-rc.1` on the commit to test. The version portion must match `VERSION`. For later candidates, increase the final number. Push the candidate tag and dispatch the workflow on that tag with the signing option enabled.
 
 ```powershell
-git tag -a v0.6.0-rc.1 -m "Ocarina of Resonance Android signing candidate"
-git push origin refs/tags/v0.6.0-rc.1
-gh workflow run release.yml --ref v0.6.0-rc.1 -f sign_android_candidate=true
+git tag -a v1.0.0-rc.1 -m "Ocarina of Resonance Android signing candidate"
+git push origin refs/tags/v1.0.0-rc.1
+gh workflow run release.yml --ref v1.0.0-rc.1 -f sign_android_candidate=true
 ```
 
 The job uses the existing `release-signing` environment and uploads the standalone APK, AAB, universal APK set, SHA-256 checksums, and signer fingerprint as the **android-candidate** Actions artifact. It leaves the GitHub Release and Pages deployment for the stable tag. Check the artifact's `SOURCE.txt` before testing. Open the standalone APK with Android's package installer. Then use the generated APK set to verify the bundle on the same device with the same signing certificate. [GitHub workflow dispatch](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch) · [Android bundletool](https://developer.android.com/tools/bundletool)
 
 ```powershell
-java -jar build/tools/bundletool-all-1.18.3.jar install-apks --apks=Ocarina-of-Resonance-Android-v0.6.0.apks --device-id=<serial>
+java -jar build/tools/bundletool-all-1.18.3.jar install-apks --apks=Ocarina-of-Resonance-Android-v1.0.0.apks --device-id=<serial>
 ```
 
 ### Publish the stable release

@@ -1,4 +1,4 @@
-# Ocarina of Resonance 0.6.0
+# Ocarina of Resonance 1.0.0
 
 Play the physically modeled blue-and-gold ocarina with four sound models, 40 factory presets, and 11 stereo effects. Edit and exchange MIDI patterns in the piano roll and share `.orpreset` files across Windows, web, and Android.
 
