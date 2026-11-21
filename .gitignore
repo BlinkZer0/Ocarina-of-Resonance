@@ -1,0 +1,13 @@
+/build/
+/dist/
+/.vs/
+/web/node_modules/
+/android/.gradle/
+/android/.kotlin/
+/android/**/.cxx/
+/android/**/build/
+/android/local.properties
+*.jks
+*.keystore
+*signing.properties
+keystore.properties

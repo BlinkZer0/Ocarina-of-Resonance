@@ -1,0 +1,50 @@
+:root {
+  color-scheme: dark;
+  font: 100% system-ui, sans-serif;
+  background: #0c1629;
+  color: #f6e5c7;
+}
+
+body {
+  display: grid;
+  min-height: 100svh;
+  margin: 0;
+  place-items: center;
+}
+
+main {
+  box-sizing: border-box;
+  width: min(100% - 2rem, 34rem);
+  padding: clamp(1rem, 6vw, 3rem);
+  border: 1px solid #886c3f;
+  border-radius: 0.75rem;
+  background: #142642;
+}
+
+h1 {
+  margin: 0;
+  color: #f5cf86;
+  font: 700 clamp(2rem, 7vw, 3.25rem) / 1.05 Georgia, serif;
+}
+
+.version { color: #d7c3a1; }
+
+button {
+  min-height: 3rem;
+  border: 1px solid #e0b872;
+  border-radius: 0.35rem;
+  background: #f5cf86;
+  color: #122440;
+  font: inherit;
+  padding-inline: 0.85rem;
+}
+
+button:disabled { opacity: 0.55; }
+button:focus-visible { outline: 3px solid #fff0c7; outline-offset: 3px; }
+button:active:not(:disabled) { background: #fff0c7; }
+
+fieldset { margin: 1rem 0; border: 0; padding: 0; }
+legend { margin-bottom: 0.5rem; }
+.keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.4rem; }
+.keys button { padding: 0; touch-action: none; }
+meter { width: min(12rem, 65%); vertical-align: middle; }

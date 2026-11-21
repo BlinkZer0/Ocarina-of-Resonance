@@ -1,0 +1,61 @@
+name: Build prototypes
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: cmd
+        run: build.bat
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install Emscripten
+        working-directory: .
+        run: |
+          git clone --depth 1 --branch 7.0.0 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/ocarina-emsdk"
+          "$RUNNER_TEMP/ocarina-emsdk/emsdk" install 7.0.0
+          "$RUNNER_TEMP/ocarina-emsdk/emsdk" activate 7.0.0
+          echo "EMSDK=$RUNNER_TEMP/ocarina-emsdk" >> "$GITHUB_ENV"
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Web-static
+          path: docs/
+          include-hidden-files: true
+          if-no-files-found: error
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install Android toolchain
+        run: sdkmanager 'platforms;android-36' 'ndk;29.0.14206865' 'cmake;3.31.6'
+      - name: Build Android ARM64 debug APK
+        working-directory: android
+        run: sh ./gradlew assembleDebug

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ocarina of Resonance</title>
+  <meta name="description" content="Play the Ocarina of Resonance shared-engine audio prototype.">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script type="module" src="./assets/main.js"></script>
+</head>
+<body>
+  <main>
+    <h1>Ocarina of Resonance</h1>
+    <p class="version">Audio prototype · v0.1.0</p>
+    <button id="start" type="button">Start audio</button>
+    <p id="status" role="status">Start audio, then hold a note to play.</p>
+    <fieldset id="keys" disabled>
+      <legend>Play a note</legend>
+      <div class="keys">
+        <button data-note="60" type="button">C4</button>
+        <button data-note="64" type="button">E4</button>
+        <button data-note="67" type="button">G4</button>
+        <button data-note="69" type="button">A4</button>
+      </div>
+    </fieldset>
+    <label for="meter">Output</label>
+    <meter id="meter" min="0" max="0.3" value="0"></meter>
+  </main>
+</body>
+</html>

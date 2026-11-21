@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "phase-one-reference",
+  "name": "Reference Voice",
+  "category": "Development",
+  "description": "Shared preset contract fixture.",
+  "parameters": { "masterGain": 70 },
+  "effects": [],
+  "performance": {
+    "model": "ceramicAuthentic",
+    "voiceMode": "mono",
+    "voiceLimit": 1,
+    "gainCompensationDb": 0
+  }
+}

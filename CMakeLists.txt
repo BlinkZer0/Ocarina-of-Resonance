@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.22)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" OCARINA_VERSION LIMIT_COUNT 1)
+project(OcarinaOfResonance VERSION ${OCARINA_VERSION} LANGUAGES C CXX)
+
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+add_subdirectory(src)
+
+include(CTest)
+option(OCARINA_BUILD_VST3 "Build the Windows VST3" ${WIN32})
+if(OCARINA_BUILD_VST3)
+    add_subdirectory(src/plugin)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(ocarina_core_test tests/CoreTest.cpp)
+    target_link_libraries(ocarina_core_test PRIVATE ocarina_core)
+    add_test(NAME ocarina_core COMMAND ocarina_core_test)
+endif()
